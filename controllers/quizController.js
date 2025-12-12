@@ -4,15 +4,15 @@ import UserProgress from "../models/UserProgress.js";
 const questionsStore = {}; // { [id]: { a, b, operator, answer } }
 
 // Generate multiple random questions
-const AddSub = (n, req, res) => {
+const AddSub = (n, t, req, res) => {
   const questions = [];
 
-  const randomNum = () => Math.floor(Math.random() * 10);
+  // const randomNum = () => Math.floor(Math.random() * t);
 
   for (let i = 0; i < n; i++) {
     // generate 5 questions
-    let a = randomNum();
-    let b = randomNum();
+    let a = Math.floor(Math.random() * t);
+    let b = Math.floor(Math.random() * 10);
     const operator = Math.random() < 0.5 ? "+" : "-";
 
     // Prevent negative subtraction
@@ -31,10 +31,11 @@ const AddSub = (n, req, res) => {
   res.json({ questions });
 };
 export function generateQuestionAddSub(req, res) {
-  AddSub(5, req, res);
+  AddSub(5, 10, req, res);
 }
-export function generateQuestionAddSub2(req, res) {
-  AddSub(1, req, res);
+
+export function generateQuestionAddSub3(req, res) {
+  AddSub(3, 15, req, res);
 }
 
 function mult(b, req, res) {

@@ -6,14 +6,16 @@ import { generateSortingQuestions3,  generateSortingQuestions, checkSortingAnswe
 import {   generateQuestionMul, generateQuestionMul2, generateQuestionMul3 } from "../controllers/quizController.js";
 import {
   checkAnswer,
-  generateQuestionAddSub,generateQuestionAddSub2,
+  generateQuestionAddSub,generateQuestionAddSub3,
 } from "../controllers/quizController.js";
+
+
 const router = express.Router();
 
 router.get("/math", generateQuestionAddSub);
 router.post("/check", checkAnswer);
 
-router.get("/mathlevel2", generateQuestionAddSub2);
+router.get("/mathlevel3", generateQuestionAddSub3);
 //router.post("/check", checkAnswer);
 // Endpoint to get new sorting questions
 router.get("/sort", generateSortingQuestions);
