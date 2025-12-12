@@ -50,4 +50,5 @@ app.use("/api/quiz", quizRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectdb();
+  
 });

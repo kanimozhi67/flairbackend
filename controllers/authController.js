@@ -27,9 +27,11 @@ export async function signup(req, res) {
 }
 
 export async function login(req, res) {
-  const { username, password } = req.body;
-
+  // const { username, password } = req.body;
   try {
+    await connectdb();
+
+    const { username, password } = req.body;
     const user = await User.findOne({ username });
     if (!user) return res.status(400).json({ message: "Invalid login" });
 
@@ -46,21 +48,20 @@ export async function login(req, res) {
       secure: process.env.NODE_ENV !== "development",
     });
 
-   // res.json({ message: "Login successful", token });
-   res.json({ message: "Login successful", token, user: { id: user._id, username: user.username, email: user.email } });
-
+    // res.json({ message: "Login successful", token });
+    res.json({
+      message: "Login successful",
+      token,
+      user: { id: user._id, username: user.username, email: user.email },
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 }
 export const logout = async (req, res) => {
   try {
-  
-
-
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "logout successfuly" });
- 
   } catch (err) {
     console.log(`error in logout controller: ${err}`);
     return res.status(500).json({ err: "Internal server error" });
