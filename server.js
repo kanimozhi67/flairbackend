@@ -19,7 +19,7 @@ const __dirname = dirname(__filename);
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 console.log(`PORT= ${PORT}`);
 
 app.use(
@@ -50,5 +50,4 @@ app.use("/api/quiz", quizRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectdb();
-  
 });
