@@ -6,7 +6,7 @@ import { generateSortingQuestions3,  generateSortingQuestions, checkSortingAnswe
 import {   generateQuestionMul, generateQuestionMul2, generateQuestionMul3 } from "../controllers/quizController.js";
 import {
   checkAnswer,
-  generateQuestionAddSub,
+  generateQuestionAddSub,generateQuestionAddSub2,
 } from "../controllers/quizController.js";
 const router = express.Router();
 
