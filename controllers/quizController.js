@@ -4,12 +4,12 @@ import UserProgress from "../models/UserProgress.js";
 const questionsStore = {}; // { [id]: { a, b, operator, answer } }
 
 // Generate multiple random questions
-export function generateQuestionAddSub(req, res) {
+const AddSub = (n, req, res) => {
   const questions = [];
 
   const randomNum = () => Math.floor(Math.random() * 10);
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < n; i++) {
     // generate 5 questions
     let a = randomNum();
     let b = randomNum();
@@ -29,6 +29,12 @@ export function generateQuestionAddSub(req, res) {
   }
 
   res.json({ questions });
+};
+export function generateQuestionAddSub(req, res) {
+  AddSub(5, req, res);
+}
+export function generateQuestionAddSub2(req, res) {
+  AddSub(1, req, res);
 }
 
 function mult(b, req, res) {
@@ -55,7 +61,7 @@ function mult(b, req, res) {
   res.json({ questions });
 }
 export function generateQuestionMul(req, res) {
- mult(10, req, res);
+  mult(10, req, res);
 }
 export function generateQuestionMul2(req, res) {
   mult(10, req, res);

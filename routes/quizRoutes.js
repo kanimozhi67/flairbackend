@@ -4,10 +4,17 @@ import auth from "../middleware/authMiddleware.js";
 import { generateSortingQuestions3,  generateSortingQuestions, checkSortingAnswers, 
     generateSortingQuestions2} from "../controllers/quizcontrollersort.js";
 import {   generateQuestionMul, generateQuestionMul2, generateQuestionMul3 } from "../controllers/quizController.js";
-
+import {
+  checkAnswer,
+  generateQuestionAddSub,
+} from "../controllers/quizController.js";
 const router = express.Router();
 
+router.get("/math", generateQuestionAddSub);
+router.post("/check", checkAnswer);
 
+router.get("/mathlevel2", generateQuestionAddSub2);
+//router.post("/check", checkAnswer);
 // Endpoint to get new sorting questions
 router.get("/sort", generateSortingQuestions);
 router.get("/mul", generateQuestionMul);
