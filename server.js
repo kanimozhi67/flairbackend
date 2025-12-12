@@ -46,10 +46,18 @@ app.use("/api/quiz/progress", progressRoutes);
 app.get("api/profile", getUserInfo);
 app.use("/img", express.static(path.join(__dirname, "img")));
 app.use("/api/quiz", quizRoutes);
-function startServer() {
-  app.listen(PORT, async () => {
-    console.log(`Server is running on port ${PORT}`);
+
+async function startServer() {
+  try {
+    // Connect to MongoDB first
     await connectdb();
-  });
+    // Then start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 }
 startServer();
