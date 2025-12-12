@@ -31,7 +31,7 @@ export async function login(req, res) {
   if (req.method !== "POST")
     return res.status(405).json({ error: "Method not allowed" });
   try {
-    await connectdb();
+ 
 
     const { username, password } = req.body;
     const user = await User.findOne({ username });
