@@ -28,6 +28,8 @@ export async function signup(req, res) {
 
 export async function login(req, res) {
   // const { username, password } = req.body;
+  if (req.method !== "POST")
+    return res.status(405).json({ error: "Method not allowed" });
   try {
     await connectdb();
 
