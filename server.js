@@ -2,10 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import cors from "cors";
-import {
-  checkAnswer,
-  generateQuestionAddSub,
-} from "./controllers/quizController.js";
+
 import progressRoutes from "./routes/progressRoutes.js";
 import connectdb from "./db/connectdb.js";
 import cookieParser from "cookie-parser";
@@ -22,7 +19,7 @@ const __dirname = dirname(__filename);
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 console.log(`PORT= ${PORT}`);
 
 app.use(
@@ -43,8 +40,8 @@ app.use("/test", (req, res) => {
 });
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
-app.get("/api/quiz/math", generateQuestionAddSub);
-app.post("/api/quiz/check", checkAnswer);
+// app.get("/api/quiz/math", generateQuestionAddSub);
+// app.post("/api/quiz/check", checkAnswer);
 app.use("/api/quiz/progress", progressRoutes);
 app.get("api/profile", getUserInfo);
 app.use("/img", express.static(path.join(__dirname, "img")));
