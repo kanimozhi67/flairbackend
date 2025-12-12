@@ -46,8 +46,10 @@ app.use("/api/quiz/progress", progressRoutes);
 app.get("api/profile", getUserInfo);
 app.use("/img", express.static(path.join(__dirname, "img")));
 app.use("/api/quiz", quizRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  connectdb();
-});
+function startServer() {
+  app.listen(PORT, async () => {
+    console.log(`Server is running on port ${PORT}`);
+    await connectdb();
+  });
+}
+startServer();
