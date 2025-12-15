@@ -15,7 +15,7 @@ export function generateSortingQuestions(req, res) {
     return num;
   };
 
-  for (let i = 0; i < 3; i++) { // generate 5 questions
+  for (let i = 0; i < 1; i++) { // generate 5 questions
     const length = 3 + Math.floor(Math.random() * 3); // 3 to 5 numbers
     const numbers = [];
 
@@ -90,7 +90,7 @@ export function generateSortingQuestions2(req, res) {
     return num;
   };
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 1; i++) {
     const length = 4 + Math.floor(Math.random() * 2); // 4 or 5 numbers
     const numbers = [];
 
@@ -122,7 +122,7 @@ export function generateSortingQuestions3(req, res) {
     return num;
   };
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 1; i++) {
     const length = 4 + Math.floor(Math.random() * 2); // 4 or 5 numbers
     const numbers = [];
 
