@@ -3,11 +3,12 @@ import auth from "../middleware/authMiddleware.js";
 //import { getQuestion } from "../controllers/quizController.js";
 import { generateSortingQuestions3,  generateSortingQuestions, checkSortingAnswers, 
     generateSortingQuestions2} from "../controllers/quizcontrollersort.js";
-import {   generateQuestionMul, generateQuestionMul2, generateQuestionMul3 } from "../controllers/quizController.js";
-import {
-  checkAnswer,
-  generateQuestionAddSub,generateQuestionAddSub3,
+import {   generateQuestionMul, generateQuestionMul2, generateQuestionMul3 } 
+     from "../controllers/quizController.js";
+import { checkAnswer, generateQuestionAddSub,generateQuestionAddSub3,
 } from "../controllers/quizController.js";
+import { generateSudoku, checkSudoku} from "../controllers/sudokuController.js";
+import { generatePuzzle,checkPuzzle } from "../controllers/puzzleController.js";
 
 
 const router = express.Router();
@@ -20,9 +21,13 @@ router.get("/mathlevel3", generateQuestionAddSub3);
 // Endpoint to get new sorting questions
 router.get("/sort", generateSortingQuestions);
 router.get("/mul", generateQuestionMul);
+router.get("/sudoku", generateSudoku);
+router.get("/puzzle", generatePuzzle);
 
 // Endpoint to submit answers
 router.post("/checksort", checkSortingAnswers);
+router.post("/checksudoku", checkSudoku);
+router.post("/checkpuzzle", checkPuzzle);
 
 router.get("/sortlevel2", generateSortingQuestions2);
 
