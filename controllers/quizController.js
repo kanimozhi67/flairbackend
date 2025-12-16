@@ -105,3 +105,5 @@ export async function checkAnswer(req, res) {
 
   res.json({ score, correctAnswers }); // SEND IT!
 }
+
+
