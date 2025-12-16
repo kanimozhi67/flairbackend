@@ -39,7 +39,7 @@ function fillBoard(board, row = 0, col = 0) {
   return false;
 }
 
-function removeCells(board, difficulty = 6) {
+function removeCells(board, difficulty = 5) {
   const puzzle = board.map((row) => [...row]);
   let removed = 0;
   while (removed < difficulty) {
@@ -65,7 +65,28 @@ export function generateSudoku(req, res) {
 
   res.json({ puzzleId, questions: puzzle });
 }
+export function generateSudoku2(req, res) {
+  const board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
+  fillBoard(board);
+  const solution = board.map((row) => [...row]);
+  const puzzle = removeCells(board,6);
 
+  const puzzleId = uuidv4();
+  sudokuStore[puzzleId] = { puzzle, solution };
+
+  res.json({ puzzleId, questions: puzzle });
+}
+export function generateSudoku3(req, res) {
+  const board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
+  fillBoard(board);
+  const solution = board.map((row) => [...row]);
+  const puzzle = removeCells(board,7);
+
+  const puzzleId = uuidv4();
+  sudokuStore[puzzleId] = { puzzle, solution };
+
+  res.json({ puzzleId, questions: puzzle });
+}
 // Check Sudoku
 export async function checkSudoku(req, res) {
   try {

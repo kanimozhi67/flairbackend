@@ -7,13 +7,13 @@ const puzzleStore = {};
 /**
  * Generate a single path puzzle
  */
-export function generatePuzzle(req, res) {
+const createSudoku =(req,res,x=5,y=10,z=5)=> {
   const puzzleId = Date.now().toString();
 
   // Randomized but valid puzzle
-  const a = Math.floor(Math.random() * 5) + 1; // 1–5
-  const b = Math.floor(Math.random() * 10) + 5;
-  const c = Math.floor(Math.random() * 5) + 1; // 5–9
+  const a = Math.floor(Math.random() * x) + 1; // 1–5
+  const b = Math.floor(Math.random() * y) + a;
+  const c = Math.floor(Math.random() * z) + 1; // 5–9
 const A =b-a;
 const B=A+c;
 const C=B;
@@ -39,6 +39,15 @@ const C=B;
   res.json({ puzzle });
 }
 
+export function generatePuzzle(req, res) {
+  createSudoku(req,res);
+}
+export function generatePuzzle2(req, res) {
+  createSudoku(req,res,10,15,10);
+}
+export function generatePuzzle3(req, res) {
+  createSudoku(req,res,15,20,15);
+}
 export async function checkPuzzle(req, res) {
   const { userId, puzzleId, answers } = req.body;
 
