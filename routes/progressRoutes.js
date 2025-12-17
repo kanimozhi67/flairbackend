@@ -4,6 +4,7 @@ import {
   addPoints,
   getTodayPoints,
   getProgressSummary,
+  leaderboard,
 } from "../controllers/progressController.js";
 
 const router = express.Router();
@@ -13,6 +14,7 @@ router.post("/addpoints", auth, addPoints);
 
 // Get today's points for the logged-in user
 router.get("/today", auth, getTodayPoints);
+router.get("/leaderbd", leaderboard);
 
 // Get overall progress summary (weekly, monthly, total, etc.)
 router.get("/summary", auth, getProgressSummary);
