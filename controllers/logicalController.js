@@ -1,33 +1,98 @@
-const shapes = ["🔺", "⭕", "⬛", "⭐", "🔶", "🔵"];
 
-export function generateLogic(req, res) {
+import UserProgress from "../models/UserProgress.js";
 
-  const A = Math.floor(Math.random() * shapes.length);
-  const B = Math.floor(Math.random() * shapes.length);
-  const C = Math.floor(Math.random() * shapes.length);
+// In-memory store for generated sorting questions
+const questionsStore = {}; // { [id]: { numbers, answer } }
 
-  const n = Math.floor(Math.random() * 3) + 1; // repeat 1 or 2 times
+const shapes = ["🟪", "⭐", "💛", "💎", "⭕", "🟢"];
+const heart =  ["❤️", "💛", "💚", "💙", "💜", "🖤", "🤍"];
+const arrow = [  "⬅️",  "➡️",  "⬆️",   "⬇️",  "🔄" ] ;
 
-  // Base pattern
-  const Xarr = [shapes[A], shapes[B], shapes[C]];
-console.log(Xarr)
-  // Repeat pattern
-  let result = Array(n).fill().flatMap(() => Xarr);
-console.log(result)
-  const len = result.length;
 
-  // Pick safe index
-  const fill = Math.floor(Math.random() * (len - 1));
+const genques = (req,res,emoji)=>{
+   const shuffled = [...emoji].sort(() => 0.5 - Math.random());
+  const base = shuffled.slice(0, 3);
 
-  // Store correct answers (optional)
-  const p = result[fill];
-  const q = result[fill + 1];
+  const repeat = Math.floor(Math.random() * 3) + 2; // 2–4 times
+  let pattern = Array(repeat).fill().flatMap(() => base);
 
-  // Hide two elements
-  result[fill] = "❓";
-  result[fill + 1] = "❓";
+  const blockSize = base.length;
+  const blockIndex = Math.floor(Math.random() * repeat);
+  const fillIndex =
+    blockIndex * blockSize + Math.floor(Math.random() * (blockSize - 1));
+
+  const answers = {
+    [fillIndex]: pattern[fillIndex],
+    [fillIndex + 1]: pattern[fillIndex + 1],
+  };
+
+  pattern[fillIndex] = "❓";
+  pattern[fillIndex + 1] = "❓";
+
+  const questionId = Date.now().toString();
+
+  questionsStore[questionId] = {
+    answer: answers,
+  };
 
   res.json({
-    pattern: result
-   });
+    id: questionId,
+    pattern,
+  });
+}
+
+export function generateLogic(req, res) {
+ genques(req,res,shapes)
+}
+export function generateLogic2(req, res) {
+ genques(req,res,heart)
+}
+export function generateLogic3(req, res) {
+ genques(req,res,arrow)
+}
+
+
+export async function checkLogic(req, res) {
+  const { userId, answers } = req.body;
+
+  if (!answers || !Array.isArray(answers)) {
+    return res.status(400).json({ error: "Invalid answers format." });
+  }
+
+  let score = 0;
+  const correctAnswers = {};
+
+  for (const q of answers) {
+    const original = questionsStore[q.id];
+    if (!original) continue;
+
+    correctAnswers[q.id] = original.answer;
+
+    const userAnswer = q.answer;
+    const correct = original.answer;
+
+    const isCorrect =
+      userAnswer &&
+      Object.keys(correct).every(
+        key => userAnswer[key] === correct[key]
+      );
+
+    if (isCorrect) score++;
+  }
+
+  // Save progress
+  if (userId) {
+    try {
+      await UserProgress.create({
+        user: userId,
+        score,
+        type: "logic",
+        date: new Date(),
+      });
+    } catch (err) {
+      console.error("Error saving logic progress:", err);
+    }
+  }
+
+  res.json({ score, correctAnswers });
 }
