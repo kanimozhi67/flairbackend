@@ -9,7 +9,7 @@ import { checkAnswer, generateQuestionAddSub,generateQuestionAddSub3,
 } from "../controllers/quizController.js";
 import { generateSudoku, generateSudoku2, generateSudoku3, checkSudoku} from "../controllers/sudokuController.js";
 import { generatePuzzle,generatePuzzle2,generatePuzzle3,checkPuzzle } from "../controllers/puzzleController.js";
-import {generateLogic} from "../controllers/logicalController.js"
+import {generateLogic,generateLogic2,generateLogic3,checkLogic} from "../controllers/logicalController.js"
 
 const router = express.Router();
 
@@ -28,10 +28,13 @@ router.get("/puzzle", generatePuzzle);
 router.get("/puzzlelevel2", generatePuzzle2);
 router.get("/puzzlelevel3", generatePuzzle3);
 router.get("/logic", generateLogic);
+router.get("/logiclevel2", generateLogic2);
+router.get("/logiclevel3", generateLogic3);
 // Endpoint to submit answers
 router.post("/checksort", checkSortingAnswers);
 router.post("/checksudoku", checkSudoku);
 router.post("/checkpuzzle", checkPuzzle);
+router.post("/checklogic", checkLogic);
 
 router.get("/sortlevel2", generateSortingQuestions2);
 
