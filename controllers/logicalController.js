@@ -7,13 +7,13 @@ const questionsStore = {}; // { [id]: { numbers, answer } }
 const shapes = ["🟪", "⭐", "💛", "💎", "⭕", "🟢"];
 const heart =  ["❤️", "💛", "💚", "💙", "💜", "🖤", "🤍"];
 const arrow = [  "⬅️",  "➡️",  "⬆️",   "⬇️",  "🔄" ] ;
+const fullarrow=["↗️","↘️","↙️","↖️","⬅️", "➡️", "⬆️","⬇️","🔄" ]
 
-
-const genques = (req,res,emoji)=>{
+const genques = (req,res,emoji,t=2)=>{
    const shuffled = [...emoji].sort(() => 0.5 - Math.random());
   const base = shuffled.slice(0, 4);
 
-  const n = Math.floor(Math.random() * 3) + 2; // 2–4 times
+  const n = Math.floor(Math.random() * 2) + t; // 2–3 times
  
 const repeat=( n % 2 === 0 ? n + 1 : n);
 
@@ -53,6 +53,10 @@ export function generateLogic2(req, res) {
 export function generateLogic3(req, res) {
  genques(req,res,arrow)
 }
+export function generateLogicp(req, res) {
+ genques(req,res,arrow)
+}
+
 
 
 export async function checkLogic(req, res) {
