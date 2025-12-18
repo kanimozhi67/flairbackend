@@ -13,7 +13,10 @@ const genques = (req,res,emoji)=>{
    const shuffled = [...emoji].sort(() => 0.5 - Math.random());
   const base = shuffled.slice(0, 3);
 
-  const repeat = Math.floor(Math.random() * 3) + 2; // 2–4 times
+  const n = Math.floor(Math.random() * 3) + 2; // 2–4 times
+ 
+const repeat=( n % 2 === 0 ? n + 1 : n);
+
   let pattern = Array(repeat).fill().flatMap(() => base);
 
   const blockSize = base.length;
