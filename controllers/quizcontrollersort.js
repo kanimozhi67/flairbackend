@@ -4,19 +4,19 @@ import UserProgress from "../models/UserProgress.js";
 const questionsStore = {}; // { [id]: { numbers, answer } }
 
 // Generate multiple random sorting questions with unique numbers
-export function generateSortingQuestions(req, res) {
-  const questions = [];
+const genQues=(req,res,n,t=0)=>{
+   const questions = [];
 
   const randomNum = (exclude = []) => {
     let num;
     do {
-      num = Math.floor(Math.random() * 20); // numbers between 0–19
+      num = Math.floor(Math.random() * n)+t; // numbers between 0–19
     } while (exclude.includes(num));
     return num;
   };
 
   for (let i = 0; i < 1; i++) { // generate 5 questions
-    const length = 3 + Math.floor(Math.random() * 3); // 3 to 5 numbers
+    const length = 3 + Math.floor(Math.random() * 3); // 4 to 5 numbers
     const numbers = [];
 
     while (numbers.length < length) {
@@ -35,6 +35,33 @@ export function generateSortingQuestions(req, res) {
 
   res.json({ questions });
 }
+export function generateSortingQuestions(req, res) {
+ genQues(req,res,20);
+}
+
+export function generateSortingQuestions2(req, res) {
+  genQues(req,res,50)
+}
+
+export function generateSortingQuestions3(req, res) {
+ 
+ genQues(req,res,100)
+  
+}
+export function generateSortingQuestionsp(req, res) {
+ genQues(req,res,1000,100);
+}
+
+export function generateSortingQuestionsp2(req, res) {
+  genQues(req,res,2000,500)
+}
+
+export function generateSortingQuestionsp3(req, res) {
+ 
+ genQues(req,res,10000,1000)
+  
+}
+
 
 // Check user's submitted sorting answers
 export async function checkSortingAnswers(req, res) {
@@ -78,65 +105,3 @@ export async function checkSortingAnswers(req, res) {
   res.json({ score, correctAnswers });
 }
 
-// Generate Level 2 sorting questions (numbers up to 100)
-export function generateSortingQuestions2(req, res) {
-  const questions = [];
-
-  const randomNum = (exclude = []) => {
-    let num;
-    do {
-      num = Math.floor(Math.random() * 50) + 1; // 1–100
-    } while (exclude.includes(num));
-    return num;
-  };
-
-  for (let i = 0; i < 1; i++) {
-    const length = 4 + Math.floor(Math.random() * 2); // 4 or 5 numbers
-    const numbers = [];
-
-    while (numbers.length < length) {
-      numbers.push(randomNum(numbers)); // unique numbers
-    }
-
-    const answer = [...numbers].sort((a, b) => a - b); // ascending
-    const id = Date.now() + i;
-
-    questionsStore[id] = { numbers, answer };
-
-    questions.push({ id, numbers });
-  }
-
-  res.json({ questions });
-}
-
-
-// Generate Level 2 sorting questions (numbers up to 100)
-export function generateSortingQuestions3(req, res) {
-  const questions = [];
-
-  const randomNum = (exclude = []) => {
-    let num;
-    do {
-      num = Math.floor(Math.random() * 100) + 1; // 1–100
-    } while (exclude.includes(num));
-    return num;
-  };
-
-  for (let i = 0; i < 1; i++) {
-    const length = 4 + Math.floor(Math.random() * 2); // 4 or 5 numbers
-    const numbers = [];
-
-    while (numbers.length < length) {
-      numbers.push(randomNum(numbers)); // unique numbers
-    }
-
-    const answer = [...numbers].sort((a, b) => a - b); // ascending
-    const id = Date.now() + i;
-
-    questionsStore[id] = { numbers, answer };
-
-    questions.push({ id, numbers });
-  }
-
-  res.json({ questions });
-}

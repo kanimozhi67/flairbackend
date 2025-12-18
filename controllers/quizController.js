@@ -44,14 +44,14 @@ export function generateQuestionAddSubp3(req, res) {
   AddSub(5, 10000, req, res,1000);
 }
 
-function mult(b, req, res) {
+function mult(b, req, res,t=16) {
   const questions = [];
 
-  const randomNum = () => Math.floor(Math.random() * 16); // 0–15
+  
 
   for (let i = 0; i < 5; i++) {
     // generate 5 questions
-    const a = randomNum();
+    const a = Math.floor(Math.random() * t); // 0–15
 
     const operator = "×"; // or "*"
 
@@ -76,41 +76,41 @@ export function generateQuestionMul2(req, res) {
 export function generateQuestionMul3(req, res) {
   mult(5, req, res);
 }
-// // Check user's submitted quiz answers
-// export async function checkAnswer(req, res) {
-//   const { userId, answers } = req.body;
+function mult2( req, res,t,u=0) {
+  const questions = [];
 
-//   if (!answers || !Array.isArray(answers)) {
-//     return res.status(400).json({ error: "Invalid answers format." });
-//   }
+  
 
-//   let score = 0;
-//   const correctAnswers = {}; // NEW
+  for (let i = 0; i < 5; i++) {
+    // generate 5 questions
+    const a = Math.floor(Math.random() * 21); // 0–20
+ const b=Math.floor(Math.random() * t)+u; 
+    const operator = "×"; // or "*"
 
-//   for (const q of answers) {
-//     const original = questionsStore[q.id];
-//     if (!original) continue;
+    const answer = a * b;
+    const id = Date.now() + i; // unique ID
 
-//     correctAnswers[q.id] = original.answer; // SEND correct answer
+    // Store question & answer on backend
+    questionsStore[id] = { a, b, operator, answer };
 
-//     if (q.answer === original.answer) score++;
-//   }
+    // Send only the question to frontend
+    questions.push({ id, a, b, operator });
+  }
 
-//   // Save progress
-//   if (userId) {
-//     try {
-//       await UserProgress.create({
-//         user: userId,
-//         score,
-//         date: new Date(),
-//       });
-//     } catch (err) {
-//       console.error("Error saving progress:", err);
-//     }
-//   }
+  res.json({ questions });
+}
+export function generateQuestionMulp(req, res) {
+  mult(20, req, res,50);
+}
+export function generateQuestionMulp2(req, res) {
+   
+  mult2( req, res,9,2);
+}
+export function generateQuestionMulp3(req, res) {
+  // const x=Math.floor(Math.random() * 6)+6; // 6-12
+  mult2( req, res,6,6);
+}
 
-//   res.json({ score, correctAnswers }); // SEND IT!
-// }
 export async function checkAnswer(req, res) {
   const { userId, answers } = req.body;
 
