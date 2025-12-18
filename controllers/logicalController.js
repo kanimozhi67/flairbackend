@@ -11,7 +11,7 @@ const arrow = [  "⬅️",  "➡️",  "⬆️",   "⬇️",  "🔄" ] ;
 
 const genques = (req,res,emoji)=>{
    const shuffled = [...emoji].sort(() => 0.5 - Math.random());
-  const base = shuffled.slice(0, 3);
+  const base = shuffled.slice(0, 4);
 
   const n = Math.floor(Math.random() * 3) + 2; // 2–4 times
  
