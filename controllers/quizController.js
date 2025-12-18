@@ -4,15 +4,15 @@ import UserProgress from "../models/UserProgress.js";
 const questionsStore = {}; // { [id]: { a, b, operator, answer } }
 
 // Generate multiple random questions
-const AddSub = (n, t, req, res) => {
+const AddSub = (n, t, req, res,l=0) => {
   const questions = [];
 
   // const randomNum = () => Math.floor(Math.random() * t);
 
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++ ) {
     // generate 5 questions
-    let a = Math.floor(Math.random() * t);
-    let b = Math.floor(Math.random() * 10);
+    let a = Math.floor(Math.random() * t)+l;// 0 to t-1
+    let b = Math.floor(Math.random() * 10)+l;
     const operator = Math.random() < 0.5 ? "+" : "-";
 
     // Prevent negative subtraction
@@ -36,6 +36,12 @@ export function generateQuestionAddSub(req, res) {
 
 export function generateQuestionAddSub3(req, res) {
   AddSub(3, 15, req, res);
+}
+export function generateQuestionAddSubp(req, res) {
+  AddSub(5, 1000, req, res,100);
+}
+export function generateQuestionAddSubp3(req, res) {
+  AddSub(5, 10000, req, res,1000);
 }
 
 function mult(b, req, res) {
@@ -70,7 +76,41 @@ export function generateQuestionMul2(req, res) {
 export function generateQuestionMul3(req, res) {
   mult(5, req, res);
 }
-// Check user's submitted quiz answers
+// // Check user's submitted quiz answers
+// export async function checkAnswer(req, res) {
+//   const { userId, answers } = req.body;
+
+//   if (!answers || !Array.isArray(answers)) {
+//     return res.status(400).json({ error: "Invalid answers format." });
+//   }
+
+//   let score = 0;
+//   const correctAnswers = {}; // NEW
+
+//   for (const q of answers) {
+//     const original = questionsStore[q.id];
+//     if (!original) continue;
+
+//     correctAnswers[q.id] = original.answer; // SEND correct answer
+
+//     if (q.answer === original.answer) score++;
+//   }
+
+//   // Save progress
+//   if (userId) {
+//     try {
+//       await UserProgress.create({
+//         user: userId,
+//         score,
+//         date: new Date(),
+//       });
+//     } catch (err) {
+//       console.error("Error saving progress:", err);
+//     }
+//   }
+
+//   res.json({ score, correctAnswers }); // SEND IT!
+// }
 export async function checkAnswer(req, res) {
   const { userId, answers } = req.body;
 
@@ -79,18 +119,20 @@ export async function checkAnswer(req, res) {
   }
 
   let score = 0;
-  const correctAnswers = {}; // NEW
+  const correctAnswers = {};
 
   for (const q of answers) {
     const original = questionsStore[q.id];
     if (!original) continue;
 
-    correctAnswers[q.id] = original.answer; // SEND correct answer
+    correctAnswers[q.id] = original.answer;
 
-    if (q.answer === original.answer) score++;
+    if (Number(q.answer) === original.answer) score++;
+
+    // Optional: remove question from store after checking
+    delete questionsStore[q.id];
   }
 
-  // Save progress
   if (userId) {
     try {
       await UserProgress.create({
@@ -103,7 +145,7 @@ export async function checkAnswer(req, res) {
     }
   }
 
-  res.json({ score, correctAnswers }); // SEND IT!
+  res.json({ score, correctAnswers });
 }
 
 

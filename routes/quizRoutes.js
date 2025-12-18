@@ -5,7 +5,7 @@ import { generateSortingQuestions3,  generateSortingQuestions, checkSortingAnswe
     generateSortingQuestions2} from "../controllers/quizcontrollersort.js";
 import {   generateQuestionMul, generateQuestionMul2, generateQuestionMul3 } 
      from "../controllers/quizController.js";
-import { checkAnswer, generateQuestionAddSub,generateQuestionAddSub3,
+import { checkAnswer, generateQuestionAddSub,generateQuestionAddSub3, generateQuestionAddSubp,generateQuestionAddSubp3
 } from "../controllers/quizController.js";
 import { generateSudoku, generateSudoku2, generateSudoku3, checkSudoku} from "../controllers/sudokuController.js";
 import { generateSudokup, generateSudokup2, generateSudokup3, checkSudokup} from "../controllers/psudokuController.js";
@@ -15,22 +15,33 @@ import {generateLogic,generateLogic2,generateLogic3,checkLogic} from "../control
 const router = express.Router();
 
 router.get("/math", generateQuestionAddSub);
+router.get("/mathp", generateQuestionAddSubp);
 router.post("/check", checkAnswer);
 
 router.get("/mathlevel3", generateQuestionAddSub3);
+router.get("/mathplevel3", generateQuestionAddSubp3);
 //router.post("/check", checkAnswer);
 // Endpoint to get new sorting questions
 router.get("/sort", generateSortingQuestions);
+router.get("/sortlevel2", generateSortingQuestions2);
+router.get("/sortlevel3", generateSortingQuestions3);
+
+
 router.get("/mul", generateQuestionMul);
+router.get("/mullevel2",  generateQuestionMul2);
+router.get("/mullevel3",  generateQuestionMul3);
+
 router.get("/sudoku", generateSudoku);
 router.get("/sudokulevel2", generateSudoku2);
 router.get("/sudokulevel3", generateSudoku3);
 router.get("/sudokup", generateSudokup);
 router.get("/sudokuplevel2", generateSudokup2);
 router.get("/sudokuplevel3", generateSudokup3);
+
 router.get("/puzzle", generatePuzzle);
 router.get("/puzzlelevel2", generatePuzzle2);
 router.get("/puzzlelevel3", generatePuzzle3);
+
 router.get("/logic", generateLogic);
 router.get("/logiclevel2", generateLogic2);
 router.get("/logiclevel3", generateLogic3);
@@ -41,12 +52,8 @@ router.post("/checksudokup", checkSudokup);
 router.post("/checkpuzzle", checkPuzzle);
 router.post("/checklogic", checkLogic);
 
-router.get("/sortlevel2", generateSortingQuestions2);
 
-router.get("/sortlevel3", generateSortingQuestions3);
-router.get("/mullevel2",  generateQuestionMul2);
 
-router.get("/mullevel3",  generateQuestionMul3);
 
 
 

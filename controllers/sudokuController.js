@@ -101,24 +101,33 @@ export async function checkSudoku(req, res) {
       return res.status(404).json({ error: "Puzzle not found." });
     }
 
-    const solution = puzzleData.solution;
+    const { puzzle, solution } = puzzleData;
+
     let score = 0;
+    let total = 0;
     const correctAnswers = {};
 
     answers.forEach(({ row, col, value }) => {
+      // ✅ Only check cells that were originally empty
+      if (puzzle[row][col] !== 0) return;
+
+      total++;
+
       const correctValue = solution[row][col];
       correctAnswers[`${row}-${col}`] = correctValue;
-      if (Number(value) === correctValue) score++;
+
+      if (Number(value) === correctValue) {
+        score++;
+      }
     });
 
-    // Optional: save user progress
     if (userId) {
       try {
         await UserProgress.create({
           user: userId,
           puzzleId,
           score,
-          total: SIZE * SIZE,
+          total,
           date: new Date(),
         });
       } catch (err) {
@@ -126,7 +135,7 @@ export async function checkSudoku(req, res) {
       }
     }
 
-    res.json({ score, correctAnswers });
+    res.json({ score, total, correctAnswers });
   } catch (err) {
     console.error("checkSudoku error:", err);
     res.status(500).json({ error: "Internal server error." });
