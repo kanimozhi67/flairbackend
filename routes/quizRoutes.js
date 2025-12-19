@@ -16,7 +16,8 @@ import {
   generateQuestionMul,
   generateQuestionMul2,
   generateQuestionMul3,
-  checkAnswerCircle
+  checkAnswerCircle,
+  checkAddCircle
 } from "../controllers/quizController.js";
 import {
   generateQuestionMulp,
@@ -100,6 +101,7 @@ router.get("/logicp", generateLogicp);
 // Endpoint to submit answers
 router.post("/checksort", checkSortingAnswers);
 router.post("/checkmulplevel3", checkAnswerCircle);
+router.post("/checkmathlevel3", checkAddCircle);
 router.post("/checksudokup", checkSudokup);
 router.post("/checkpuzzle", checkPuzzle);
 router.post("/checklogic", checkLogic);
