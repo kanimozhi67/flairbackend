@@ -54,7 +54,7 @@ export function generateLogic3(req, res) {
  genques(req,res,arrow)
 }
 export function generateLogicp(req, res) {
- genques(req,res,arrow)
+ genques(req,res,fullarrow)
 }
 
 
