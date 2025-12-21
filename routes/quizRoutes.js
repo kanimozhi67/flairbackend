@@ -102,6 +102,7 @@ router.get("/logicp", generateLogicp);
 router.post("/checksort", checkSortingAnswers);
 router.post("/checkmulplevel3", checkAnswerCircle);
 router.post("/checkmathlevel3", checkAddCircle);
+router.post("/checksudoku", checkSudoku);
 router.post("/checksudokup", checkSudokup);
 router.post("/checkpuzzle", checkPuzzle);
 router.post("/checklogic", checkLogic);
