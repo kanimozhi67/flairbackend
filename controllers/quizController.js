@@ -157,7 +157,7 @@ function mult(b, req, res, t = 16) {
   res.json({ questions });
 }
 export function generateQuestionMul(req, res) {
-  mult(10, req, res);
+  mult(2, req, res);
 }
 export function generateQuestionMul2(req, res) {
   mult(10, req, res);
