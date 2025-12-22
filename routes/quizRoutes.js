@@ -32,6 +32,9 @@ import {
   generateQuestionAddSubp3,
 } from "../controllers/quizController.js";
 import {
+  genMoney,genMoney2,checkAnswerMoney,genWordProblems
+} from "../controllers/moneyController.js"
+import {
   generateSudoku,
   generateSudoku2,
   generateSudoku3,
@@ -88,6 +91,10 @@ router.get("/sudokup", generateSudokup);
 router.get("/sudokuplevel2", generateSudokup2);
 router.get("/sudokuplevel3", generateSudokup3);
 
+router.get("/money", genMoney);
+router.get("/moneylevel2", genMoney2);
+router.get("/moneylevel3", genWordProblems);
+
 router.get("/puzzle", generatePuzzle);
 router.get("/puzzlelevel2", generatePuzzle2);
 router.get("/puzzlelevel3", generatePuzzle3);
@@ -103,6 +110,8 @@ router.post("/checksort", checkSortingAnswers);
 router.post("/checkmulplevel3", checkAnswerCircle);
 router.post("/checkmathlevel3", checkAddCircle);
 router.post("/checksudoku", checkSudoku);
+router.post("/checkmoney", checkAnswerMoney);
+
 router.post("/checksudokup", checkSudokup);
 router.post("/checkpuzzle", checkPuzzle);
 router.post("/checklogic", checkLogic);
