@@ -321,3 +321,59 @@ export async function checkAnswerCircle(req, res) {
 
   res.json({ score, results });
 }
+
+function div(t, req, res,s=13) {
+  const questions = [];
+
+  for (let i = 0; i < 5; i++) {
+    // generate 5 questions
+    const d = Math.floor(Math.random() * s)+2; // 0–15
+ const b = Math.floor(Math.random() * t)+2; // 0-9
+    const operator = "➗"; // or "*"
+const a =d *b;
+    const answer = a / b;
+    const id = Date.now() + i; // unique ID
+
+    // Store question & answer on backend
+    questionsStore[id] = { a, b, operator, answer };
+
+    // Send only the question to frontend
+    questions.push({ id, a, b, operator });
+  }
+
+  res.json({ questions });
+}
+function div3( req, res) {
+  const questions = [];
+
+  for (let i = 0; i < 5; i++) {
+    // generate 5 questions
+    const d =  Number((Math.random() * 100).toFixed(2));// 0–15
+     const b = Math.floor(Math.random() * 8)+2; // 0-9
+const a= d*b;
+    const operator = "➗"; // or "*"
+
+    const answer = a / b;
+    const id = Date.now() + i; // unique ID
+
+    // Store question & answer on backend
+    questionsStore[id] = { a, b, operator, answer };
+
+    // Send only the question to frontend
+    questions.push({ id, a, b, operator });
+  }
+
+  res.json({ questions });
+}
+export function generateQuestionDiv(req, res) {
+  div(4, req, res);
+}
+export function generateQuestionDiv2(req, res) {
+  
+  div(8, req, res,100);
+}
+export function generateQuestionDiv3(req, res) {
+  
+  
+  div3( req, res);
+}

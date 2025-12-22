@@ -17,7 +17,10 @@ import {
   generateQuestionMul2,
   generateQuestionMul3,
   checkAnswerCircle,
-  checkAddCircle
+  checkAddCircle,
+  generateQuestionDiv,
+  generateQuestionDiv2,
+  generateQuestionDiv3
 } from "../controllers/quizController.js";
 import {
   generateQuestionMulp,
@@ -83,6 +86,10 @@ router.get("/mullevel3", generateQuestionMul3);
 router.get("/mulp", generateQuestionMulp);
 router.get("/mulplevel2", generateQuestionMulp2);
 router.get("/mulplevel3", generateQuestionMulp3);
+
+router.get("/div", generateQuestionDiv);
+router.get("/divlevel2", generateQuestionDiv2);
+router.get("/divlevel3", generateQuestionDiv3);
 
 router.get("/sudoku", generateSudoku);
 router.get("/sudokulevel2", generateSudoku2);
