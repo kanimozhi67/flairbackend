@@ -132,7 +132,11 @@ export function generateQuestionAddSubp(req, res) {
   AddSub(5, 1000, req, res, 100);
 }
 export function generateQuestionAddSubp3(req, res) {
-  AddSub(5, 10000, req, res, 1000);
+  // AddSub(5, 10000, req, res, 1000);
+   const t = Math.floor(Math.random() * 40) + 2; // 2-5
+  const b = Math.floor(Math.random() * 5) +1 ; // 2
+
+  addsub3(b, req, res, t);
 }
 
 function mult(b, req, res, t = 16) {
