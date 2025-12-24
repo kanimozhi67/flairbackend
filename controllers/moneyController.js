@@ -145,28 +145,28 @@ export const gen2Question = () => {
     case "add": {
       const a = randomRupee();
       const b = randomRupee();
-      questionText = `₹ ${a} + ₹ ${b} = ___`;
+      questionText = `₹ ${a} ➕ ₹ ${b} = ___`;
       answer = +(a + b).toFixed(2);
       break;
     }
     case "subtract": {
       const a = randomRupee(100, 5000);
       const b = randomRupee(1, a);
-      questionText = `₹ ${a} - ₹ ${b} = ___`;
+      questionText = `₹ ${a} ➖ ₹ ${b} = ___`;
       answer = +(a - b).toFixed(2);
       break;
     }
     case "multiply": {
       const a = randomRupee(1, 100);
       const b = Math.floor(Math.random() * 10) + 1;
-      questionText = `₹ ${a} * ${b} = ___`;
+      questionText = `₹ ${a} ✖️ ${b} = ___`;
       answer = +(a * b).toFixed(2);
       break;
     }
     case "divide": {
       const b = Math.floor(Math.random() * 9) + 1;
       const a = +(randomRupee(1, 100) * b).toFixed(2);
-      questionText = `₹ ${a} / ${b} = ___`;
+      questionText = `₹ ${a} ➗ ${b} = ___`;
       answer = +(a / b).toFixed(2);
       break;
     }
