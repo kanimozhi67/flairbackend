@@ -35,6 +35,10 @@ import {
   generateQuestionAddSubp3,
 } from "../controllers/quizController.js";
 import {
+  genUnitQuiz,checkUnitAnswers,
+  genAvgQuiz,checkAvgAnswers,genWordQuiz,checkWordAnswers
+} from "../controllers/measurementController.js";
+import {
   genMoney,genMoney2,checkAnswerMoney,genWordProblems
 } from "../controllers/moneyController.js"
 import {
@@ -62,6 +66,7 @@ import {
   checkLogic,
 } from "../controllers/logicalController.js";
 import { generateLogicp } from "../controllers/logicalController.js";
+
 
 const router = express.Router();
 
@@ -91,6 +96,10 @@ router.get("/div", generateQuestionDiv);
 router.get("/divlevel2", generateQuestionDiv2);
 router.get("/divlevel3", generateQuestionDiv3);
 
+router.get("/measure", genUnitQuiz);
+router.get("/measurelevel2", genAvgQuiz);
+router.get("/measurelevel3", genWordQuiz);
+
 router.get("/sudoku", generateSudoku);
 router.get("/sudokulevel2", generateSudoku2);
 router.get("/sudokulevel3", generateSudoku3);
@@ -118,6 +127,9 @@ router.post("/checkmulplevel3", checkAnswerCircle);
 router.post("/checkmathlevel3", checkAddCircle);
 router.post("/checksudoku", checkSudoku);
 router.post("/checkmoney", checkAnswerMoney);
+router.post("/checkmeasure", checkUnitAnswers);
+router.post("/checkmeasure2", checkAvgAnswers);
+router.post("/checkmeasure3", checkWordAnswers);
 
 router.post("/checksudokup", checkSudokup);
 router.post("/checkpuzzle", checkPuzzle);
