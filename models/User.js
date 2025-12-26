@@ -1,29 +1,52 @@
 import mongoose from "mongoose";
 
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    avatar: {
+      type: String,
+      default: "/img/rabbitAvatar.png",
+    },
+    sticker: {
+      type: [String],
+      default: [],
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    class: {
+      type: String,
+      default:"App Class"
+    },
+    section: {
+      type: String,
+      default: "App Section",
+    },
+    level: {
+      type: String,
+      //   enum: ["kindergarden", "primary"],
+      // required: true,
+    
+    },
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
+    // 🔐 ADD THIS
+    role: {
+      type: String,
+      enum: ["User", "Admin"],
+      default: "User",
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  avatar: {
-    type: String, // single avatar URL for simplicity
-    default: "/img/rabbitAvatar.png",
-  },
-  sticker: {
-    type: [String], // single avatar URL for simplicity
-    default: [],
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 export default mongoose.model("User", userSchema);
