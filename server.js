@@ -13,6 +13,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import quizRoutes from "./routes/quizRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -38,6 +39,7 @@ app.use(cookieParser());
 app.use("/test", (req, res) => {
   return res.json({ message: "app is working" });
 });
+app.use("/api/admin",adminRoutes)
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 // app.get("/api/quiz/math", generateQuestionAddSub);

@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import express  from "express";
+import Task from "../models/Task.js";
 
 const router = express.Router();
 
@@ -36,4 +37,15 @@ export const getStickers = async (req, res) => {
   }
 }
 
+export const getTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find().sort({ createdAt: -1 });
 
+    res.status(200).json(tasks);
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to fetch tasks",
+      error: err.message,
+    });
+  }
+};
