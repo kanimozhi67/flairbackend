@@ -99,3 +99,43 @@ export const completetask = async (req, res) => {
     res.status(500).json({ message: "Failed to complete task", error: err.message });
   }
 };
+
+// Get all tasks with students who completed them
+
+
+export const getTaskBoard = async (req, res) => {
+  try {
+    const tasks = await Task.find().sort({ createdAt: -1 });
+
+    const result = await Promise.all(
+      tasks.map(async (task) => {
+        // Find UserTasks for this task and populate user info
+        const userTasks = await UserTask.find({ taskId: task._id, completed: true })
+          .populate("userId", "username email"); // populate username & email
+
+        const completedStudents = userTasks.map((ut) => ({
+          username: ut.userId?.username || "Unknown", // fallback if population fails
+          email: ut.userId?.email || "Unknown",
+          totalPoints: ut.totalPoints || 0,
+        }));
+
+        return {
+          taskId: task._id,
+          title: task.title,
+          date: task.date,
+          categories: task.categories.map((c) => c.name),
+          active: task.active,
+          completedStudents,
+        };
+      })
+    );
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch task board", error: err.message });
+  }
+};
+
+
+
