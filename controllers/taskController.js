@@ -119,14 +119,24 @@ export const getTaskBoard = async (req, res) => {
           totalPoints: ut.totalPoints || 0,
         }));
 
+        // return {
+        //   taskId: task._id,
+        //   title: task.title,
+        //   date: task.date,
+        //   categories: task.categories.map((c) => c.name),
+        //   active: task.active,
+        //   completedStudents,
+        // };
         return {
-          taskId: task._id,
-          title: task.title,
-          date: task.date,
-          categories: task.categories.map((c) => c.name),
-          active: task.active,
-          completedStudents,
-        };
+  taskId: task._id,
+  title: task.title,
+  date: task.date,
+  categories: task.categories.map((c) => c.name),
+  active: task.active,
+  level: task.level, // <-- add this
+  completedStudents,
+};
+
       })
     );
 
