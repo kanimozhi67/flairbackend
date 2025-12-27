@@ -14,7 +14,7 @@ router.get("/:userId/stickers", getStickers);
 
 
 router.get("/todaytask", authMiddleware, todaytask);
-router.post("/completelevel",completetask );
+router.post("/completetask",authMiddleware,completetask );
 
 
 
