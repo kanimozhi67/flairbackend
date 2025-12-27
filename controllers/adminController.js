@@ -87,3 +87,26 @@ export const getTasks = async (req, res) => {
     });
   }
 };
+
+
+// DELETE /api/admin/task/:id
+export const deleteTask = async (req, res) => {
+  try {
+    const taskId = req.params.id;
+
+    // Delete the task
+    const deletedTask = await Task.findByIdAndDelete(taskId);
+
+    if (!deletedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Optionally, remove related UserTask entries
+    await UserTask.deleteMany({ taskId });
+
+    res.status(200).json({ message: "Task deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to delete task", error: err.message });
+  }
+};
