@@ -43,6 +43,7 @@ const UserTaskSchema = new mongoose.Schema(
     progress: [UserCategoryProgressSchema], // mirrors Task.categories
     totalPoints: { type: Number, default: 0 },
     completed: { type: Boolean, default: false },
+    level:{type:String}//primary ,kindergarten
   },
   { timestamps: true }
 );

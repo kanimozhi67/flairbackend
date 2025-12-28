@@ -3,44 +3,49 @@ import UserTask from "../models/UserTask.js";
 import User from "../models/User.js";
 
 
+
 export const createTask = async (req, res) => {
   try {
     const {
       title,
       description,
       category,
-      level,
-      selectedLevel,
+      level,          // kindergarten | primary
+      selectedLevel,  // 1 | 2 | 3
       date,
       active,
     } = req.body;
 
-    // 🔥 Build Task structure correctly
+    // ✅ Normalize level
+    const normalizedLevel = level.toLowerCase();
+
+    // ✅ Create Task WITH level
     const task = await Task.create({
       title,
       description,
       date,
       active,
+      level: normalizedLevel, // 🔥 ADD THIS
       categories: [
         {
           name: category,
           levels: [
             {
-              level,           // kindergarden | primary
-              selectedLevel,   // 1 | 2 | 3
-              points: 10,       // default points (change if needed)
+              level: normalizedLevel,
+              selectedLevel,
+              points: 10,
             },
           ],
         },
       ],
     });
 
-    // find eligible users
+    // ✅ Find users eligible for this task
     const users = await User.find({
-      level: level.toLowerCase(),
+      level: normalizedLevel,
     });
 
-    // create UserTask for each user
+    // ✅ Create UserTask entries
     const userTasks = users.map((user) => ({
       userId: user._id,
       taskId: task._id,
@@ -49,6 +54,7 @@ export const createTask = async (req, res) => {
           categoryName: category,
           levels: [
             {
+              level: normalizedLevel,
               selectedLevel,
               completed: false,
               score: 0,

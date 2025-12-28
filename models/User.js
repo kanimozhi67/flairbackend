@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    class: {
+    className: {
       type: String,
       default:"App Class"
     },
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema(
     },
     level: {
       type: String,
-      //   enum: ["kindergarden", "primary"],
+      //   enum: ["kindergarten", "primary"],
       // required: true,
     
     },
