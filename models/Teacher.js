@@ -25,6 +25,14 @@ const TeacherSchema = new mongoose.Schema(
       enum: ["Teacher", "Admin"],
       default: "Teacher",
     },
+     className: {
+      type: String,
+      required: true,
+    },
+     section: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -11,14 +11,10 @@ import {
   deleteSchool,
   createTeacher,
   deleteTeacher,
+  updateTeacher
 } from "../controllers/adminSchoolController.js";
 
 const router = express.Router();
-
-
-
-
-
 
 // DELETE task
 router.delete("/task/:id", deleteTask);
@@ -31,6 +27,7 @@ router.delete("/school/:schoolId", deleteSchool);
 
 // Teachers
 router.post("/teacher", createTeacher);
+router.put("/teacheredit/:id", updateTeacher);
 router.delete("/teacher/:teacherId", deleteTeacher);
 
 

@@ -109,34 +109,25 @@ export const getTaskBoard = async (req, res) => {
 
     const result = await Promise.all(
       tasks.map(async (task) => {
-        // Find UserTasks for this task and populate user info
         const userTasks = await UserTask.find({ taskId: task._id, completed: true })
-          .populate("userId", "username email"); // populate username & email
+          .populate("userId", "username email");
 
-        const completedStudents = userTasks.map((ut) => ({
-          username: ut.userId?.username || "Unknown", // fallback if population fails
+        const completedStudents = userTasks.map(ut => ({
+          username: ut.userId?.username || "Unknown",
           email: ut.userId?.email || "Unknown",
           totalPoints: ut.totalPoints || 0,
+          level: ut.level || task.level || "Unknown", // ✅ reliable
         }));
 
-        // return {
-        //   taskId: task._id,
-        //   title: task.title,
-        //   date: task.date,
-        //   categories: task.categories.map((c) => c.name),
-        //   active: task.active,
-        //   completedStudents,
-        // };
         return {
-  taskId: task._id,
-  title: task.title,
-  date: task.date,
-  categories: task.categories.map((c) => c.name),
-  active: task.active,
-  level: task.level, // <-- add this
-  completedStudents,
-};
-
+          taskId: task._id,
+          title: task.title,
+          date: task.date,
+          categories: task.categories.map(c => c.name),
+          active: task.active,
+          level: task.level, // task level
+          completedStudents,
+        };
       })
     );
 
@@ -146,6 +137,7 @@ export const getTaskBoard = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch task board", error: err.message });
   }
 };
+
 
 
 
