@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const studentsSchema = new mongoose.Schema(
   {
     school:{
 type:  mongoose.Schema.Types.ObjectId,
-ref: "Schools",
+ref: "School",
+  required: true,
     },
     username: {
       type: String,
@@ -13,7 +14,7 @@ ref: "Schools",
     },
     email: {
       type: String,
-     required: true,
+    // required: true,
       unique: true,
     },
     avatar: {
@@ -32,8 +33,8 @@ ref: "Schools",
     rollNo: {
       type: String,
         unique: true,
-        default:"70"
-      //required: true,
+        //default:"70"
+      required: true,
     },
     className: {
       type: String,
@@ -53,11 +54,11 @@ ref: "Schools",
     // 🔐 ADD THIS
     role: {
       type: String,
-      enum: ["User", "Admin","Student"],
-      default: "User",
+      enum: [ "Admin","Student"],
+      default: "Student",
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model("Students", studentsSchema);
