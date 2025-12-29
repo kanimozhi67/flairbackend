@@ -25,6 +25,7 @@ const SchoolSchema = new mongoose.Schema(
     },
     // Optional: array of teachers (can also populate from Teacher collection)
     teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Teacher" }],
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Students" }],
   },
   { timestamps: true }
 );

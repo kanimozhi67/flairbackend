@@ -20,16 +20,23 @@ export const getSchools = async (req, res) => {
     const schools = await School.find()
       .populate({
         path: "teachers",
-        select: "username email className section", // select only needed fields
+        select: "username email className section",
+      })
+      .populate({
+        path: "students",
+        select: "username rollNo className section level",
       })
       .lean();
 
     res.status(200).json(schools);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to fetch schools", error: err.message });
+    res.status(500).json({
+      message: "Failed to fetch schools",
+      error: err.message,
+    });
   }
 };
+
 // Delete a school
 export const deleteSchool = async (req, res) => {
   try {
