@@ -11,7 +11,8 @@ import {
   deleteSchool,
   createTeacher,
   deleteTeacher,
-  updateTeacher
+  updateTeacher,
+  createSchoolAdmin
 } from "../controllers/adminSchoolController.js";
 
 const router = express.Router();
@@ -27,6 +28,7 @@ router.delete("/school/:schoolId", deleteSchool);
 
 // Teachers
 router.post("/teacher", createTeacher);
+router.post("/schooladmin",authMiddleware, isAdmin , createSchoolAdmin);
 router.put("/teacheredit/:id", updateTeacher);
 router.delete("/teacher/:teacherId", deleteTeacher);
 

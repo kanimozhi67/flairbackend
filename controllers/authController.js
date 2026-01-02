@@ -6,6 +6,68 @@ import School from "../models/Schools.js";
 import Teacher from "../models/Teacher.js";
 
 
+export const schoolAdminLogin = async (req, res) => {
+  try {
+    const { schoolId, username, password } = req.body;
+
+    // 1. Validate input
+    if (!schoolId || !email || !password) {
+      return res.status(400).json({
+        message: "schoolId, username and password are required",
+      });
+    }
+
+    // 2. Find SchoolAdmin
+      const admin = await Teacher.findOne({ email, school: schoolId , role: "SchoolAdmin",}).populate("school");
+    
+  
+    if (!admin) {
+      return res.status(401).json({
+        message: "Invalid credentials",
+      });
+    }
+
+    // 3. Compare password
+    const isMatch = await bcrypt.compare(password, admin.password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        message: "Invalid credentials",
+      });
+    }
+
+    // 4. Generate JWT
+    const token = jwt.sign(
+      {
+        id: admin._id,
+       //  email:admin.email,
+        role: admin.role,
+        schoolId: admin.school,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // 5. Send response
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      admin: {
+        id: admin._id,
+       // email:admin.email,
+        username: admin.username,
+        role: admin.role,
+        schoolId: admin.school,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
+
 
 export const teacherLogin = async (req, res) => {
   try {
