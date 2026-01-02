@@ -200,25 +200,21 @@ export const leaderboard = async (req, res) => {
 };
 
 
-/**
- * GET /quiz/leaderboard/school?schoolId=xxx&className=YYY&studentId=ZZZ
- * Returns leaderboard for a school class including rollNo
- */
 
 
 // export const schoolLeaderboard = async (req, res) => {
 //   try {
 //     const { userId } = req.query;
 
-//     // 1️⃣ Find the logged-in student
+//     // 1️⃣ Get logged-in student
 //     const student = await StudentModel.findById(userId);
 //     if (!student) {
 //       return res.json({ top5: [], message: "Only students have school leaderboard" });
 //     }
 
-//     const { school: schoolId, className, section } = student;
+//     const { school: schoolId, className } = student;
 
-//     // 2️⃣ Get all students in the same school & class
+//     // 2️⃣ Find all students in the same school & class
 //     const studentsInClass = await StudentModel.find({
 //       school: schoolId,
 //       className,
@@ -226,50 +222,55 @@ export const leaderboard = async (req, res) => {
 
 //     const studentIds = studentsInClass.map((s) => s._id);
 
-//     if (!studentIds.length) {
+//     if (studentIds.length === 0) {
 //       return res.json({ top5: [] });
 //     }
 
-//     // 3️⃣ Aggregate points for these students
+//     // 3️⃣ Aggregate points for all students in class
 //     const agg = await UserProgress.aggregate([
-//       { $match: { ownerId: { $in: studentIds }, ownerType: "Student" } },
-//       { $group: { _id: "$ownerId", totalScore: { $sum: "$score" } } },
+//       { 
+//         $match: { 
+//           ownerType: "Student",
+//           ownerId: { $in: studentIds.map((id) => new mongoose.Types.ObjectId(id)) },
+//         } 
+//       },
+//       {
+//         $group: {
+//           _id: "$ownerId",
+//           totalScore: { $sum: "$score" },
+//         }
+//       },
+//       { $sort: { totalScore: -1 } },
+//       { $limit: 5 }
 //     ]);
 
-//     // 4️⃣ Populate username, rollNo, className, section
-//     const populated = await StudentModel.populate(agg, {
-//       path: "_id",
-//       select: "username rollNo className section",
-//     });
+//     // 4️⃣ Attach student info
+//     const leaderboardResult = await Promise.all(
+//       agg.map(async (item, index) => {
+//         const s = studentsInClass.find((stu) => stu._id.equals(item._id));
+//         return {
+//           studentId: s._id,
+//           username: s.username,
+//           rollNo: s.rollNo,
+//           className: s.className,
+//           section: s.section,
+//           points: item.totalScore,
+//           rank: index + 1,
+//         };
+//       })
+//     );
 
-//     // 5️⃣ Sort by points descending
-//     populated.sort((a, b) => b.totalScore - a.totalScore);
+//     res.json({ top5: leaderboardResult });
 
-//     // 6️⃣ Map to leaderboard format
-//     const leaderboardResult = populated.map((item, index) => ({
-//       studentId: item._id._id,
-//       username: item._id.username,
-//       rollNo: item._id.rollNo,
-//       className: item._id.className,
-//       section: item._id.section,
-//       points: item.totalScore,
-//       rank: index + 1,
-//     }));
-
-//     res.json({ top5: leaderboardResult.slice(0, 5) });
 //   } catch (err) {
 //     console.error("School leaderboard error:", err);
 //     res.status(500).json({ message: "Failed to get school leaderboard" });
 //   }
 // };
-
-
-
 export const schoolLeaderboard = async (req, res) => {
   try {
     const { userId } = req.query;
 
-    // 1️⃣ Get logged-in student
     const student = await StudentModel.findById(userId);
     if (!student) {
       return res.json({ top5: [], message: "Only students have school leaderboard" });
@@ -277,53 +278,65 @@ export const schoolLeaderboard = async (req, res) => {
 
     const { school: schoolId, className } = student;
 
-    // 2️⃣ Find all students in the same school & class
-    const studentsInClass = await StudentModel.find({
-      school: schoolId,
-      className,
-    }).select("_id username rollNo className section");
-
-    const studentIds = studentsInClass.map((s) => s._id);
-
-    if (studentIds.length === 0) {
-      return res.json({ top5: [] });
-    }
-
-    // 3️⃣ Aggregate points for all students in class
-    const agg = await UserProgress.aggregate([
-      { 
-        $match: { 
-          ownerType: "Student",
-          ownerId: { $in: studentIds.map((id) => new mongoose.Types.ObjectId(id)) },
-        } 
-      },
+    const leaderboard = await StudentModel.aggregate([
       {
-        $group: {
-          _id: "$ownerId",
-          totalScore: { $sum: "$score" },
+        $match: {
+          school: schoolId,
+          className
         }
       },
-      { $sort: { totalScore: -1 } },
-      { $limit: 5 }
+      {
+        $lookup: {
+          from: "userprogresses", // ⚠️ Mongo collection name (plural, lowercase)
+          let: { studentId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$ownerType", "Student"] },
+                    { $eq: ["$ownerId", "$$studentId"] }
+                  ]
+                }
+              }
+            },
+            {
+              $group: {
+                _id: "$ownerId",
+                totalScore: { $sum: "$score" }
+              }
+            }
+          ],
+          as: "progress"
+        }
+      },
+      {
+        $addFields: {
+          totalPoints: {
+            $ifNull: [{ $arrayElemAt: ["$progress.totalScore", 0] }, 0]
+          }
+        }
+      },
+      { $sort: { totalPoints: -1 } },
+      { $limit: 5 },
+      {
+        $project: {
+          studentId: "$_id",
+          username: 1,
+          rollNo: 1,
+          className: 1,
+          section: 1,
+          points: "$totalPoints"
+        }
+      }
     ]);
 
-    // 4️⃣ Attach student info
-    const leaderboardResult = await Promise.all(
-      agg.map(async (item, index) => {
-        const s = studentsInClass.find((stu) => stu._id.equals(item._id));
-        return {
-          studentId: s._id,
-          username: s.username,
-          rollNo: s.rollNo,
-          className: s.className,
-          section: s.section,
-          points: item.totalScore,
-          rank: index + 1,
-        };
-      })
-    );
+    const ranked = leaderboard.map((s, i) => ({
+      ...s,
+      rank: i + 1
+    }));
 
-    res.json({ top5: leaderboardResult });
+    res.json({ top5: ranked });
 
   } catch (err) {
     console.error("School leaderboard error:", err);
