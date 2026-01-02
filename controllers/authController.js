@@ -3,6 +3,61 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import StudentModel from "../models/StudentModel.js";
 import School from "../models/Schools.js";
+import Teacher from "../models/Teacher.js";
+
+
+
+export const teacherLogin = async (req, res) => {
+  try {
+    const { email, password, schoolId } = req.body;
+
+    if (!email || !password || !schoolId) {
+      return res.status(400).json({ message: "Email, password, and school are required" });
+    }
+
+    // Find teacher in the specific school
+    const teacher = await Teacher.findOne({ email, school: schoolId }).populate("school");
+    if (!teacher) {
+      return res.status(401).json({ message: "Invalid email, password, or school" });
+    }
+
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email, password, or school" });
+    }
+
+    // Generate JWT including className & section
+    const token = jwt.sign(
+      {
+        id: teacher._id,
+        role: teacher.role,
+        model: "Teacher",
+        schoolId: teacher.school._id,
+        className: teacher.className,
+        section: teacher.section,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      teacher: {
+        id: teacher._id,
+        username: teacher.username,
+        email: teacher.email,
+        role: teacher.role,
+        school: teacher.school,
+        className: teacher.className,
+        section: teacher.section,
+      },
+    });
+  } catch (error) {
+    console.error("Teacher login error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 export async function signup(req, res) {
@@ -208,41 +263,7 @@ export const logout = async (req, res) => {
     return res.status(500).json({ err: "Internal server error" });
   }
 };
-// GET /auth/me
-// export const getMe = async (req, res) => {
-//   try {
-//     const authHeader = req.headers.authorization;
-//     if (!authHeader) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
 
-//     const token = authHeader.split(" ")[1];
-//     if (!token) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
-
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-//     // Try User collection first
-//     let user = await User.findById(decoded.id).select("-password");
-
-//     // If not found, try Students collection
-//     if (!user) {
-//       user = await Students.findById(decoded.id).select("-password");
-//     }
-
-//     // If still not found
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     // Success
-//     return res.json(user);
-
-//   } catch (err) {
-//     return res.status(401).json({ message: "Invalid token" });
-//   }
-// };
 export const getMe = async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
@@ -258,6 +279,9 @@ export const getMe = async (req, res) => {
       user = await User.findById(decoded.id).select("-password");
     } else if (decoded.model === "StudentModel") {
       user = await StudentModel.findById(decoded.id).select("-password");
+    }
+     else if (decoded.model === "Teacher") {
+      user = await Teacher.findById(decoded.id).select("-password");
     }
 
     if (!user) {
