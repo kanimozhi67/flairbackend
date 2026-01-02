@@ -2,18 +2,13 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    school:{
-type:  mongoose.Schema.Types.ObjectId,
-ref: "Schools",
-    },
     username: {
       type: String,
       required: true,
-    //  unique: true,
     },
     email: {
       type: String,
-     required: true,
+      required: true,
       unique: true,
     },
     avatar: {
@@ -27,33 +22,15 @@ ref: "Schools",
     password: {
       type: String,
       required: true,
-    }, 
-    //rollNo only for students
-    rollNo: {
-      type: String,
-        unique: true,
-        default:"70"
-      //required: true,
-    },
-    className: {
-      type: String,
-      default:"App Class"
-    },
-    section: {
-      type: String,
-      default: "App Section",
     },
     level: {
       type: String,
-      //   enum: ["kindergarten", "primary"],
-      // required: true,
-    
+      enum: ["kindergarten", "primary"], // 🔥 enforce only these two
+      required: true,
     },
-
-    // 🔐 ADD THIS
     role: {
       type: String,
-      enum: ["User", "Admin","Student"],
+      enum: ["User", "Admin"],
       default: "User",
     },
   },

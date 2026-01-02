@@ -1,99 +1,19 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import Students from "../models/Students.js";
+import StudentModel from "../models/StudentModel.js";
 import School from "../models/Schools.js";
-// export async function signup(req, res) {
-//   const { username, email, password, level } = req.body;
-
-//   try {
-//     if (!level || !["kindergarden", "primary"].includes(level)) {
-//       return res.status(400).json({ message: "Invalid level" });
-//     }
-
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     if (!email || !emailRegex.test(email)) {
-//       return res.status(400).json({ err: "Invalid email format" });
-//     }
-
-//     const userExists = await User.findOne({ username });
-//     if (userExists)
-//       return res.status(400).json({ message: "Username already exists" });
-
-//     const hashed = await bcrypt.hash(password, 10);
-
-//     const user = new User({
-//       username,
-//       email,
-//       password: hashed,
-//       level, // ✅ SAVED
-//     });
-
-//     await user.save();
-
-//     res.json({ message: "Signup successful" });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// }
-
-
-// export async function login(req, res) {
-//   if (req.method !== "POST")
-//     return res.status(405).json({ error: "Method not allowed" });
-
-//   try {
-//     const { username, password } = req.body;
-//     const user = await User.findOne({ username });
-//     if (!user) return res.status(400).json({ message: "Invalid login" });
-
-//     const match = await bcrypt.compare(password, user.password);
-//     if (!match) return res.status(400).json({ message: "Invalid login" });
-
-//     const token = jwt.sign(
-//       {
-//         id: user._id,
-//         role: user.role,
-//         level: user.level, // ✅ THIS FIXES EVERYTHING
-//       },
-//       process.env.JWT_SECRET,
-//       { expiresIn: "1d" }
-//     );
-
-//     res.cookie("jwt", token, {
-//       maxAge: 1 * 24 * 60 * 60 * 1000,
-//       httpOnly: true,
-//       sameSite: "strict",
-//       secure: process.env.NODE_ENV !== "development",
-//     });
-
-//     res.json({
-//       message: "Login successful",
-//       token,
-//       user: {
-//         id: user._id,
-//         username: user.username,
-//         email: user.email,
-//         level: user.level, // optional for frontend
-//       },
-//     });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// }
 
 
 export async function signup(req, res) {
   const { username, email, password } = req.body;
 
   try {
-  
     // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       return res.status(400).json({ err: "Invalid email format" });
     }
-
 
     // Check if username already exists
     const userExists = await User.findOne({ username });
@@ -102,16 +22,13 @@ export async function signup(req, res) {
 
     // Hash password
     const hashed = await bcrypt.hash(password, 10);
-
+const level="kindergarten";
     // Create new user
     const user = new User({
       username,
       email,
       password: hashed,
       level,
-      rollNo,
-      className,
-      section,
     });
 
     await user.save();
@@ -122,7 +39,7 @@ export async function signup(req, res) {
   }
 }
 
-export async function login(req, res) { 
+export async function login(req, res) {
   if (req.method !== "POST")
     return res.status(405).json({ error: "Method not allowed" });
 
@@ -141,9 +58,8 @@ export async function login(req, res) {
         id: user._id,
         role: user.role,
         level: user.level,
-        rollNo: user.rollNo,
-        className: user.className,
-        section: user.section,
+
+        model: "User",
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
@@ -164,9 +80,6 @@ export async function login(req, res) {
         username: user.username,
         email: user.email,
         level: user.level,
-        rollNo: user.rollNo,
-        className: user.className,
-        section: user.section,
       },
     });
   } catch (err) {
@@ -180,7 +93,8 @@ export async function login(req, res) {
  */
 export async function studentSignup(req, res) {
   try {
-    const { schoolId, username, rollNo, className, section, level, password } = req.body;
+    const { schoolId, username, rollNo, className, section, level, password } =
+      req.body;
 
     if (!schoolId || !username || !rollNo || !className || !section || !level) {
       return res.status(400).json({ message: "All fields are required" });
@@ -188,7 +102,7 @@ export async function studentSignup(req, res) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const student = await Students.create({
+    const student = await StudentModel.create({
       school: schoolId,
       username,
       rollNo,
@@ -196,10 +110,10 @@ export async function studentSignup(req, res) {
       section,
       level,
       password: hashedPassword,
-    //  email: `${rollNo}@school.com`,
+      //  email: `${rollNo}@school.com`,
       role: "Student",
     });
-  await School.findByIdAndUpdate(
+    await School.findByIdAndUpdate(
       schoolId,
       { $push: { students: student._id } },
       { new: true }
@@ -211,12 +125,10 @@ export async function studentSignup(req, res) {
   }
 }
 
-
 /**
  * POST /auth/studentLogin
  * Student login using rollNo + schoolId
  */
-
 
 export async function studentLogin(req, res) {
   const { rollNo, password, schoolId } = req.body;
@@ -233,13 +145,15 @@ export async function studentLogin(req, res) {
     }
 
     // 2️⃣ Find student under that school
-    const student = await Students.findOne({
+    const student = await StudentModel.findOne({
       rollNo,
       school: schoolId,
     });
 
     if (!student) {
-      return res.status(400).json({ message: "Invalid roll number for this school" });
+      return res
+        .status(400)
+        .json({ message: "Invalid roll number for this school" });
     }
 
     // 3️⃣ Password check
@@ -252,12 +166,20 @@ export async function studentLogin(req, res) {
     const token = jwt.sign(
       {
         id: student._id,
-        role: student.role,
-        school: student.school,
+        // role: student.role,
+        model: "StudentModel",
+        role: "Student",
+        level: student.level,
       },
       process.env.JWT_SECRET,
       { expiresIn: "30d" }
     );
+res.cookie("jwt", token, {
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  sameSite: "strict",
+  secure: process.env.NODE_ENV !== "development",
+});
 
     res.json({
       message: "Login successful",
@@ -268,6 +190,7 @@ export async function studentLogin(req, res) {
         className: student.className,
         section: student.section,
         school: school.name,
+        level: student.level,
       },
     });
   } catch (err) {
@@ -275,8 +198,6 @@ export async function studentLogin(req, res) {
     res.status(500).json({ message: "Server error" });
   }
 }
-
-
 
 export const logout = async (req, res) => {
   try {
@@ -288,18 +209,60 @@ export const logout = async (req, res) => {
   }
 };
 // GET /auth/me
+// export const getMe = async (req, res) => {
+//   try {
+//     const authHeader = req.headers.authorization;
+//     if (!authHeader) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
+
+//     const token = authHeader.split(" ")[1];
+//     if (!token) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+//     // Try User collection first
+//     let user = await User.findById(decoded.id).select("-password");
+
+//     // If not found, try Students collection
+//     if (!user) {
+//       user = await Students.findById(decoded.id).select("-password");
+//     }
+
+//     // If still not found
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // Success
+//     return res.json(user);
+
+//   } catch (err) {
+//     return res.status(401).json({ message: "Invalid token" });
+//   }
+// };
 export const getMe = async (req, res) => {
   try {
-    // Expect token in headers: Authorization: Bearer <token>
-    const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({ message: "Unauthorized" });
-
-    const token = authHeader.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password"); // exclude password
-    if (!user) return res.status(404).json({ message: "User not found" });
+
+    let user;
+
+    if (decoded.model === "User") {
+      user = await User.findById(decoded.id).select("-password");
+    } else if (decoded.model === "StudentModel") {
+      user = await StudentModel.findById(decoded.id).select("-password");
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.json(user);
   } catch (err) {
