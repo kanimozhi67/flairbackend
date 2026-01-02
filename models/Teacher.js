@@ -27,11 +27,11 @@ const TeacherSchema = new mongoose.Schema(
     },
      className: {
       type: String,
-      required: true,
+     // required: true,
     },
      section: {
       type: String,
-      required: true,
+     // required: true,
     },
   },
   { timestamps: true }

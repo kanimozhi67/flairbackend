@@ -53,6 +53,36 @@ export const deleteSchool = async (req, res) => {
 
 
 
+export const createSchoolAdmin = async (req, res) => {
+  try {
+    const { schoolId, username, email, password} = req.body;
+
+    // ✅ Basic validation
+    if (!schoolId || !username || !email || !password ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // ✅ Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // ✅ Create teacher
+    const teacher = await Teacher.create({
+      school: schoolId,
+      username,
+      email,
+      password: hashedPassword,
+     role:"SchoolAdmin"
+    });
+
+    // ✅ Add teacher to school's teachers array
+    await School.findByIdAndUpdate(schoolId, { $push: { teachers: teacher._id } });
+
+    res.status(201).json({ message: "SchoolAdmin added", teacher });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to add School admin", error: err.message });
+  }
+};
 export const createTeacher = async (req, res) => {
   try {
     const { schoolId, username, email, password, className, section } = req.body;
