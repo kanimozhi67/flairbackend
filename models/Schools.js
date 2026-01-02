@@ -25,9 +25,12 @@ const SchoolSchema = new mongoose.Schema(
     },
     // Optional: array of teachers (can also populate from Teacher collection)
     teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Teacher" }],
-    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Students" }],
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "StudentModel" }],
   },
   { timestamps: true }
 );
+
+SchoolSchema.index({ city: 1, state: 1 }); // optional for filtering
+
 
 export default mongoose.model("School", SchoolSchema);

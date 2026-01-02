@@ -22,7 +22,7 @@ const TeacherSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["Teacher", "Admin"],
+      enum: ["Teacher", "SchoolAdmin"],
       default: "Teacher",
     },
      className: {
