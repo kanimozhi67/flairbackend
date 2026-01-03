@@ -8,7 +8,7 @@ import Teacher from "../models/Teacher.js";
 
 export const schoolAdminLogin = async (req, res) => {
   try {
-    const { schoolId, username, password } = req.body;
+    const { schoolId, email, password } = req.body;
 
     // 1. Validate input
     if (!schoolId || !email || !password) {
@@ -40,7 +40,7 @@ export const schoolAdminLogin = async (req, res) => {
     const token = jwt.sign(
       {
         id: admin._id,
-       //  email:admin.email,
+         email:admin.email,
         role: admin.role,
         schoolId: admin.school,
       },
@@ -54,7 +54,7 @@ export const schoolAdminLogin = async (req, res) => {
       token,
       admin: {
         id: admin._id,
-       // email:admin.email,
+        email:admin.email,
         username: admin.username,
         role: admin.role,
         schoolId: admin.school,
