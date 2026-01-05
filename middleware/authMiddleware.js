@@ -66,8 +66,7 @@ import Teacher from "../models/Teacher.js";
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const token =
-      req.headers.authorization?.split(" ")[1] || req.cookies?.jwt;
+    const token = req.headers.authorization?.split(" ")[1] || req.cookies?.jwt;
 
     if (!token) {
       return res.status(401).json({ error: "Not authenticated" });
@@ -104,11 +103,20 @@ const authMiddleware = async (req, res, next) => {
       id: account._id.toString(),
       role: decoded.role,
       model: decoded.model,
-      schoolId: decoded.schoolId,
-      ...(decoded.model === "Teacher" && decoded.role !== "SchoolAdmin" && {
-        className: account.className,
-        section: account.section,
+
+      ...(decoded.model === "Student" && {
+        schoolId: decoded.schoolId,
       }),
+      ...(decoded.model === "Teacher" &&
+        decoded.role == "SchoolAdmin" && {
+          schoolId: decoded.schoolId,
+        }),
+      ...(decoded.model === "Teacher" &&
+        decoded.role !== "SchoolAdmin" && {
+          schoolId: decoded.schoolId,
+          className: account.className,
+          section: account.section,
+        }),
     };
 
     next();
