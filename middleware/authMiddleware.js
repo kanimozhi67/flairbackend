@@ -59,6 +59,7 @@
 // };
 
 // export default authMiddleware;
+
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import StudentModel from "../models/StudentModel.js";

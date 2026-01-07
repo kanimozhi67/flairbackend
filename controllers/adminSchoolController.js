@@ -1,6 +1,6 @@
 import School from "../models/Schools.js";
 import Teacher from "../models/Teacher.js";
-
+import StudentModel from "../models/StudentModel.js";
 import bcrypt from "bcryptjs";
 // ----------------- Schools -----------------
 
@@ -20,11 +20,11 @@ export const getSchools = async (req, res) => {
     const schools = await School.find()
       .populate({
         path: "teachers",
-        select: "username email className section",
+        select: "username email role className section",
       })
       .populate({
         path: "students",
-        select: "username rollNo className section level",
+        select: "username rollNo role className section level",
       })
       .lean();
 
@@ -129,6 +129,20 @@ export const updateTeacher = async (req, res) => {
     res.status(500).json({ message: "Failed to update teacher", error: err.message });
   }
 };
+export const updateStudent = async (req, res) => {
+  try {
+    const { username, rollNo, className, section, level } = req.body;
+    const student = await StudentModel.findByIdAndUpdate(
+      req.params.id, // use teacherId, not id
+      { username, rollNo, className, section, level },
+      { new: true }
+    );
+    if (!student) return res.status(404).json({ message: "student not found" });
+    res.status(200).json({ message: "student updated", student });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update student", error: err.message });
+  }
+};
 
 
 
@@ -143,5 +157,17 @@ export const deleteTeacher = async (req, res) => {
     res.json({ message: "Teacher deleted" });
   } catch (err) {
     res.status(500).json({ message: "Failed to delete teacher", error: err.message });
+  }
+};
+export const deleteStudent = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const student = await StudentModel.findByIdAndDelete(studentId);
+    if (student) {
+      await School.findByIdAndUpdate(student.school, { $pull: { students: student._id } });
+    }
+    res.json({ message: "Student deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete student ", error: err.message });
   }
 };

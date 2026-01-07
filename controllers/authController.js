@@ -43,6 +43,7 @@ export const schoolAdminLogin = async (req, res) => {
          email:admin.email,
         role: admin.role,
         schoolId: admin.school,
+        model:"Teacher"
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
@@ -58,6 +59,7 @@ export const schoolAdminLogin = async (req, res) => {
         username: admin.username,
         role: admin.role,
         schoolId: admin.school,
+         model:"Teacher"
       },
     });
   } catch (error) {
@@ -107,6 +109,7 @@ export const teacherLogin = async (req, res) => {
       token,
       teacher: {
         id: teacher._id,
+         model: "Teacher",
         username: teacher.username,
         email: teacher.email,
         role: teacher.role,
@@ -318,8 +321,12 @@ res.cookie("jwt", token, {
 
 export const logout = async (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).json({ message: "logout successfuly" });
+     res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",})
+    // res.cookie("jwt", "", { maxAge: 0 });
+    // res.status(200).json({ message: "logout successfuly" });
   } catch (err) {
     console.log(`error in logout controller: ${err}`);
     return res.status(500).json({ err: "Internal server error" });
@@ -351,7 +358,19 @@ export const getMe = async (req, res) => {
     }
 
     res.json(user);
+    console.log(JSON.stringify(user))
   } catch (err) {
     res.status(401).json({ message: "Invalid token" });
   }
 };
+// export const getMe = async (req, res) => {
+//   try {
+//     if (!req.user) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
+//     res.status(200).json(req.user);
+//   } catch (err) {
+//     console.error("getMe error:", err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };

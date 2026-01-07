@@ -30,9 +30,15 @@ app.use(
       "https://flairfrontend.vercel.app",
       process.env.FRONTEND_URL,
     ], // your frontend URL
+     methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+       allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // important: allow cookies
   })
 );
+ //app.options("/*", cors());
+
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -46,7 +52,7 @@ app.use("/api/auth", authRoutes);
 // app.get("/api/quiz/math", generateQuestionAddSub);
 // app.post("/api/quiz/check", checkAnswer);
 app.use("/api/quiz/progress", progressRoutes);
-app.get("api/profile", getUserInfo);
+app.get("/api/profile", getUserInfo);
 app.use("/img", express.static(path.join(__dirname, "img")));
 app.use("/api/quiz", quizRoutes);
 

@@ -1,7 +1,104 @@
 import Task from "../models/Task.js";
 import UserTask from "../models/UserTask.js";
 import User from "../models/User.js";
+import StudentTask from "../models/StudentTask.js";
+import StudentModel from "../models/StudentModel.js";
+import StudentAssignedTask from "../models/StudentAssignedTask.js";
 
+export const screateTask = async (req, res) => {
+  try {
+    const {
+      school,
+      title,
+      description,
+      category,
+      className,
+      section,
+      level,
+      selectedLevel,
+      date,
+      active,
+    } = req.body;
+
+    if (!school) {
+      return res.status(400).json({ message: "School ID is required" });
+    }
+
+    const normalizedClass = className.trim().toLowerCase();
+    const normalizedSection = section.trim().toLowerCase();
+
+    // 1️⃣ Create task
+    const task = await StudentTask.create({
+      school,
+      title,
+      description,
+      level,
+      date,
+      active,
+      className: normalizedClass,
+      section: normalizedSection,
+      categories: [
+        {
+          name: category,
+          levels: [
+            {
+              level,           // ✅ FIXED
+              selectedLevel,
+              points: 10,
+            },
+          ],
+        },
+      ],
+    });
+
+    // 2️⃣ Find eligible students
+
+    const students = await StudentModel.find({
+  school,
+  level,
+  className: { $regex: `^${className.trim()}$`, $options: "i" },
+  section: { $regex: `^${section.trim()}$`, $options: "i" },
+});
+   
+
+    if (!students.length) {
+      return res.status(404).json({
+        message: "No students found for selected class and section",
+      });
+    }
+
+    // 3️⃣ Assign task
+    const assignedTasks = students.map((student) => ({
+      student: student._id,
+      task: task._id,
+      progress: [
+        {
+          categoryName: category,
+          levels: [
+            {
+              level,
+              selectedLevel,
+              completed: false,
+              score: 0,
+            },
+          ],
+        },
+      ],
+    }));
+
+    await StudentAssignedTask.insertMany(assignedTasks);
+
+    res.status(201).json({
+      message: "Task created and assigned successfully",
+      assignedCount: assignedTasks.length,
+    });
+  } catch (err) {
+    console.error("CREATE TASK ERROR:", err);
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
 
 
 export const createTask = async (req, res) => {
@@ -81,6 +178,20 @@ export const createTask = async (req, res) => {
   }
 };
 
+
+
+
+export const sgetTasks = async (req, res) => {
+  try {
+    const tasks = await StudentTask.find().sort({ createdAt: -1 });
+    res.status(200).json(tasks);
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to fetch tasks",
+      error: err.message,
+    });
+  }
+};
 
 export const getTasks = async (req, res) => {
   try {
