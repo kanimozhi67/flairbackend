@@ -1,5 +1,33 @@
 // Stores generated questions per session
 const shapeQuestionsStore = {}; // { [id]: { correctAnswer, emoji, options } }
+const shapes3Dpr = [
+  { name: "12 edges, 8 vertices", emoji: "🎲" },
+  { name: "12 edges, 8 vertices", emoji: "🧊" },
+  { name: "12 edges, 8 vertices", emoji: "📦" },
+  { name: "12 edges, 8 vertices", emoji: "📺" },
+  { name: "0 edge, 0 vertex", emoji: "🏀" }, // approximate
+  { name: "0 edge, 0 vertex", emoji: "⚽" }, // approximate
+  { name: "2 edges, 0 vertex,", emoji: "🥫" },
+  { name: "2 edges, 0 vertex", emoji: "🛢️" },
+  { name: "2 edges, 0 vertex", emoji: "✏️" },
+  { name: "1 edge, 1 vertex", emoji: "🎉" },
+  { name: "8 edges, 5 vertices", emoji: "⛺" },
+];
+const shapes3Dp = [
+  { name: "6", emoji: "🎲" },
+  { name: "6", emoji: "🧊" },
+  { name: "6", emoji: "📦" },
+  { name: "6", emoji: "📺" },
+  { name: "1", emoji: "🏀" }, // approximate
+  { name: "1", emoji: "⚽" }, // approximate
+  { name: "3", emoji: "🥫" },
+  { name: "3", emoji: "🛢️" },
+  { name: "3", emoji: "✏️" },
+  { name: "2", emoji: "🎉" },
+  { name: "5", emoji: "⛺" },
+];
+
+
 const shapes2Dc = [
   { name: "0", emoji: "⭕" },
   { name: "3", emoji: "🔺" },
@@ -15,8 +43,8 @@ const shapes3Dc = [
   { name: "12", emoji: "🧊" },
   { name: "12", emoji: "📦" },
   { name: "12", emoji: "📺" },
-  { name: "1", emoji: "🏀" }, // approximate
-  { name: "1", emoji: "⚽" }, // approximate
+  { name: "0", emoji: "🏀" }, // approximate
+  { name: "0", emoji: "⚽" }, // approximate
   { name: "2", emoji: "🥫" },
   { name: "2", emoji: "🛢️" },
   { name: "2", emoji: "✏️" },
@@ -99,6 +127,12 @@ export function generateShapeQuizStep2(req, res) {
 }
 export function generateShapeQuizStep3(req, res) {
   shapeq(req,res, shapes3Dc,shapes3Dc);
+}
+export function generateShapeQuizStepp1(req, res) {
+  shapeq(req,res, shapes3Dp,shapes3Dp);
+}
+export function generateShapeQuizStepp2(req, res) {
+  shapeq(req,res, shapes3Dpr,shapes3Dpr);
 }
 
 const shapeq=(req,res,a,b)=>{
