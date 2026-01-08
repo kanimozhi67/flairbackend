@@ -125,6 +125,41 @@ export const teacherLogin = async (req, res) => {
 };
 
 
+
+export async function forgotPassword(req, res) {
+  const { email, newPassword } = req.body;
+
+  try {
+    // Validate input
+    if (!email || !newPassword) {
+      return res.status(400).json({ message: "Email and new password are required" });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User with this email does not exist" });
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update password
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 export async function signup(req, res) {
   const { username, email, password } = req.body;
 
@@ -333,9 +368,42 @@ export const logout = async (req, res) => {
   }
 };
 
+// export const getMe = async (req, res) => {
+//   try {
+//     const token = req.headers.authorization?.split(" ")[1];
+//     if (!token) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+//     let user;
+
+//     if (decoded.model === "User") {
+//       user = await User.findById(decoded.id).select("-password");
+//     } else if (decoded.model === "StudentModel") {
+//       user = await StudentModel.findById(decoded.id).select("-password");
+//     }
+//      else if (decoded.model === "Teacher") {
+//       user = await Teacher.findById(decoded.id).select("-password");
+//     }
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     res.json(user);
+//     console.log(JSON.stringify(user))
+//   } catch (err) {
+//     res.status(401).json({ message: "Invalid token" });
+//   }
+// };
+
 export const getMe = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
+    const token =
+      req.headers.authorization?.split(" ")[1] || req.cookies?.jwt;
+
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -348,8 +416,7 @@ export const getMe = async (req, res) => {
       user = await User.findById(decoded.id).select("-password");
     } else if (decoded.model === "StudentModel") {
       user = await StudentModel.findById(decoded.id).select("-password");
-    }
-     else if (decoded.model === "Teacher") {
+    } else if (decoded.model === "Teacher") {
       user = await Teacher.findById(decoded.id).select("-password");
     }
 
@@ -358,19 +425,10 @@ export const getMe = async (req, res) => {
     }
 
     res.json(user);
-    console.log(JSON.stringify(user))
   } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({ message: "Token expired" });
+    }
     res.status(401).json({ message: "Invalid token" });
   }
 };
-// export const getMe = async (req, res) => {
-//   try {
-//     if (!req.user) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
-//     res.status(200).json(req.user);
-//   } catch (err) {
-//     console.error("getMe error:", err);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
