@@ -66,7 +66,7 @@ import {
   checkLogic,
 } from "../controllers/logicalController.js";
 import { generateLogicp } from "../controllers/logicalController.js";
-import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, generateShapeQuizStep3 } from "../controllers/shapesController.js";
+import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, generateShapeQuizStep3, generateShapeQuizStepp1, generateShapeQuizStepp2 } from "../controllers/shapesController.js";
 
 
 const router = express.Router();
@@ -135,6 +135,8 @@ router.post("/checkmeasure3", checkWordAnswers);
 router.get("/shape", generateShapeQuizStep);
 router.get("/shape2", generateShapeQuizStep2);
 router.get("/shape3", generateShapeQuizStep3);
+router.get("/shapep1", generateShapeQuizStepp1);
+router.get("/shapep2", generateShapeQuizStepp2);
 router.post("/checkshape", checkShapeAnswerStep);
 router.post("/checksudokup", checkSudokup);
 router.post("/checkpuzzle", checkPuzzle);
