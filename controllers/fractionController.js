@@ -5,70 +5,158 @@ import { v4 as uuidv4 } from "uuid";
 import UserProgress from "../models/UserProgress.js";
 
 const questionsStore = {};
-// fractionQuestionBank.js
 
-// generateFractionQuiz.js
-// getNextFractionQuestion.js
-// fractionQuestionBank3.js
+export const fractionEmojiQuizB = [
+  {
+    text: "Which emoji shows quarters (4 equal parts)?",
+    answer: "⊕",
+    options: ["⊘", "⊕", "⊟"]
+  },
+  {
+    text: "Which emoji shows quarters (4 equal parts)?",
+    answer: "⊗",
+    options: ["⊗","⊘", "⊟"]
+  },
+  {
+    text: "Which emoji shows quarters (4 equal parts)?",
+    answer: "⊞",
+    options: ["⊟", "⊞", "⊖"]
+  },
+  {
+    text: "Which emoji shows quarters (4 equal parts)?",
+    answer: "▤",
+    options: ["⊟", "▤", "▦"]
+  },
+  {
+    text: "Which emoji shows quarters (4 equal parts)?",
+    answer: "▥",
+    options: ["⊟", "▥", "▦"]
+  },
+  {
+    text: "Which emoji shows quarters (4 equal parts)?",
+    answer: "🪟",
+    options: ["🧱", "🪟", "🟦"]
+  },
+ 
+];
+export const fractionEmojiQuizA = [
+  {
+    text: "Which emoji shows half (2 equal parts)?",
+    answer: "⊖",
+    options: ["⊗", "⊕", "⊖"]
+  },
+  {
+    text: "Which emoji shows half (2 equal parts)?",
+    answer: "⊘",
+    options: ["⊗","⊘", "⊞"]
+  },
+  {
+    text: "Which emoji shows half (2 equal parts)?",
+    answer: "🧱 🧱",
+    options: ["🧱","🧱 🧱", "🧱🧱🧱"]
+  },
+  {
+    text: "Which emoji shows half (2 equal parts)?",
+    answer: "⊟",
+    options: ["⊛", "⊜", "⊟"]
+  },
+  {
+    text: "Which emoji shows half (2 equal parts)?",
+    answer: "◐",
+    options: ["⊛", "⊜", "◐"]
+  },
+  {
+    text: "Which emoji shows half (2 equal parts)?",
+    answer: "🌓",
+    options: ["🌓", "🌘", "🌒"]
+  },
+  
+  
+
+];
+export const fractionEmojiQuizC = [
+  {
+    text: "Which emoji shows whole ?",
+    answer: "🟢",
+    options: ["⊗", "⊕", "🟢"]
+  },
+  {
+    text: "Which emoji shows whole ?",
+    answer: "🟩",
+    options: ["⊞", "▤", "🟩"]
+  },
+  {
+    text: "Which emoji shows whole ?",
+    answer: "🟢",
+    options: ["◐", "◕", "🟢"]
+  },
+  {
+    text: "Which emoji shows whole ?",
+    answer: "🟡",
+    options: ["❇️", "🌓", "🟡"]
+  },
+  {
+    text: "Which emoji shows whole ?",
+    answer: "⬜",
+    options: ["⬜", "🪟", "❇️"]
+  },
+
+ 
+];
+
+
 export const fractionQuestionBank = [
   {
-    text: "What fraction is shown?\n🦀 🦀 🦀 🦀 | 🦀 🦀 🦀 🦀",
+    text: "🍭 🍭 🍭 🍭 | 🍭 🍭 🍭 🍭",
     options: ["1/2", "1/3", "1/4", "2/3"],
     answer: "1/2"
   },
   {
-    text: "What fraction of stars are shown?\n⭐ ⭐ |  ⭐ ⭐  |  ⭐ ⭐   | ⭐ ⭐",
-    options: ["1/2", "1/4", "3/4", "2/4"],
-    answer: "1/4"
+    text: "🐤 🐤 |  🐤 🐤  |  🐤 🐤   | 🐤 🐤 |  🐤 🐤 |  🐤 🐤  |  🐤 🐤   | 🐤 🐤",
+    options: ["3/8", "8/1", "1/8", "2/8"],
+    answer: "1/8"
   },
   {
-    text: "What fraction is represented?\n🐙 🐙 🐙 | 🐙 🐙 🐙  |  🐙 🐙 🐙",
-    options: ["1/3", "1/2", "2/3", "3/3"],
-    answer: "1/3"
+    text: "🍕 🍕 🍕 | 🍕 🍕 🍕  |  🍕 🍕 🍕 | 🍕 🍕 🍕  |  🍕 🍕 🍕",
+    options: ["1/3", "1/5", "2/3", "5/3"],
+    answer: "1/5"
   },
   {
-    text: "What fraction is represented?\n🍎 🍎  |  🍎 🍎 | 🍎 🍎",
+    text: "🧸 🧸  |  🧸 🧸 | 🧸 🧸",
     options: ["1/2", "2/3", "1/3", "3/4"],
     answer: "1/3"
   },
   {
-    text: "Which fraction matches the picture?\n🐟 🐟 🐟 | 🐟 🐟 🐟  |  🐟 🐟 🐟  |  🐟 🐟 🐟",
-    options: ["1/4", "2/4", "1/4", "3/4"],
+    text: "🚀 🚀 🚀 | 🚀 🚀 🚀  |  🚀 🚀 🚀  |  🚀 🚀 🚀 |  🚀 🚀 🚀  |  🚀 🚀 🚀",
+    options: ["2/6", "2/4", "6/3", "1/6"],
+    answer: "1/6"
+  },
+  {
+    text: "🦀 🦀 🦀 🦀 | 🦀 🦀 🦀 🦀",
+    options: ["1/2", "1/3", "1/4", "2/3"],
+    answer: "1/2"
+  },
+  {
+    text: "⭐ ⭐ |  ⭐ ⭐  |  ⭐ ⭐   | ⭐ ⭐",
+    options: ["1/2", "1/4", "3/4", "2/4"],
+    answer: "1/4"
+  },
+  {
+    text: "🐙 🐙 🐙 | 🐙 🐙 🐙  |  🐙 🐙 🐙",
+    options: ["1/3", "1/2", "2/3", "3/3"],
+    answer: "1/3"
+  },
+  {
+    text: "🍎 🍎  |  🍎 🍎 | 🍎 🍎",
+    options: ["1/2", "2/3", "1/3", "3/4"],
+    answer: "1/3"
+  },
+  {
+    text: "🐟 🐟 🐟 | 🐟 🐟 🐟  |  🐟 🐟 🐟  |  🐟 🐟 🐟",
+    options: ["1/4", "2/4", "4/3", "3/4"],
     answer: "1/4"
   }
 ];
-
-
-export const generateFractionQuiz = (req, res) => {
-  const selected = shuffleArray([...fractionQuestionBank]).slice(0, 5);
-
-  const questions = selected.map((q, index) => {
-    const id = uuidv4();
-
-    // store correct answer server-side
-    questionsStore[id] = {
-      answer: q.answer
-    };
-
-    return {
-      id,
-      step: index + 1,
-      question: q.text,        // emoji-based question
-      options: shuffleArray([...q.options])
-    };
-  });
-
-  res.json({
-    totalSteps: questions.length,
-    questions
-  });
-};
-
-
-
-
-
-
 
 // fractionQuestions.js
 export const fractionQuestionBank2 = [
@@ -125,46 +213,6 @@ export const fractionQuestionBank2 = [
 ];
 
 
-
-// Generate quiz (1 question at a time)
-export const generateFractionQuiz2 = (req, res) => {
-//   const shuffled = shuffleArray([...fractionQuestionBank2]);
-//   const question = shuffled[0]; // pick only one question
-
-//   const id = uuidv4();
-//   questionsStore[id] = { answer: question.answer };
-
-//   res.json({
-//     id,
-//     question: question.text,
-//     options: shuffleArray([...question.options])
-//   });
-// };
- const selected = shuffleArray([...fractionQuestionBank2]).slice(0, 5);
-
-  const questions = selected.map((q, index) => {
-    const id = uuidv4();
-
-    questionsStore[id] = {
-      answer: q.answer
-    };
-
-    return {
-      id,
-      step: index + 1,
-      question: q.text,
-      options: shuffleArray([...q.options])
-    };
-  });
-
-  res.json({
-    totalSteps: questions.length,
-    questions
-  });
-};
-
-
-
 export const fractionQuestionBank3 = [
   {
     text: "There are 18 bananas in a basket. One-third of them are ripe. How many bananas are ripe?",
@@ -216,13 +264,14 @@ export const fractionQuestionBank3 = [
 // Shuffle helper
 const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
 
-// Generate quiz (5 random questions)
-export const generateFractionQuiz3 = (req, res) => {
-  const selected = shuffleArray([...fractionQuestionBank3]).slice(0, 5);
+
+const genQ =(req,res,a)=>{
+    const selected = shuffleArray([...a]).slice(0, 5);
 
   const questions = selected.map((q, index) => {
     const id = uuidv4();
 
+    // store correct answer server-side
     questionsStore[id] = {
       answer: q.answer
     };
@@ -230,7 +279,7 @@ export const generateFractionQuiz3 = (req, res) => {
     return {
       id,
       step: index + 1,
-      question: q.text,
+      question: q.text,        // emoji-based question
       options: shuffleArray([...q.options])
     };
   });
@@ -239,8 +288,26 @@ export const generateFractionQuiz3 = (req, res) => {
     totalSteps: questions.length,
     questions
   });
+}
+export const generateFractionQuizk = (req, res) => {
+genQ(req,res,fractionEmojiQuizA)
 };
-// checkFractionAnswers.js
+export const generateFractionQuizk2= (req, res) => {
+genQ(req,res,fractionEmojiQuizB)
+};
+export const generateFractionQuizk3 = (req, res) => {
+genQ(req,res,fractionEmojiQuizC)
+};
+export const generateFractionQuiz = (req, res) => {
+genQ(req,res,fractionQuestionBank)
+};
+export const generateFractionQuiz2= (req, res) => {
+genQ(req,res,fractionQuestionBank2)
+};
+export const generateFractionQuiz3 = (req, res) => {
+genQ(req,res,fractionQuestionBank3)
+};
+
 
 
 export async function checkAnswerFraction(req, res) {

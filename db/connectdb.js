@@ -6,7 +6,14 @@ const connectdb = async() => {
     await mongoose.connect(process.env.MONGO_URL);
     console.log("MongoDB Connected");
 
-//const email = "kaniboopathi93@gmail.com";
+// const email = "anju@gmail.com";
+
+// const user = await User.findOneAndUpdate(
+//   { email },
+//   { $set: { username: "Anjana" } },
+//   { new: true } // returns the updated document
+// );
+
 // const level = "kindergarden";
 
 // const user = await User.findAndUpdate(
@@ -17,6 +24,7 @@ const connectdb = async() => {
 //   { level: "kindergarden" },
 //   { $set: { level: "kindergarten" } }
 // );
+
 
 
   } catch (err) {
