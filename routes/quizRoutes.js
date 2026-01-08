@@ -67,7 +67,7 @@ import {
 } from "../controllers/logicalController.js";
 import { generateLogicp } from "../controllers/logicalController.js";
 import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, generateShapeQuizStep3, generateShapeQuizStepp1, generateShapeQuizStepp2 } from "../controllers/shapesController.js";
-import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3 } from "../controllers/fractionController.js";
+import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3 } from "../controllers/fractionController.js";
 
 
 const router = express.Router();
@@ -133,10 +133,11 @@ router.post("/checkmeasure", checkUnitAnswers);
 router.post("/checkmeasure2", checkAvgAnswers);
 router.post("/checkmeasure3", checkWordAnswers);
 
+router.get("/fractionk", generateFractionQuizk);
+router.get("/fractionk2", generateFractionQuizk2);
+router.get("/fractionk3", generateFractionQuizk3);
 router.get("/fraction", generateFractionQuiz);
 router.get("/fraction2", generateFractionQuiz2);
-
-
 router.get("/fraction3", generateFractionQuiz3);
 router.post("/checkfraction", checkAnswerFraction);
 router.get("/shape", generateShapeQuizStep);
