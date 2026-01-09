@@ -5,6 +5,127 @@ import { v4 as uuidv4 } from "uuid";
 import UserProgress from "../models/UserProgress.js";
 
 const questionsStore = {};
+export const analyticalEmojiQuizpuzz3= [
+  {
+    text: "├ ",
+    answer: "┤",
+    options: ["├", "┼", "┤", "│"]
+  },
+  {
+    text: "┬",
+    answer: "┴",
+    options: ["┬", "┴", "┤", "│"]
+  },
+  {
+    text: "🔻 ",
+    answer: "🔺",
+    options: ["🔺", "🔷", "🔴", "🔻"]
+  },
+  {
+    text: "◐ ",
+    answer: "◑",
+    options: ["◐", "◒", "◑", "◓"]
+  },
+  {
+    text: "◓ ",
+    answer: "◒",
+    options: ["◐", "◒", "◑", "◓"]
+  },
+  {
+    text: "▨ ",
+    answer: "▧",
+    options: ["▥", "▨", "▧", "▤"]
+  },
+];
+export const analyticalEmojiQuizpuzz2= [
+  {
+    text: "🔍 Find the odd one out",
+    answer: "🔷",
+    options: ["🔴", "🔵", "🟢", "🔷"]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "🔵",
+    options: ["❤️",  "💚", "🔵","💛",]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "⭐",
+    options: ["🎂", "⭐", "🍰","🍫",]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "Db",
+    options: ["Aa" ,"Db", "Mm","Ff"]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "🔄",
+    options: ["🔄" ,"➡️", "⬆️","⬇️"]
+  },
+  {
+    text: "🔍 Find the symmetric one ",
+    answer: "⚖️",
+    options: ["📊", "⚖️", "🪨", "🔢"]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "🐟",
+    options: ["🐶", "🐱", "🐭", "🐟"]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "🍎",
+    options: ["🥕", "🥦", "🍎", "🌽"]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "✈️",
+    options: ["🚗", "🚌", "🚲", "✈️"]
+  },
+  {
+    text: "🔍 Find the missing piece : ◓ ",
+   answer: "◒",
+    options: ["◐", "◒", "◑", "◓"]
+  },
+  {
+    text: "➡️ Find the emoji that completes the sequence :  🌑, 🌓,❓",
+    answer: "🌕",
+    options: ["🌑", "🌓", "🌗", "🌕"]
+  },
+  // {
+  //   text: "🧩 Find the next term in the series: 🅰️, 🅰️🅱️, 🅰️🅱️🅲️, 🅰️🅱️🅲️🅳️, ❓",
+  //   answer: "🅰️🅱️🅲️🅳️🅴️",
+  //   options: [
+  //     "🅰️🅱️🅲️🅴️🅳️",
+  //     "🅰️🅱️🅱️🅲️🅳️",
+  //     "🅰️🅱️🅲️🅳️🅴️",
+  //     "🅰️🅱️🅲️🅳️🅵️"
+  //   ]
+  // },
+  {
+    text: "🧩 Find the next term in the series: 🔺 : 🍰, 🟥 : : ❓",
+    answer: "🎁",
+    options: ["🍕", "🟢", "🎁", "🚪"]
+  },
+  {
+    text: "🧩 Find the next term in the series: ab, abc , abcd , ❓",
+    answer: "abcde",
+    options: ["ab", "abc", "acd", "abcde"]
+  },
+  {
+    text: "🧩 Find the next term in the series: 0, 5 , 10 , 15, ❓",
+    answer: "20",
+    options: ["5", "25", "40", "20"]
+  },
+  {
+    text: "🧩 Find the next term in the series: 10, 20 , 30 , 40, ❓",
+    answer: "50",
+    options: ["50", "25", "40", "20"]
+  },
+ 
+];
+
 
 export const fractionEmojiQuizB = [
   {
@@ -52,11 +173,6 @@ export const fractionEmojiQuizA = [
   },
   {
     text: "Which emoji shows half (2 equal parts)?",
-    answer: "🧱 🧱",
-    options: ["🧱","🧱 🧱", "🧱🧱🧱"]
-  },
-  {
-    text: "Which emoji shows half (2 equal parts)?",
     answer: "⊟",
     options: ["⊛", "⊜", "⊟"]
   },
@@ -77,18 +193,18 @@ export const fractionEmojiQuizA = [
 export const fractionEmojiQuizC = [
   {
     text: "Which emoji shows whole ?",
-    answer: "🟢",
-    options: ["⊗", "⊕", "🟢"]
+    answer: "⬤",
+    options: ["⊗", "⊕", "⬤"]
   },
   {
     text: "Which emoji shows whole ?",
-    answer: "🟩",
-    options: ["⊞", "▤", "🟩"]
+    answer: "▢",
+    options: ["⊞", "▤", "▢"]
   },
   {
     text: "Which emoji shows whole ?",
-    answer: "🟢",
-    options: ["◐", "◕", "🟢"]
+    answer: "⬤",
+    options: ["◐", "◕", "⬤"]
   },
   {
     text: "Which emoji shows whole ?",
@@ -306,6 +422,12 @@ genQ(req,res,fractionQuestionBank2)
 };
 export const generateFractionQuiz3 = (req, res) => {
 genQ(req,res,fractionQuestionBank3)
+};
+export const generateFractionQuizPuzz3 = (req, res) => {
+genQ(req,res,analyticalEmojiQuizpuzz3)
+};
+export const generateFractionQuizPuzz2 = (req, res) => {
+genQ(req,res,analyticalEmojiQuizpuzz2)
 };
 
 
