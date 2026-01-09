@@ -20,7 +20,7 @@ export async function addPoints(req, res) {
     const { points, studentId } = req.body;
     const { id: userId, model: currentModel } = req.user;
 
-    if (!points || typeof points !== "number") {
+    if ( typeof points !== "number") {
       return res.status(400).json({ message: "Points must be a number" });
     }
 
