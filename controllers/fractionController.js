@@ -32,10 +32,21 @@ export const analyticalEmojiQuizpuzz3= [
     options: ["◐", "◒", "◑", "◓"]
   },
   {
-    text: "▨ ",
+    text: "▨",
     answer: "▧",
     options: ["▥", "▨", "▧", "▤"]
   },
+  {
+    text: "🌛",
+    answer: "🌜",
+    options: ["🌜", "🌛", "🌕", "🌝"]
+  },
+  {
+    text: "👈",
+    answer: "👉",
+    options: ["👆", "👉", "👇", "👈"]
+  },
+
 ];
 export const analyticalEmojiQuizpuzz2= [
   {
@@ -50,6 +61,16 @@ export const analyticalEmojiQuizpuzz2= [
   },
   {
     text: "🔍 Find the odd one out",
+    answer: "🏈",
+    options: ["⚽️",  "⚾️", "🏀","🏈",]
+  },
+  {
+    text: "🔍 Find the odd one out",
+    answer: "🗼",
+    options: ["🎡",  "🛝", "🎠","🗼",]
+  },
+  {
+    text: "🔍 Find the odd one out",
     answer: "⭐",
     options: ["🎂", "⭐", "🍰","🍫",]
   },
@@ -57,6 +78,11 @@ export const analyticalEmojiQuizpuzz2= [
     text: "🔍 Find the odd one out",
     answer: "Db",
     options: ["Aa" ,"Db", "Mm","Ff"]
+  },
+    {
+    text: "🔍 Find the odd one out",
+    answer: "✊",
+    options: ["👆", "👉", "✊", "👈"]
   },
   {
     text: "🔍 Find the odd one out",
