@@ -55,8 +55,7 @@ import {
 } from "../controllers/psudokuController.js";
 import {
   generatePuzzle,
-  generatePuzzle2,
-  generatePuzzle3,
+
   checkPuzzle,
 } from "../controllers/puzzleController.js";
 import {
@@ -67,7 +66,7 @@ import {
 } from "../controllers/logicalController.js";
 import { generateLogicp } from "../controllers/logicalController.js";
 import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, generateShapeQuizStep3, generateShapeQuizStepp1, generateShapeQuizStepp2 } from "../controllers/shapesController.js";
-import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3 } from "../controllers/fractionController.js";
+import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3, generateFractionQuizPuzz2, generateFractionQuizPuzz3 } from "../controllers/fractionController.js";
 
 
 const router = express.Router();
@@ -114,8 +113,8 @@ router.get("/moneylevel2", genMoney2);
 router.get("/moneylevel3", genWordProblems);
 
 router.get("/puzzle", generatePuzzle);
-router.get("/puzzlelevel2", generatePuzzle2);
-router.get("/puzzlelevel3", generatePuzzle3);
+router.get("/puzzlelevel2",generateFractionQuizPuzz2);
+router.get("/puzzlelevel3", generateFractionQuizPuzz3);
 
 router.get("/logic", generateLogic);
 router.get("/logiclevel2", generateLogic2);
