@@ -5,6 +5,92 @@ import StudentTask from "../models/StudentTask.js";
 import StudentModel from "../models/StudentModel.js";
 import StudentAssignedTask from "../models/StudentAssignedTask.js";
 
+import nodemailer from "nodemailer";
+
+
+export const feedback = async (req, res) => {
+  try {
+    const { name, email, message} = req.body;
+
+    // 🔒 Basic validation
+    if (!name || !email || !message) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"Flair Olympiad" <${process.env.EMAIL_USER}>`,
+      to: "flairolympiad@gmail.com",
+      replyTo: email,
+      subject: "Feedback",
+      html: `
+        <h3>FEEDBACK</h3>
+        <table border="1" cellpadding="8" cellspacing="0">
+          <tr><td><b>Name</b></td><td>${name}</td></tr>
+          <tr><td><b>Email</b></td><td>${email}</td></tr>
+          <tr><td><b>Message</b></td><td>${message}</td></tr>
+         
+        </table>
+      `,
+    });
+
+    return res.status(200).json({ success: true, message: "Email sent successfully" });
+
+  } catch (error) {
+    console.error("Email error:", error);
+    return res.status(500).json({ success: false, message: "Failed to send email" });
+  }
+};
+export const joinform = async (req, res) => {
+  try {
+    const { name, email, mobile, grade, country } = req.body;
+
+    // 🔒 Basic validation
+    if (!name || !email || !mobile || !grade || !country) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"Flair Olympiad" <${process.env.EMAIL_USER}>`,
+      to: "flairolympiad@gmail.com",
+      replyTo: email,
+      subject: "New Student Registration",
+      html: `
+        <h3>New Student Registration</h3>
+        <table border="1" cellpadding="8" cellspacing="0">
+          <tr><td><b>Name</b></td><td>${name}</td></tr>
+          <tr><td><b>Email</b></td><td>${email}</td></tr>
+          <tr><td><b>Mobile</b></td><td>${mobile}</td></tr>
+          <tr><td><b>Grade</b></td><td>${grade}</td></tr>
+          <tr><td><b>Country</b></td><td>${country}</td></tr>
+        </table>
+      `,
+    });
+
+    return res.status(200).json({ success: true, message: "Email sent successfully" });
+
+  } catch (error) {
+    console.error("Email error:", error);
+    return res.status(500).json({ success: false, message: "Failed to send email" });
+  }
+};
+
+
 export const screateTask = async (req, res) => {
   try {
     const {
