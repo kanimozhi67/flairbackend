@@ -1,6 +1,6 @@
 import express from "express";
 
-import { deleteTask } from "../controllers/adminController.js";
+import { deleteTask, feedback, joinform } from "../controllers/adminController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import {  isSchoolAdmin } from "../middleware/isSchoolAdmin.js";
@@ -61,7 +61,8 @@ router.get(
  // isSchoolAdmin,
 sgetTasks);
 
-
+router.post("/joinform",joinform)
+router.post("/feedback",feedback)
 router.get("/taskboard",  authMiddleware, isAdmin, getTaskBoard);
 router.get("/taskboardstudent",   getTaskBoardStudent);
 export default router;
