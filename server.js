@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 
 // 🔥 FORCE PATH (Windows-safe)
-dotenv.config({ path: "./.env" });
+dotenv.config();
 
 
 
@@ -33,18 +33,30 @@ const app = express();
 const PORT = process.env.PORT;
 console.log(`PORT= ${PORT}`);
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000","http://localhost:5173",
-      "https://flairfrontend.vercel.app",
-      process.env.FRONTEND_URL,
-    ], // your frontend URL
-     methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-       allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // important: allow cookies
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000","http://localhost:5173",
+//       "https://flairfrontend.vercel.app",
+//       process.env.FRONTEND_URL,
+//     ], // your frontend URL
+//      methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+//        allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true, // important: allow cookies
+//   })
+// );
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://flairfrontend.vercel.app",
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+app.options("*", cors());
+
  //app.options("/*", cors());
 
 
