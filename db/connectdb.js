@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
-import User from "../models/User.js";
-import stripe from "../utils/stripe.js";
+// import User from "../models/User.js";
+// import stripe from "../utils/stripe.js";
 // Connect MongoDB
 const connectdb = async() => {
   try {
     await mongoose.connect(process.env.MONGO_URL);
     console.log("MongoDB Connected");
-// PRODUCT ID: prod_TmBAYJMmF3UmLp
-// PRICE ID: price_1SocnuPKeiF8APQ1UaPnCNaB
+
+
 // const email = "anju@gmail.com";
 
 // const user = await User.findOneAndUpdate(
