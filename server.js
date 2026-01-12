@@ -37,7 +37,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000","http://localhost:5173",
-      "https://flairfrontend.vercel.app",
+      "http://flairfrontend.vercel.app",
       process.env.FRONTEND_URL,
     ], // your frontend URL
      methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
