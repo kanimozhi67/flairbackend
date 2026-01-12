@@ -1,6 +1,6 @@
 import express from "express";
 
-import { deleteTask, feedback, joinform } from "../controllers/adminController.js";
+import { deleteTask, deleteUser, feedback, getAllUser, joinform, updateUser, updateUserScore } from "../controllers/adminController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/isAdmin.js";
 import {  isSchoolAdmin } from "../middleware/isSchoolAdmin.js";
@@ -60,9 +60,19 @@ router.get(
  // authMiddleware, // 🔥 MUST come first
  // isSchoolAdmin,
 sgetTasks);
-
+router.get("/getalluser",getAllUser)
 router.post("/joinform",joinform)
 router.post("/feedback",feedback)
+
+
+router.put("/updateuser/:id",authMiddleware, isAdmin, updateUser);
+router.put("/updatescore/:id",authMiddleware, isAdmin, updateUserScore);
+router.delete("/deleteuser/:id",authMiddleware, isAdmin, deleteUser);
+
+// router.post("/createcheckoutsession", createCheckoutSession);
+
+// router.post("/create-payment-intent", createPaymentIntent);
+
 router.get("/taskboard",  authMiddleware, isAdmin, getTaskBoard);
 router.get("/taskboardstudent",   getTaskBoardStudent);
 export default router;

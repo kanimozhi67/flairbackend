@@ -14,7 +14,7 @@ const userProgressSchema = new mongoose.Schema({
   },
   score: {
     type: Number,
-    default: 1,
+    default: 0,
     required: true,
   },
    dayKey: {

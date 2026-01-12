@@ -152,17 +152,32 @@ export const leaderboard = async (req, res) => {
     const populated = await Promise.all(
       agg.map(async (item) => {
         let owner;
-        if (item._id.ownerType === "User") {
-          owner = await User.findById(item._id.ownerId).select("username level");
-        } else {
-          owner = await StudentModel.findById(item._id.ownerId).select(
-            "username level"
-          );
-        }
-        return {
+        // if (item._id.ownerType === "User") {
+        //   owner = await User.findById({_id:item._id.ownerId , role: { $ne: "Admin" }}).select("username level role");
+        //  console.log(owner)
+        // } else {
+        //   owner = await StudentModel.findById(item._id.ownerId).select(
+        //     "username level role"
+        //   );
+        // }
+         if (item._id.ownerType === "User") {
+      owner = await User.findOne({
+        _id: item._id.ownerId,
+      //  role: { $ne: "Admin" }   // ❌ exclude admin
+      }).select("username level role");
+    
+    } else {
+  owner = await StudentModel.findOne({
+    _id: item._id.ownerId,
+   // role: { $nin: ["SchoolAdmin", "Teacher"] } // ✅ exclude both
+  }).select("username level role");
+}
+
+        return{
           ownerId: item._id.ownerId,
           ownerType: item._id.ownerType,
           username: owner?.username || "Unknown",
+          role:owner?.role,
           level: owner?.level || "Unknown",
           points: item.totalScore,
         };
@@ -170,8 +185,11 @@ export const leaderboard = async (req, res) => {
     );
 
     // 3️⃣ Filter by level if provided
-    let filtered = level ? populated.filter((u) => u.level === level) : populated;
-
+  //  let filtered = level ? populated.filter((u) => u.level === level ) : populated;
+const filtered2 = populated.filter((u=>u.role!=="Teacher"));
+const filtered1= filtered2.filter((u=>u.role!=="SchoolAdmin"));
+const filtered = filtered1.filter((u=>u.role!=="Admin"));
+ 
     // 4️⃣ Sort descending by points
     filtered.sort((a, b) => b.points - a.points);
 
@@ -182,11 +200,12 @@ export const leaderboard = async (req, res) => {
       points: u.points,
       rank: index + 1,
       level: u.level,
+      role:u.role,
     }));
 
     // 6️⃣ Top 5
     const top5 = leaderboardResult.slice(0, 5);
-
+console.log("top5:",top5)
     // 7️⃣ Current user
     const currentUser = userId
       ? leaderboardResult.find((u) => String(u.userId) === String(userId))

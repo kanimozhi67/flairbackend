@@ -1,6 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
+
+
+// 🔥 FORCE PATH (Windows-safe)
+dotenv.config({ path: "./.env" });
+
+
+
 import authRoutes from "./routes/authRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import { stripeWebhook } from "./controllers/paymentController.js";
 import cors from "cors";
 
 import progressRoutes from "./routes/progressRoutes.js";
@@ -14,10 +23,11 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import quizRoutes from "./routes/quizRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import stripe from "./utils/stripe.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-dotenv.config();
+
 
 const app = express();
 const PORT = process.env.PORT;
@@ -26,7 +36,7 @@ console.log(`PORT= ${PORT}`);
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      "http://localhost:3000","http://localhost:5173",
       "https://flairfrontend.vercel.app",
       process.env.FRONTEND_URL,
     ], // your frontend URL
@@ -46,6 +56,13 @@ app.use(cookieParser());
 app.use("/test", (req, res) => {
   return res.json({ message: "app is working" });
 });
+
+
+app.get("/stripe-test", async (req, res) => {
+  const balance = await stripe.balance.retrieve();
+  res.json(balance);
+});
+
 app.use("/api/admin",adminRoutes)
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
@@ -54,15 +71,26 @@ app.use("/api/auth", authRoutes);
 app.use("/api/quiz/progress", progressRoutes);
 app.get("/api/profile", getUserInfo);
 app.use("/img", express.static(path.join(__dirname, "img")));
-app.use("/api/quiz", quizRoutes);
+app.use("/api/payment", paymentRoutes);
+app.post(
+  "/payment/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhook
+);
 
 async function startServer() {
   try {
     // Connect to MongoDB first
     await connectdb();
     // Then start the server
+    app.post("/api/payment/createcheckoutsession", (req, res) => {
+  res.json({ ok: true });
+});
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+      
+
+// 👀
     });
   } catch (error) {
     console.error("Failed to start server:", error);

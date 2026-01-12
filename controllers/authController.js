@@ -213,7 +213,7 @@ export async function login(req, res) {
         id: user._id,
         role: user.role,
         level: user.level,
-
+isPremiuim:user.isPremium,
         model: "User",
       },
       process.env.JWT_SECRET,

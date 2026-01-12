@@ -105,6 +105,9 @@ const authMiddleware = async (req, res, next) => {
       role: decoded.role,
       model: decoded.model,
 
+      ...(decoded.model === "User" && {
+        isPremium: decoded.isPremium,
+      }),
       ...(decoded.model === "Student" && {
         schoolId: decoded.schoolId,
       }),
