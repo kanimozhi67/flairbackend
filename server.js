@@ -1,11 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 
-
 // 🔥 FORCE PATH (Windows-safe)
 dotenv.config();
-
-
 
 import authRoutes from "./routes/authRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
@@ -28,7 +25,6 @@ import stripe from "./utils/stripe.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-
 const app = express();
 const PORT = process.env.PORT;
 console.log(`PORT= ${PORT}`);
@@ -45,21 +41,23 @@ console.log(`PORT= ${PORT}`);
 //     credentials: true, // important: allow cookies
 //   })
 // );
-app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://flairfrontend.vercel.app",
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://flairfrontend.vercel.app"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.options("*", cors());
 
- //app.options("/*", cors());
-
-
+//app.options("/*", cors());
+app.post(
+  "/payment/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhook
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -69,13 +67,12 @@ app.use("/test", (req, res) => {
   return res.json({ message: "app is working" });
 });
 
-
 app.get("/stripe-test", async (req, res) => {
   const balance = await stripe.balance.retrieve();
   res.json(balance);
 });
 
-app.use("/api/admin",adminRoutes)
+app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 // app.get("/api/quiz/math", generateQuestionAddSub);
@@ -84,25 +81,19 @@ app.use("/api/quiz/progress", progressRoutes);
 app.get("/api/profile", getUserInfo);
 app.use("/img", express.static(path.join(__dirname, "img")));
 app.use("/api/payment", paymentRoutes);
-app.post(
-  "/payment/webhook",
-  express.raw({ type: "application/json" }),
-  stripeWebhook
-);
 
 async function startServer() {
   try {
     // Connect to MongoDB first
     await connectdb();
     // Then start the server
-    app.post("/api/payment/createcheckoutsession", (req, res) => {
-  res.json({ ok: true });
-});
+    //     app.post("/api/payment/createcheckoutsession", (req, res) => {
+    //   res.json({ ok: true });
+    // });
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
-      
 
-// 👀
+      // 👀
     });
   } catch (error) {
     console.error("Failed to start server:", error);
