@@ -367,8 +367,8 @@ export const logout = async (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",})
-    // res.cookie("jwt", "", { maxAge: 0 });
-    // res.status(200).json({ message: "logout successfuly" });
+     res.cookie("jwt", "", { maxAge: 0 });
+     res.status(200).json({ message: "logout successfuly" });
   } catch (err) {
     console.log(`error in logout controller: ${err}`);
     return res.status(500).json({ err: "Internal server error" });

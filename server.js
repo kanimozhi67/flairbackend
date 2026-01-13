@@ -6,7 +6,7 @@ dotenv.config();
 
 import authRoutes from "./routes/authRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-import { stripeWebhook } from "./controllers/paymentController.js";
+
 import cors from "cors";
 
 import progressRoutes from "./routes/progressRoutes.js";
@@ -21,6 +21,7 @@ import { dirname } from "path";
 import quizRoutes from "./routes/quizRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import stripe from "./utils/stripe.js";
+import { stripeWebhook } from "./controllers/paymentController.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -57,7 +58,7 @@ app.use(
 app.post(
   "/payment/webhook",
   express.raw({ type: "application/json" }),
-  stripeWebhook
+ stripeWebhook
 );
 
 app.use(express.json());
@@ -76,10 +77,9 @@ app.get("/stripe-test", async (req, res) => {
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
-// app.get("/api/quiz/math", generateQuestionAddSub);
-// app.post("/api/quiz/check", checkAnswer);
+app.use("/api/quiz", quizRoutes);
 app.use("/api/quiz/progress", progressRoutes);
-app.get("/api/profile", getUserInfo);
+// app.get("/api/profile", getUserInfo);
 app.use("/img", express.static(path.join(__dirname, "img")));
 app.use("/api/payment", paymentRoutes);
 

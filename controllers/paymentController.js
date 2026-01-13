@@ -35,7 +35,51 @@ export const createCheckoutSession = async (req, res) => {
 };
 
 
+export const stripeWebhook = async (req, res) => {
+   console.log("🔥 Webhook received");
+  const sig = req.headers["stripe-signature"];
 
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+     console.error("❌ Webhook signature error:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+    
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const userId = session.metadata.userId;
+
+    await User.findByIdAndUpdate(userId, {
+      isPremium: true,
+      subscription: {
+        plan: "monthly",
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      },
+      stripeCustomerId: session.customer,
+    });
+  }
+console.log("✅ Checkout completed for user:", session.metadata.userId);
+
+  if (event.type === "customer.subscription.deleted") {
+    await User.findOneAndUpdate(
+      { stripeCustomerId: event.data.object.customer },
+      {
+        isPremium: false,
+        "subscription.plan": null,
+        "subscription.expiresAt": null,
+      }
+    );
+  }
+
+  res.json({ received: true });
+};
 
 
 //  export const paymentIntent = await stripe.paymentIntents.create({
@@ -76,103 +120,64 @@ export const createCheckoutSession = async (req, res) => {
 
 
 
-export const handleStripeWebhook = async (req, res) => {
-  const event = req.body;
+// export const handleStripeWebhook = async (req, res) => {
+//   const event = req.body;
 
-  if (event.type === "payment_intent.succeeded") {
-    const intent = event.data.object;
+//   if (event.type === "payment_intent.succeeded") {
+//     const intent = event.data.object;
 
-    const payment = await Payment.findOne({
-      paymentIntentId: intent.id,
-    });
+//     const payment = await Payment.findOne({
+//       paymentIntentId: intent.id,
+//     });
 
-    if (payment) {
-      payment.status = "success";
-      await payment.save();
+//     if (payment) {
+//       payment.status = "success";
+//       await payment.save();
 
-      // 🔥 Upgrade user
-      await User.findByIdAndUpdate(payment.userId, {
-        isPremium: true,
-        premiumUntil: new Date(
-          Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
-        ),
-      });
-    }
-  }
+//       // 🔥 Upgrade user
+//       await User.findByIdAndUpdate(payment.userId, {
+//         isPremium: true,
+//          "subscription.plan": "yearly",
+//           "subscription.expiresAt": new Date(
+//           Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
+//         ),
+//       });
+//     }
+//   }
 
-  res.json({ received: true });
-};
+//   res.json({ received: true });
+// };
 
-export const activatePremium = async (req, res) => {
-  try {
-    const { userId, plan } = req.body;
+// export const activatePremium = async (req, res) => {
+//   try {
+//     const { userId, plan } = req.body;
 
-    const expiresAt =
-      plan === "monthly"
-        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-        : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+//     const expiresAt =
+//       plan === "monthly"
+//         ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+//         : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
 
-    await User.findByIdAndUpdate(userId, {
-      isPremium: true,
-      "subscription.plan": plan,
-      "subscription.expiresAt": expiresAt,
-    });
+//     await User.findByIdAndUpdate(userId, {
+//       isPremium: true,
+//       "subscription.plan": plan,
+//       "subscription.expiresAt": expiresAt,
+//     });
 
-    res.json({ message: "Premium activated" });
-  } catch (err) {
-    res.status(500).json({ message: "Failed to activate premium" });
-  }
-};
-export const updateUserPaymentStatus = async (req, res) => {
-  const { id } = req.params;
-  const { isPremium } = req.body;
+//     res.json({ message: "Premium activated" });
+//   } catch (err) {
+//     res.status(500).json({ message: "Failed to activate premium" });
+//   }
+// };
+// export const updateUserPaymentStatus = async (req, res) => {
+//   const { id } = req.params;
+//   const { isPremium } = req.body;
 
-  await User.findByIdAndUpdate(id, { isPremium });
+//   await User.findByIdAndUpdate(id, { isPremium });
 
-  res.json({ message: "User updated" });
-};
-// await api.put(`/admin/update-user-payment/${userId}`, {
-//   isPremium: true
-// });
+//   res.json({ message: "User updated" });
+// };
+// // await api.put(`/admin/update-user-payment/${userId}`, {
+// //   isPremium: true
+// // });
 
-export const stripeWebhook = async (req, res) => {
-  const sig = req.headers["stripe-signature"];
 
-  let event;
-  try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-  } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
-    const userId = session.metadata.userId;
-
-    await User.findByIdAndUpdate(userId, {
-      isPremium: true,
-      subscription: {
-        plan: "monthly",
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      },
-      stripeCustomerId: session.customer,
-    });
-  }
-
-  if (event.type === "customer.subscription.deleted") {
-    await User.findOneAndUpdate(
-      { stripeCustomerId: event.data.object.customer },
-      {
-        isPremium: false,
-        "subscription.plan": null,
-        "subscription.expiresAt": null,
-      }
-    );
-  }
-
-  res.json({ received: true });
-};
