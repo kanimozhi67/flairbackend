@@ -205,7 +205,7 @@ const filtered = filtered1.filter((u=>u.role!=="Admin"));
 
     // 6️⃣ Top 5
     const top5 = leaderboardResult.slice(0, 5);
-console.log("top5:",top5)
+
     // 7️⃣ Current user
     const currentUser = userId
       ? leaderboardResult.find((u) => String(u.userId) === String(userId))

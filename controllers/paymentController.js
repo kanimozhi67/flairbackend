@@ -34,12 +34,66 @@ export const createCheckoutSession = async (req, res) => {
   }
 };
 
+// const stripe = new stripe(process.env.STRIPE_SECRET_KEY);
+
+// export const stripeWebhook = async (req, res) => {
+//    console.log("🔥 Webhook received");
+//   const sig = req.headers["stripe-signature"];
+
+//   let event;
+//   try {
+//     event = stripe.webhooks.constructEvent(
+//       req.body,
+//       sig,
+//       process.env.STRIPE_WEBHOOK_SECRET
+//     );
+//   } catch (err) {
+//      console.error("❌ Webhook signature error:", err.message);
+//     return res.status(400).send(`Webhook Error: ${err.message}`);
+    
+//   }
+//   // 🔒 Always log, never assume structure
+//   console.log("✅ Stripe event:", event.type);
+
+//   if (event.type === "checkout.session.completed") {
+//     const session = event.data.object;
+//     const userId = session.metadata?.userId;
+//  if (!userId) {
+//       console.error("❌ userId missing in metadata");
+//       return res.sendStatus(200);
+//     }
+//     await User.findByIdAndUpdate(userId, {
+//       isPremium: true,
+//       subscription: {
+//         plan: "monthly",
+//         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+//       },
+//       stripeCustomerId: session.customer,
+//     });
+//   }
+// console.log("✅ Checkout completed for user:", session?.metadata.userId);
+
+//   if (event.type === "customer.subscription.deleted") {
+//     await User.findOneAndUpdate(
+//       { stripeCustomerId: event.data.object.customer },
+//       {
+//         isPremium: false,
+//         "subscription.plan": null,
+//         "subscription.expiresAt": null,
+//       }
+//     );
+//   }
+//   res.sendStatus(200);
+//   // res.json({ received: true });
+// };
+
+
+
 
 export const stripeWebhook = async (req, res) => {
-   console.log("🔥 Webhook received");
   const sig = req.headers["stripe-signature"];
-
   let event;
+
   try {
     event = stripe.webhooks.constructEvent(
       req.body,
@@ -47,40 +101,54 @@ export const stripeWebhook = async (req, res) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-     console.error("❌ Webhook signature error:", err.message);
+    console.error("❌ Signature verification failed:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
-    
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
-    const userId = session.metadata.userId;
+  // 🔒 Always log, never assume structure
+  console.log("✅ Stripe event:", event.type);
 
-    await User.findByIdAndUpdate(userId, {
-      isPremium: true,
-      subscription: {
-        plan: "monthly",
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      },
-      stripeCustomerId: session.customer,
-    });
-  }
-console.log("✅ Checkout completed for user:", session.metadata.userId);
+  try {
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const session = event.data.object;
 
-  if (event.type === "customer.subscription.deleted") {
-    await User.findOneAndUpdate(
-      { stripeCustomerId: event.data.object.customer },
-      {
-        isPremium: false,
-        "subscription.plan": null,
-        "subscription.expiresAt": null,
+        const userId = session.metadata?.userId;
+        if (!userId) break;
+
+        await User.findByIdAndUpdate(userId, {
+          isPremium: true,
+          stripeCustomerId: session.customer,
+          subscriptionId: session.subscription,
+          "subscription.plan": "monthly",
+          "subscription.expiresAt": new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000
+          ),
+        });
+
+        console.log("🎉 Premium activated for user:", userId);
+        break;
       }
-    );
+
+      // OPTIONAL: handle later if needed
+      case "invoice.payment_failed":
+      case "customer.subscription.deleted":
+        console.log("⚠️ Subscription issue:", event.type);
+        break;
+
+      default:
+        // 👈 VERY IMPORTANT
+        // Ignore all other events safely
+        break;
+    }
+  } catch (err) {
+    // ❌ Never crash webhook
+    console.error("❌ Webhook handler error:", err);
   }
 
-  res.json({ received: true });
+  // ✅ ALWAYS ACK STRIPE
+  res.sendStatus(200);
 };
-
 
 //  export const paymentIntent = await stripe.paymentIntents.create({
 //   amount,

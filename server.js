@@ -27,22 +27,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+
+
+app.post(
+  "/api/payment/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhook
+);
+
  const PORT = process.env.PORT;
 
 console.log(`PORT= ${PORT}`);
 
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:3000","http://localhost:5173",
-//       "https://flairfrontend.vercel.app",
-//       process.env.FRONTEND_URL,
-//     ], // your frontend URL
-//      methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-//        allowedHeaders: ["Content-Type", "Authorization"],
-//     credentials: true, // important: allow cookies
-//   })
-// );
+
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://flairfrontend.vercel.app",process.env.FRONTEND_URL,],
@@ -52,14 +49,9 @@ app.use(
   })
 );
 
-// app.options("*", cors());
 
 
-app.post(
-  "/payment/webhook",
-  express.raw({ type: "application/json" }),
- stripeWebhook
-);
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -79,7 +71,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/quiz/progress", progressRoutes);
-// app.get("/api/profile", getUserInfo);
+
 app.use("/img", express.static(path.join(__dirname, "img")));
 app.use("/api/payment", paymentRoutes);
 
