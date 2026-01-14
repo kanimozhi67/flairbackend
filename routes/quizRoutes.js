@@ -66,7 +66,7 @@ import {
 } from "../controllers/logicalController.js";
 import { generateLogicp } from "../controllers/logicalController.js";
 import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, generateShapeQuizStep3, generateShapeQuizStepp1, generateShapeQuizStepp2 } from "../controllers/shapesController.js";
-import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3, generateFractionQuizPuzz2, generateFractionQuizPuzz3 } from "../controllers/fractionController.js";
+import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3, generateFractionQuizPuzz2, generateFractionQuizPuzz3, logicQuizPuzz2, logicQuizPuzz3 } from "../controllers/fractionController.js";
 
 
 const router = express.Router();
@@ -120,8 +120,9 @@ router.get("/logic", generateLogic);
 router.get("/logiclevel2", generateLogic2);
 router.get("/logiclevel3", generateLogic3);
 router.get("/logicp", generateLogicp);
-// router.get("/logicplevel2", generateLogicp2);
-// router.get("/logicplevel3", generateLogicp3);
+router.get("/logicplevel2", logicQuizPuzz2);
+router.get("/logicplevel3", logicQuizPuzz3);
+
 // Endpoint to submit answers
 router.post("/checksort", checkSortingAnswers);
 router.post("/checkmulplevel3", checkAnswerCircle);
