@@ -348,9 +348,11 @@ function div3( req, res) {
 
   for (let i = 0; i < 5; i++) {
     // generate 5 questions
-    const d =  Number((Math.random() * 100).toFixed(2));// 0–15
-     const b = Math.floor(Math.random() * 8)+2; // 0-9
-const a= d*b;
+    const d =  ( Math.floor((Math.random() * 900)))+9;// 0–15
+    
+     const b = Math.floor(Math.random() * 8)+2; // 2 to 9
+const e= d*b;
+const a=e/100;
     const operator = "➗"; // or "*"
 
     const answer = a / b;
