@@ -118,7 +118,10 @@ export const getAllUser = async (req, res) => {
           level: 1,
           role: 1,
           sticker: 1,
-          points: 1
+          points: 1,
+          isPremium:1,
+          "subscription.plan": 1,
+          "subscription.expiresAt": 1,
         }
       },
 
@@ -135,6 +138,9 @@ export const getAllUser = async (req, res) => {
         email: u.email,
         level: u.level,
         role: u.role,
+        isPremium:u.isPremium,
+        plan: u.subscription?.plan || null,
+        expiresAt: u.subscription?.expiresAt || null,
         sticker: u.sticker,
         points: u.points || 0
       }))
