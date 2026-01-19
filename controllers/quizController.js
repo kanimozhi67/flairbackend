@@ -32,39 +32,69 @@ const AddSub = (n, t, req, res, l = 0) => {
 };
 
 function addsub3(b, req, res, t) {
-  const questions = [];
-
-  let c = 0;
-  const ran = [];
-  var a = [];
-  var q = [];
-  const operator = "×"; // or "*"
-  let rnum = Math.floor(Math.random() * 2) + 2;
+    const questions = [];
+  const q = [];
+  const mul = b;
+  // generate skip-count numbers
+  let start = Math.floor(Math.random() * 4) + 2;
   for (let i = 0; i < 5; i++) {
-    // generate 5 questions
-
-    ran[i] = rnum + c;
-    c = t;
-    rnum = ran[i];
+    q.push((start + i * t) * b);
   }
-  a = [...ran].sort((a, b) => a - b);
-  for (let i = 0; i < 5; i++) {
-    q[i] = a[i] * b;
-    c = c + t;
-  }
-  const d = Math.floor(Math.random() * 5);
-  const answer = q[d];
-  q[d] = null;
-  const id = Date.now() + 1; // unique ID
-  c = c + t;
-  const skip = t;
-  // Store question & answer on backend
-  questionsStore[id] = { q,  operator, answer };
+const skip=q[1]-q[0];
+console.log(skip)
+  // choose missing index
+  const missingIndex = Math.floor(Math.random() * 3)+2;
+  const answer = q[missingIndex];
+  q[missingIndex] = null;
 
-  // Send only the question to frontend
-  questions.push({ id, q, operator });
+  const id = Date.now();
+
+  questionsStore[id] = {
+    answer, // ✅ correct value
+   
+  };
+
+  questions.push({
+    id,
+    q,
+    operator: "×",
+  });
 
   res.json({ questions });
+
+  // const questions = [];
+
+  // let c = 0;
+  // const ran = [];
+  // var a = [];
+  // var q = [];
+  // const operator = "×"; // or "*"
+  // let rnum = Math.floor(Math.random() * 2) + 2;
+  // for (let i = 0; i < 5; i++) {
+  //   // generate 5 questions
+
+  //   ran[i] = rnum + c;
+  //   c = t;
+  //   rnum = ran[i];
+  // }
+  // a = [...ran].sort((a, b) => a - b);
+  // for (let i = 0; i < 5; i++) {
+  //   q[i] = a[i] * b;
+  //   c = c + t;
+  // }
+  // const d = Math.floor(Math.random() * 5);
+  // const answer = q[d];
+  // q[d] = null;
+  // const id = Date.now() + 1; // unique ID
+  // c = c + t;
+  // const skip = t;
+  // // Store question & answer on backend
+  // questionsStore[id] = { q,  operator, answer };
+
+  // // Send only the question to frontend
+  // questions.push({ id, q, operator });
+
+  // res.json({ questions });
 }
 
 export function generateQuestionAddSub(req, res) {
@@ -199,7 +229,8 @@ function mult3(b, req, res, t) {
   for (let i = 0; i < 5; i++) {
     q.push((start + i * t) * b);
   }
-
+const skip=q[1]-q[0];
+console.log(skip)
   // choose missing index
   const missingIndex = Math.floor(Math.random() * 5);
   const answer = q[missingIndex];
@@ -210,7 +241,7 @@ function mult3(b, req, res, t) {
   questionsStore[id] = {
     answer, // ✅ correct value
     mul, // ✅ multiplicand
-    skip: t, // ✅ skip value
+    skip, // ✅ skip value
   };
 
   questions.push({

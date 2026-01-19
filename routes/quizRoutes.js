@@ -67,6 +67,7 @@ import {
 import { generateLogicp } from "../controllers/logicalController.js";
 import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, generateShapeQuizStep3, generateShapeQuizStepp1, generateShapeQuizStepp2 } from "../controllers/shapesController.js";
 import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3, generateFractionQuizPuzz2, generateFractionQuizPuzz3, logicQuizPuzz2, logicQuizPuzz3, puzzlep2, puzzlep3 } from "../controllers/fractionController.js";
+import { explainWrongAnswer, explainWrongAnswer2, explainWrongAnswer3 } from "../controllers/openaiController.js";
 
 
 const router = express.Router();
@@ -151,5 +152,9 @@ router.post("/checkshape", checkShapeAnswerStep);
 router.post("/checksudokup", checkSudokup);
 router.post("/checkpuzzle", checkPuzzle);
 router.post("/checklogic", checkLogic);
+router.post("/explain", explainWrongAnswer);
+router.post("/explain2", explainWrongAnswer2);
+router.post("/explain3", explainWrongAnswer3);
+
 
 export default router;
