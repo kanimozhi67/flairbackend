@@ -3,6 +3,96 @@ import UserTask from "../models/UserTask.js";
 import User from "../models/User.js";
 import StudentAssignedTask from "../models/StudentAssignedTask.js";
 import StudentTask from "../models/StudentTask.js"
+import Completed from "../models/Completed.js";
+
+
+// GET completed tasks by userId
+export const getCompleted = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const today = getLocalDate();
+
+  const completed = await Completed.findOne({ userId, date: today });
+
+    if (!completed) {
+      return res.status(404).json({
+        success: false,
+        message: "No completed tasks found for this user",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: completed,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch completed tasks",
+    });
+  }
+};
+const getLocalDate = () => {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() + now.getTimezoneOffset() * -1);
+  return now.toISOString().split("T")[0]; // YYYY-MM-DD
+};
+export const addCompleted = async (req, res) => {
+  try {
+    const {
+      userId,
+      level,
+      category,
+      selectedLevel,
+      points = 0,
+    } = req.body;
+
+    // Find existing completed record for user
+  
+const today = getLocalDate();
+
+  let completed = await Completed.findOne({ userId, date: today });
+
+ 
+    if (!completed) {
+      // Create new document if not exists
+      completed = new Completed({
+        userId,
+          date: today,
+        totalPoints: points,
+        completedLevel: [level],
+        completedCategory: [category],
+        completedSelectedLevel: [selectedLevel],
+        completedPoints: [points],
+      });
+    } else {
+      // Update existing document
+       
+      completed.completedLevel.push(level);
+      completed.completedCategory.push(category);
+      completed.completedSelectedLevel.push(selectedLevel);
+      completed.completedPoints.push(points);
+      completed.totalPoints += points;
+    }
+
+    await completed.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Completed task added successfully",
+      data: completed,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to add completed task",
+    });
+  }
+};
+
 
 export const todaytaskStudent = async (req, res) => {
   try {

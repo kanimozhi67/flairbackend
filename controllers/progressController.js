@@ -74,18 +74,18 @@ export async function getTodayPoints(req, res) {
     const dayKey = moment().utc().format("YYYY-MM-DD");
 
     // Log for debugging
-    console.log({ ownerId, ownerType, dayKey });
+   
 
     // Find today's record
     const today = await UserProgress.findOne({ ownerId, ownerType, dayKey });
-    console.log("today:", today);
+   
 
     // Total points
     const totalAgg = await UserProgress.aggregate([
       { $match: { ownerId: new mongoose.Types.ObjectId(ownerId), ownerType } },
       { $group: { _id: null, totalScore: { $sum: "$score" } } }
     ]);
-    console.log("totalAgg:", totalAgg);
+   
 
     res.json({
       todayPoints: today?.score ?? 0,
@@ -152,14 +152,7 @@ export const leaderboard = async (req, res) => {
     const populated = await Promise.all(
       agg.map(async (item) => {
         let owner;
-        // if (item._id.ownerType === "User") {
-        //   owner = await User.findById({_id:item._id.ownerId , role: { $ne: "Admin" }}).select("username level role");
-        //  console.log(owner)
-        // } else {
-        //   owner = await StudentModel.findById(item._id.ownerId).select(
-        //     "username level role"
-        //   );
-        // }
+    
          if (item._id.ownerType === "User") {
       owner = await User.findOne({
         _id: item._id.ownerId,

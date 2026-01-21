@@ -159,7 +159,7 @@ export async function checkAddCircle(req, res) {
 }
 
 export function generateQuestionAddSubp(req, res) {
-  AddSub(5, 1000, req, res, 100);
+  AddSub(5, 900, req, res, 100);
 }
 export function generateQuestionAddSubp3(req, res) {
   // AddSub(5, 10000, req, res, 1000);

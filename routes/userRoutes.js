@@ -1,6 +1,6 @@
 import express from "express";
 import { getStickers, addStickers } from "../controllers/userController.js";
-import { completetask, completetaskStudent, todaytask, todaytaskStudent } from "../controllers/taskController.js";
+import { addCompleted, completetask, completetaskStudent, getCompleted, todaytask, todaytaskStudent } from "../controllers/taskController.js";
 import  authMiddleware  from'../middleware/authMiddleware.js'; // verifies JWT
 
 const router = express.Router();
@@ -18,6 +18,7 @@ router.get("/todaytaskstudent", authMiddleware, todaytaskStudent);
 router.post("/completetask",authMiddleware,completetask );
 router.post("/completetaskstudent",authMiddleware,completetaskStudent );
 
-
+router.post("/completed", addCompleted);
+router.get("/completed/:userId", getCompleted);
 
 export default router;
