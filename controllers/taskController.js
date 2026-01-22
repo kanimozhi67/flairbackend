@@ -42,7 +42,8 @@ const getLocalDate = () => {
 export const addCompleted = async (req, res) => {
   try {
     const {
-      userId,
+      Id,
+      role,
       level,
       category,
       selectedLevel,
@@ -52,8 +53,17 @@ export const addCompleted = async (req, res) => {
     // Find existing completed record for user
   
 const today = getLocalDate();
+let userId=Id;
+let completed;
+const now = new Date();
+const time = now.toLocaleTimeString();
+console.log(time);
 
-  let completed = await Completed.findOne({ userId, date: today });
+   completed = await Completed.findOne({ userId:Id, date: today }) ;
+   console.log(completed)
+   if(!completed)
+   completed = await Completed.findOne({ studentId:Id, date: today }) ;
+
 
  
     if (!completed) {
@@ -61,6 +71,7 @@ const today = getLocalDate();
       completed = new Completed({
         userId,
           date: today,
+          time,
         totalPoints: points,
         completedLevel: [level],
         completedCategory: [category],
@@ -74,6 +85,7 @@ const today = getLocalDate();
       completed.completedCategory.push(category);
       completed.completedSelectedLevel.push(selectedLevel);
       completed.completedPoints.push(points);
+      completed.time.push(time);
       completed.totalPoints += points;
     }
 

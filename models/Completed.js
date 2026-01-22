@@ -5,11 +5,20 @@ const CompletedTaskSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+     
     },
+      studentId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "StudentModel",
+        
+        },
  date: {
       type: String, // "2026-01-22"
       required: true,
+    },
+    time:{
+ type:[ String], 
+     
     },
     totalPoints: {
       type: Number,
