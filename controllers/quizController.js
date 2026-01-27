@@ -1,10 +1,10 @@
 import UserProgress from "../models/UserProgress.js";
-
+import Quiz from "../models/Quiz.js";
 // In-memory store for generated questions (keyed by id)
 const questionsStore = {}; // { [id]: { a, b, operator, answer } }
 
 // Generate multiple random questions
-const AddSub = (n, t, req, res, l = 0) => {
+const AddSub =async(n, t, req, res, l = 0) => {
   const questions = [];
 
   // const randomNum = () => Math.floor(Math.random() * t);
@@ -22,7 +22,15 @@ const AddSub = (n, t, req, res, l = 0) => {
     const id = Date.now() + i; // unique ID
 
     // Store question in memory
-    questionsStore[id] = { a, b, operator, answer };
+   // questionsStore[id] = { a, b, operator, answer };
+  await Quiz.create({
+      id,
+      a,
+      b,
+      operator,
+      answer,
+      createdAt: new Date(),
+    });
 
     // Send only necessary info to frontend (no answer)
     questions.push({ id, a, b, operator });
@@ -31,7 +39,7 @@ const AddSub = (n, t, req, res, l = 0) => {
   res.json({ questions });
 };
 
-function addsub3(b, req, res, t) {
+const  addsub3=async(b, req, res, t)=> {
     const questions = [];
   const q = [];
   const mul = b;
@@ -49,10 +57,17 @@ console.log(skip)
 
   const id = Date.now();
 
-  questionsStore[id] = {
-    answer, // ✅ correct value
+  // questionsStore[id] = {
+  //   answer, // ✅ correct value
    
-  };
+  // };
+  await Quiz.create({
+      id,
+     
+     
+      answer,
+      createdAt: new Date(),
+    });
 
   questions.push({
     id,
@@ -62,39 +77,7 @@ console.log(skip)
 
   res.json({ questions });
 
-  // const questions = [];
-
-  // let c = 0;
-  // const ran = [];
-  // var a = [];
-  // var q = [];
-  // const operator = "×"; // or "*"
-  // let rnum = Math.floor(Math.random() * 2) + 2;
-  // for (let i = 0; i < 5; i++) {
-  //   // generate 5 questions
-
-  //   ran[i] = rnum + c;
-  //   c = t;
-  //   rnum = ran[i];
-  // }
-  // a = [...ran].sort((a, b) => a - b);
-  // for (let i = 0; i < 5; i++) {
-  //   q[i] = a[i] * b;
-  //   c = c + t;
-  // }
-  // const d = Math.floor(Math.random() * 5);
-  // const answer = q[d];
-  // q[d] = null;
-  // const id = Date.now() + 1; // unique ID
-  // c = c + t;
-  // const skip = t;
-  // // Store question & answer on backend
-  // questionsStore[id] = { q,  operator, answer };
-
-  // // Send only the question to frontend
-  // questions.push({ id, q, operator });
-
-  // res.json({ questions });
+ 
 }
 
 export function generateQuestionAddSub(req, res) {
@@ -126,7 +109,8 @@ export async function checkAddCircle(req, res) {
   const results = {};
 
   for (const q of answers) {
-    const original = questionsStore[q.id];
+    // const original = questionsStore[q.id];
+      const original = await Quiz.findOne({ id: q.id });
     if (!original) continue;
 
     const isAnswerCorrect = Number(q.answer) === original.answer;
@@ -140,7 +124,7 @@ export async function checkAddCircle(req, res) {
   isCorrect: isAnswerCorrect,
     };
 
-    delete questionsStore[q.id]; // cleanup
+    // delete questionsStore[q.id]; // cleanup
   }
   score = score * 3;
   if (userId) {
@@ -169,7 +153,7 @@ export function generateQuestionAddSubp3(req, res) {
   addsub3(b, req, res, t);
 }
 
-function mult(b, req, res, t = 16) {
+const mult=async(b, req, res, t = 16)=> {
   const questions = [];
 
   for (let i = 0; i < 5; i++) {
@@ -182,7 +166,15 @@ function mult(b, req, res, t = 16) {
     const id = Date.now() + i; // unique ID
 
     // Store question & answer on backend
-    questionsStore[id] = { a, b, operator, answer };
+    // questionsStore[id] = { a, b, operator, answer };
+  await Quiz.create({
+      id,
+      a,
+      b,
+      operator,
+      answer,
+      createdAt: new Date(),
+    });
 
     // Send only the question to frontend
     questions.push({ id, a, b, operator });
@@ -199,7 +191,7 @@ export function generateQuestionMul2(req, res) {
 export function generateQuestionMul3(req, res) {
   mult(5, req, res);
 }
-function mult2(req, res, t, u = 0) {
+const mult2=async(req, res, t, u = 0)=> {
   const questions = [];
 
   for (let i = 0; i < 5; i++) {
@@ -212,7 +204,15 @@ function mult2(req, res, t, u = 0) {
     const id = Date.now() + i; // unique ID
 
     // Store question & answer on backend
-    questionsStore[id] = { a, b, operator, answer };
+    // questionsStore[id] = { a, b, operator, answer };
+  await Quiz.create({
+      id,
+      a,
+      b,
+      operator,
+      answer,
+      createdAt: new Date(),
+    });
 
     // Send only the question to frontend
     questions.push({ id, a, b, operator });
@@ -220,7 +220,7 @@ function mult2(req, res, t, u = 0) {
 
   res.json({ questions });
 }
-function mult3(b, req, res, t) {
+const mult3=async(b, req, res, t)=> {
   const questions = [];
   const q = [];
   const mul = b;
@@ -238,11 +238,22 @@ console.log(skip)
 
   const id = Date.now();
 
-  questionsStore[id] = {
-    answer, // ✅ correct value
-    mul, // ✅ multiplicand
-    skip, // ✅ skip value
-  };
+  // questionsStore[id] = {
+  //   answer, // ✅ correct value
+  //   mul, // ✅ multiplicand
+  //   skip, // ✅ skip value
+  // };
+  await Quiz.create({
+      id,
+      mul,
+      skip,
+    
+      answer,
+      createdAt: new Date(),
+    });
+
+
+
 
   questions.push({
     id,
@@ -278,7 +289,8 @@ export async function checkAnswer(req, res) {
   const correctAnswers = {};
 
   for (const q of answers) {
-    const original = questionsStore[q.id];
+    // const original = questionsStore[q.id];
+     const original = await Quiz.findOne({ id: q.id });
     if (!original) continue;
 
     correctAnswers[q.id] = original.answer;
@@ -314,7 +326,8 @@ export async function checkAnswerCircle(req, res) {
   const results = {};
 
   for (const q of answers) {
-    const original = questionsStore[q.id];
+    // const original = questionsStore[q.id];
+     const original = await Quiz.findOne({ id: q.id });
     if (!original) continue;
 
     const isAnswerCorrect = Number(q.answer) === original.answer;
@@ -335,7 +348,7 @@ export async function checkAnswerCircle(req, res) {
       isCorrect: isAnswerCorrect && isMulCorrect && isSkipCorrect,
     };
 
-    delete questionsStore[q.id]; // cleanup
+    // delete questionsStore[q.id]; // cleanup
   }
   score = score * 3;
   if (userId) {
@@ -353,7 +366,7 @@ export async function checkAnswerCircle(req, res) {
   res.json({ score, results });
 }
 
-function div(t, req, res,s=13) {
+const div=async(t, req, res,s=13)=> {
   const questions = [];
 
   for (let i = 0; i < 5; i++) {
@@ -366,15 +379,22 @@ const a =d *b;
     const id = Date.now() + i; // unique ID
 
     // Store question & answer on backend
-    questionsStore[id] = { a, b, operator, answer };
-
+    // questionsStore[id] = { a, b, operator, answer };
+  await Quiz.create({
+      id,
+      a,
+      b,
+      operator,
+      answer,
+      createdAt: new Date(),
+    });
     // Send only the question to frontend
     questions.push({ id, a, b, operator });
   }
 
   res.json({ questions });
 }
-function div3( req, res) {
+const div3=async( req, res)=> {
   const questions = [];
 
   for (let i = 0; i < 5; i++) {
@@ -390,8 +410,15 @@ const a=e/100;
     const id = Date.now() + i; // unique ID
 
     // Store question & answer on backend
-    questionsStore[id] = { a, b, operator, answer };
-
+    // questionsStore[id] = { a, b, operator, answer };
+  await Quiz.create({
+      id,
+      a,
+      b,
+      operator,
+      answer,
+      createdAt: new Date(),
+    });
     // Send only the question to frontend
     questions.push({ id, a, b, operator });
   }
