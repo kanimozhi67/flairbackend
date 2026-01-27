@@ -174,6 +174,9 @@ export async function signup(req, res) {
     const userExists = await User.findOne({ username });
     if (userExists)
       return res.status(400).json({ message: "Username already exists" });
+    const emailExists = await User.findOne({ email });
+    if (emailExists)
+      return res.status(400).json({ message: "Email already exists" });
 
     // Hash password
     const hashed = await bcrypt.hash(password, 10);
@@ -201,7 +204,11 @@ export async function login(req, res) {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    let user = await User.findOne({ username });
+    if(!user){
+      const email=username;
+         user = await User.findOne({ email });
+    }
     if (!user) return res.status(400).json({ message: "Invalid username" });
 
     const match = await bcrypt.compare(password, user.password);

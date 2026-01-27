@@ -7,7 +7,7 @@ const puzzleStore = {};
 /**
  * Generate a single path puzzle
  */
-const createSudoku =(req,res,x=5,y=10,z=5)=> {
+const createPuzzle =(req,res,x=5,y=10,z=5,t=0)=> {
   const puzzleId = Date.now().toString();
 
   // Randomized but valid puzzle
@@ -25,7 +25,7 @@ const C=B;
     equations: [
       { left: ["A", "+", a], right:  b},
       { left: ["A", "+", c], right: "B" },
-      { left: [ "B", "+",0], right: "C"}
+      { left: [ "B", "+",t], right: "C"}
     ],
 
     inputs: ["A", "B", "C"]
@@ -40,13 +40,13 @@ const C=B;
 }
 
 export function generatePuzzle(req, res) {
-  createSudoku(req,res);
+  createPuzzle(req,res);
 }
 export function generatePuzzle2(req, res) {
-  createSudoku(req,res,10,15,10);
+  createPuzzle(req,res,200,150,200,100);
 }
 export function generatePuzzle3(req, res) {
-  createSudoku(req,res,15,20,15);
+  createPuzzle(req,res,15,20,15);
 }
 export async function checkPuzzle(req, res) {
   const { userId, puzzleId, answers } = req.body;

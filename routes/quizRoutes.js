@@ -57,6 +57,7 @@ import {
   generatePuzzle,
 
   checkPuzzle,
+  generatePuzzle2,
 } from "../controllers/puzzleController.js";
 import {
   generateLogic,
@@ -114,6 +115,7 @@ router.get("/moneylevel2", genMoney2);
 router.get("/moneylevel3", genWordProblems);
 
 router.get("/puzzle", generatePuzzle);
+router.get("/puzzlep", generatePuzzle2);
 router.get("/puzzlelevel2",generateFractionQuizPuzz2);
 router.get("/puzzlelevel3", generateFractionQuizPuzz3);
 router.get("/puzzleplevel2", puzzlep3);

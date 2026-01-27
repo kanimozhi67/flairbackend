@@ -2,7 +2,7 @@ import UserProgress from "../models/UserProgress.js";
 import moment from "moment";
 import User from "../models/User.js";
 import StudentModel from "../models/StudentModel.js";
-
+import Teacher from "../models/Teacher.js";
 import mongoose from "mongoose";
 
 /**
@@ -218,7 +218,11 @@ export const schoolLeaderboard = async (req, res) => {
   try {
     const { userId } = req.query;
 
-    const student = await StudentModel.findById(userId);
+    let student = await StudentModel.findById(userId);
+ 
+    if (!student) {
+       student = await Teacher.findById(userId);
+    }
     if (!student) {
       return res.json({ top5: [], message: "Only students have school leaderboard" });
     }
