@@ -1,3 +1,5 @@
+import Quiz from "../models/Quiz.js";
+import { v4 as uuidv4 } from "uuid";
 // Stores generated questions per session
 const shapeQuestionsStore = {}; // { [id]: { correctAnswer, emoji, options } }
 const shapes3Dpr = [
@@ -65,7 +67,7 @@ const shapes2D = [
   { name: "Diamond", emoji: "💎" },
   { name: "Oval", emoji: "🥚" },
   { name: "Pentagon", emoji: "⬟" },
-  { name: "Hexaagon", emoji: "⬡" },
+  { name: "Hexagon", emoji: "⬡" },
 ];
 
 const shapes3D = [
@@ -135,7 +137,7 @@ export function generateShapeQuizStepp2(req, res) {
   shapeq(req,res, shapes3Dpr,shapes3Dpr);
 }
 
-const shapeq=(req,res,a,b)=>{
+const shapeq=async(req,res,a,b)=>{
   const questions = [];
 
   for (let i = 0; i < 5; i++) {
@@ -156,15 +158,22 @@ const shapeq=(req,res,a,b)=>{
 
     const options = Array.from(optionsSet).sort(() => Math.random() - 0.5); // shuffle
 
-    const id = Date.now() + i;
+    const id =   uuidv4() + i;
 
     // Store correct answer in memory
-    shapeQuestionsStore[id] = {
-      correctAnswer: correctShape.name,
-      emoji: correctShape.emoji,
-      options,
-    };
-
+    // shapeQuestionsStore[id] = {
+    //   correctAnswer: correctShape.name,
+    //   emoji: correctShape.emoji,
+    //   options,
+    // };
+    await Quiz.create({
+      id,
+  
+    
+     operator: correctShape.emoji,
+      answerString: correctShape.name,
+      createdAt: new Date(),
+    });
     questions.push({
       id,
       emoji: correctShape.emoji,
@@ -220,12 +229,13 @@ export async function checkShapeAnswerStep(req, res) {
     return res.status(400).json({ error: "Invalid answer format." });
   }
 
-  const original = shapeQuestionsStore[answer.id];
+  //const original = shapeQuestionsStore[answer.id];
+    const original = await Quiz.findOne({ id: answer.id });
   if (!original) {
     return res.status(404).json({ error: "Question not found." });
   }
 
-  const isCorrect = answer.selectedOption === original.correctAnswer;
+  const isCorrect = answer.selectedOption === original.answerString;
 
   // Optional: save progress if you have UserProgress model
   let score = isCorrect ? 1 : 0;
@@ -236,13 +246,13 @@ export async function checkShapeAnswerStep(req, res) {
       console.error("Error saving progress:", err);
     }
   }
-
-  delete shapeQuestionsStore[answer.id];
+   await Quiz.deleteOne({ id:  answer.id  });
+  // delete shapeQuestionsStore[answer.id];
 
   res.json({
     id: answer.id,
-    emoji: original.emoji,
-    correctAnswer: original.correctAnswer,
+    emoji: original.operator,
+    correctAnswer: original.answerString,
     userAnswer: answer.selectedOption,
     isCorrect,
     score,

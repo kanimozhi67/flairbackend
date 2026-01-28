@@ -67,7 +67,7 @@ import {
 } from "../controllers/logicalController.js";
 import { generateLogicp } from "../controllers/logicalController.js";
 import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, generateShapeQuizStep3, generateShapeQuizStepp1, generateShapeQuizStepp2 } from "../controllers/shapesController.js";
-import { checkAnswerFraction,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3, generateFractionQuizPuzz2, generateFractionQuizPuzz3, logicQuizPuzz2, logicQuizPuzz3, puzzlep2, puzzlep3 } from "../controllers/fractionController.js";
+import { checkAnswerFraction,  checkAnswerFraction2,  generateFractionQuiz, generateFractionQuiz2, generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, generateFractionQuizk3, generateFractionQuizPuzz2, generateFractionQuizPuzz3, logicQuizPuzz2, logicQuizPuzz3, puzzlep2, puzzlep3 } from "../controllers/fractionController.js";
 import { explainWrongAnswer, explainWrongAnswer2, explainWrongAnswer3 } from "../controllers/openaiController.js";
 
 
@@ -145,6 +145,7 @@ router.get("/fraction", generateFractionQuiz);
 router.get("/fraction2", generateFractionQuiz2);
 router.get("/fraction3", generateFractionQuiz3);
 router.post("/checkfraction", checkAnswerFraction);
+router.post("/checkfraction2", checkAnswerFraction2);
 router.get("/shape", generateShapeQuizStep);
 router.get("/shape2", generateShapeQuizStep2);
 router.get("/shape3", generateShapeQuizStep3);

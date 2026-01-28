@@ -14,8 +14,15 @@ mul:Number,
 skip:Number,
 
 
-  answer: Number,
-
+  answer:  Number,
+answerString:String,
+ answerStringArr: mongoose.Schema.Types.Mixed,
+// answerStringArr: [
+//   {
+//     type: Map,
+//     of: String
+//   }
+// ],
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

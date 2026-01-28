@@ -123,7 +123,7 @@ export async function checkAddCircle(req, res) {
     userAnswer: q.answer,
   isCorrect: isAnswerCorrect,
     };
-
+    await Quiz.deleteOne({ id: q.id });
     // delete questionsStore[q.id]; // cleanup
   }
   score = score * 3;
@@ -298,7 +298,8 @@ export async function checkAnswer(req, res) {
     if (Number(q.answer) === original.answer) score++;
 
     // Optional: remove question from store after checking
-    delete questionsStore[q.id];
+    // delete questionsStore[q.id];
+        await Quiz.deleteOne({ id: q.id });
   }
 
   if (userId) {
@@ -347,7 +348,7 @@ export async function checkAnswerCircle(req, res) {
       userSkip: q.skip,
       isCorrect: isAnswerCorrect && isMulCorrect && isSkipCorrect,
     };
-
+    await Quiz.deleteOne({ id: q.id });
     // delete questionsStore[q.id]; // cleanup
   }
   score = score * 3;

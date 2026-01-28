@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-
+import Quiz from "../models/Quiz.js";
 const questionsStore = {};
 
 // Generate a single unit conversion question
-const generateUnitQuestion = () => {
+const generateUnitQuestion = async() => {
   const conversions = [
     { q: "9 m = ____ cm", a: "900 cm" },
     { q: "68 m 75 cm = ____ cm", a: "6875 cm" },
@@ -31,14 +31,22 @@ const generateUnitQuestion = () => {
   const id = uuidv4();
 
   questionsStore[id] = selected.a;
-
+  // await Quiz.create({
+  //     id,
+     
+  //     answerString:selected.a,
+  //     createdAt: new Date(),
+  //   });
   return { id, question: selected.q };
 };
 
 // Generate 6 questions only
-export const genUnitQuiz = (req, res) => {
+export const genUnitQuiz = async(req, res) => {
   const COUNT = 6;
-  const questions = Array.from({ length: COUNT }, generateUnitQuestion);
+  // const questions = Array.from({ length: COUNT }, generateUnitQuestion);
+    const questions = await Promise.all(
+    Array.from({ length: COUNT }, () => generateUnitQuestion())
+  );
   res.json({ questions });
 };
 
@@ -83,13 +91,14 @@ const parseLiters = (val) => {
 };
 
 // Check answers
-export const checkUnitAnswers = (req, res) => {
+export const checkUnitAnswers = async(req, res) => {
   const { answers } = req.body;
   let score = 0;
   const results = [];
 
   for (const q of answers) {
-    const correct = questionsStore[q.id];
+    // const correct = questionsStore[q.id];
+      const correct = await Quiz.findOne({ id: q.id });
     if (!correct) continue;
 
     let isCorrect = false;
@@ -120,7 +129,7 @@ export const checkUnitAnswers = (req, res) => {
       isCorrect
     });
 
-    delete questionsStore[q.id];
+     await Quiz.deleteOne({ id: q.id });
   }
 
   res.json({
@@ -194,7 +203,16 @@ export const genAvgQuiz = (req, res) => {
 
   const questions = source.map(item => {
     const id = uuidv4();
-    questionsStore[id] = item.a;
+
+//questionsStore[id] = item.a;
+
+   Quiz.create({
+      id,
+   
+      answerString:item.a,
+      createdAt: new Date(),
+    });
+
     return { id, question: item.q };
   });
 
@@ -215,29 +233,31 @@ const normalize2 = (val) =>
     .replace(/\s+/g, "")
     .replace(/[^a-z0-9.]/g, "");
 
-export const checkAvgAnswers = (req, res) => {
+export const checkAvgAnswers = async(req, res) => {
   const { answers } = req.body;
 
   let score = 0;
   const results = [];
 
   for (const q of answers) {
-    const correct = questionsStore[q.id];
+
+ const correct = await Quiz.findOne({ id: q.id });
+    //const correct = questionsStore[q.id];
     if (!correct) continue;
 
     const isCorrect =
-      normalize2(q.answer) === normalize2(correct);
+      normalize2(q.answer) === normalize2(correct.answerString);
 
     if (isCorrect) score++;
 
     results.push({
       id: q.id,
       userAnswer: q.answer,
-      correctAnswer: correct,
+      correctAnswer: correct.answerString,
       isCorrect
     });
-
-    delete questionsStore[q.id];
+  await Quiz.deleteOne({ id: q.id });
+    //delete questionsStore[q.id];
   }
 
   res.json({
@@ -291,7 +311,16 @@ export const genWordQuiz = (req, res) => {
 
   const questions = selected.map(item => {
     const id = uuidv4();
-    questionsStore[id] = item.a;
+    // questionsStore[id] = item.a;
+
+    
+   Quiz.create({
+      id,
+   
+      answerString:item.a,
+      createdAt: new Date(),
+    });
+
     return {
       id,
       question: item.q
@@ -309,29 +338,30 @@ const normalize3 = (val) =>
     .replace(/\s+/g, "")
     .replace(/[^a-z0-9.]/g, "");
 
-export const checkWordAnswers = (req, res) => {
+export const checkWordAnswers = async(req, res) => {
   const { answers } = req.body;
 
   let score = 0;
   const results = [];
 
   for (const q of answers) {
-    const correct = questionsStore[q.id];
+     const correct = await Quiz.findOne({ id: q.id });
+    // const correct = questionsStore[q.id];
     if (!correct) continue;
 
     const isCorrect =
-      normalize3(q.answer) === normalize3(correct);
+      normalize3(q.answer) === normalize3(correct.answerString);
 
     if (isCorrect) score++;
 
     results.push({
       id: q.id,
       userAnswer: q.answer,
-      correctAnswer: correct,
+      correctAnswer: correct.answerString,
       isCorrect
     });
-
-    delete questionsStore[q.id];
+    await Quiz.deleteOne({ id: q.id });
+    // delete questionsStore[q.id];
   }
 
   res.json({

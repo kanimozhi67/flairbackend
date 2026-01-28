@@ -1,5 +1,6 @@
-
+import Quiz from "../models/Quiz.js";
 import UserProgress from "../models/UserProgress.js";
+import { v4 as uuidv4 } from "uuid";
 
 // In-memory store for generated sorting questions
 const questionsStore = {}; // { [id]: { numbers, answer } }
@@ -9,7 +10,7 @@ const heart =  ["❤️", "💛", "💚", "💙", "💜", "🖤", "🤍"];
 const arrow = [  "⬅️",  "➡️",  "⬆️",   "⬇️",  "🔄" ] ;
 const fullarrow=["↗️","↘️","↙️","↖️","⬅️", "➡️", "⬆️","⬇️","🔄" ]
 
-const genques = (req,res,emoji,t=2)=>{
+const genques = async(req,res,emoji,t=2)=>{
    const shuffled = [...emoji].sort(() => 0.5 - Math.random());
   const base = shuffled.slice(0, 4);
 
@@ -32,14 +33,20 @@ const repeat=( n % 2 === 0 ? n + 1 : n);
   pattern[fillIndex] = "❓";
   pattern[fillIndex + 1] = "❓";
 
-  const questionId = Date.now().toString();
-
-  questionsStore[questionId] = {
-    answer: answers,
-  };
+  // const questionId = Date.now().toString();
+ const id = uuidv4();
+  // questionsStore[questionId] = {
+  //   answer: answers,
+  // };
+   await Quiz.create({
+      id,
+    
+      answerStringArr: answers,
+      createdAt: new Date(),
+    });
 
   res.json({
-    id: questionId,
+    id,
     pattern,
   });
 }
@@ -70,13 +77,14 @@ export async function checkLogic(req, res) {
   const correctAnswers = {};
 
   for (const q of answers) {
-    const original = questionsStore[q.id];
+    // const original = questionsStore[q.id];
+      const original = await Quiz.findOne({ id: q.id });
     if (!original) continue;
 
-    correctAnswers[q.id] = original.answer;
+    correctAnswers[q.id] = original.answerStringArr;
 
     const userAnswer = q.answer;
-    const correct = original.answer;
+    const correct = original.answerStringArr;
 
     const isCorrect =
       userAnswer &&
@@ -85,6 +93,7 @@ export async function checkLogic(req, res) {
       );
 
     if (isCorrect) score++;
+      await Quiz.deleteOne({ id: q.id });
   }
 
   // Save progress

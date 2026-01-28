@@ -1,7 +1,7 @@
 // fractionQuestions.js
 // fractionQuizController.js
 import { v4 as uuidv4 } from "uuid";
-
+import Quiz from "../models/Quiz.js";
 import UserProgress from "../models/UserProgress.js";
 
 export const puzz2=
@@ -1289,9 +1289,15 @@ const genQ =(req,res,a)=>{
     const id = uuidv4();
 
     // store correct answer server-side
-    questionsStore[id] = {
-      answer: q.answer
-    };
+    // questionsStore[id] = {
+    //   answer: q.answer
+    // };
+  Quiz.create({
+     
+  id,
+      answerString: q.answer,
+      createdAt: new Date(),
+    });
 
     return {
       id,
@@ -1356,16 +1362,60 @@ export async function checkAnswerFraction(req, res) {
   const correctAnswers = {};
 
   for (const q of answers) {
-    const original = questionsStore[q.id];
+    // const original = questionsStore[q.id];
+    const original = await Quiz.findOne({ id: q.id });
+    if (!original)
     if (!original) continue;
 
     correctAnswers[q.id] = original.answer;
 
-    if (q.answer === original.answer) {
-      score++;
-    }
+    if (Number(q.answer) === original.answer) score++;
 
-    delete questionsStore[q.id];
+    // remove after checking
+    await Quiz.deleteOne({ id: q.id });
+  }
+
+  if (userId) {
+    try {
+      await UserProgress.create({
+        user: userId,
+        score,
+        date: new Date()
+      });
+    } catch (err) {
+      console.error("Error saving progress:", err);
+    }
+  }
+
+  res.json({
+    score,
+    total: answers.length,
+    correctAnswers
+  });
+}
+
+export async function checkAnswerFraction2(req, res) {
+  const { userId, answers } = req.body;
+
+  if (!Array.isArray(answers)) {
+    return res.status(400).json({ error: "Invalid answers format." });
+  }
+
+  let score = 0;
+  const correctAnswers = {};
+
+  for (const q of answers) {
+    // const original = questionsStore[q.id];
+    const original = await Quiz.findOne({ id: q.id });
+    
+    if (!original) continue;
+
+    correctAnswers[q.id] = original.answerString;
+
+    if ((q.answer) === original.answerString) score++;
+
+    // remove after checking
+    await Quiz.deleteOne({ id: q.id });
   }
 
   if (userId) {
