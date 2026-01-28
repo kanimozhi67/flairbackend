@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import UserProgress from "../models/UserProgress.js";
-
+import Quiz from "../models/Quiz.js";
 /**
  * In-memory store
  * key: questionId
@@ -82,7 +82,7 @@ const generateQuestion = () => {
 };
 
 
-export function genMoney(req, res) {
+export async function genMoney(req, res) {
   const questions = [];
 
   for (let i = 0; i < 6; i++) {
@@ -90,8 +90,12 @@ export function genMoney(req, res) {
     if (!q) continue;
 
     const id = uuidv4();
-
-    questionsStore[id] = q;
+ await Quiz.create({
+      id,
+     answerStringArr: q,
+      createdAt: new Date(),
+    });
+    // questionsStore[id] = q;
 
     questions.push({
       id,
@@ -115,17 +119,19 @@ export async function checkAnswerMoney(req, res) {
   const correctAnswers = {};
 
   for (const q of answers) {
-    const original = questionsStore[q.id];
+    const original = await Quiz.findOne({ id: q.id });
+   // const original = questionsStore[q.id];
     if (!original) continue;
 
-    correctAnswers[q.id] = original.answer;
+    correctAnswers[q.id] = original.answerStringArr.answer;
 
-    if (Number(q.answer) === Number(original.answer)) {
+    if (Number(q.answer) === Number(original.answerStringArr.answer)) {
       score++;
     }
 
     // remove question after checking
-    delete questionsStore[q.id];
+    // delete questionsStore[q.id];
+       await Quiz.deleteOne({ id: q.id });
   }
 
   if (userId) {
@@ -155,7 +161,7 @@ const randomRupee = (min = 1, max = 5000) => {
 };
 
 // Generate a single random arithmetic question
-export const gen2Question = () => {
+export const gen2Question = async() => {
   const types = ["add", "subtract", "multiply", "divide"];
   const type = types[Math.floor(Math.random() * types.length)];
 
@@ -196,21 +202,26 @@ export const gen2Question = () => {
   const id = uuidv4();
 
   // Store question for later answer checking
-  questionsStore[id] = { question: questionText, answer };
+   await Quiz.create({
+      id,
+     answerStringArr: { question: questionText, answer },
+      createdAt: new Date(),
+    });
+ // questionsStore[id] = { question: questionText, answer };
 
   return { id, question: questionText, answer };
 };
 
 // Example: generate multiple questions
-export const generateArithmeticQuiz = (count = 6) => {
-  const questions = Array.from({ length: count }, () => gen2Question());
+export const generateArithmeticQuiz = async(count = 6) => {
+  const questions = await Promise.all(Array.from({ length: count }, () => gen2Question()));
   return questions;
 };
 
 // Generate multiple questions
-export const genMoney2 = (req, res) => {
+export const genMoney2 = async(req, res) => {
   const numQuestions = 6; // or req.query.count
-  const questions = Array.from({ length: numQuestions }, gen2Question);
+  const questions = await Promise.all(Array.from({ length: numQuestions }, gen2Question));
 
   res.json({ questions });
 };
@@ -223,7 +234,7 @@ const randomRupee2 = (min = 10, max = 1000) => {
 };
 
 // Generate a single word problem
-const generateWordProblem = () => {
+const generateWordProblem = async() => {
   const types = ["add", "subtract", "missing_amount", "multiply", "unit_cost"];
   const type = types[Math.floor(Math.random() * types.length)];
 
@@ -283,15 +294,20 @@ const generateWordProblem = () => {
 
 
   // Store question for later answer checking
-  questionsStore[id] = { question, answer };
+   await Quiz.create({
+      id,
+     answerStringArr: { question: question, answer },
+      createdAt: new Date(),
+    });
+  // questionsStore[id] = { question, answer };
 
   return { id, question, answer };
 };
 
 // Generate multiple word problems
-export const genWordProblems = (req, res) => {
+export const genWordProblems = async(req, res) => {
   const count = req.query.count ? parseInt(req.query.count) : 6;
-  const questions = Array.from({ length: count }, () => generateWordProblem());
+  const questions = await Promise.all(Array.from({ length: count }, () => generateWordProblem()));
   res.json({ questions });
 };
 
