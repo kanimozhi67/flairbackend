@@ -30,13 +30,13 @@ const generateUnitQuestion = async() => {
   const selected = conversions[Math.floor(Math.random() * conversions.length)];
   const id = uuidv4();
 
-  questionsStore[id] = selected.a;
-  // await Quiz.create({
-  //     id,
+  //questionsStore[id] = selected.a;
+  await Quiz.create({
+      id,
      
-  //     answerString:selected.a,
-  //     createdAt: new Date(),
-  //   });
+      answerString:selected.a,
+      createdAt: new Date(),
+    });
   return { id, question: selected.q };
 };
 
@@ -104,20 +104,20 @@ export const checkUnitAnswers = async(req, res) => {
     let isCorrect = false;
 
     // If correct answer is decimal meters (e.g., 0.55 m, 1.55 m)
-    if (/m/.test(correct) && /\d+\.\d+/.test(correct)) {
-      isCorrect = parseMeters(q.answer) === parseMeters(correct);
+    if (/m/.test(correct.answerString) && /\d+\.\d+/.test(correct.answerString)) {
+      isCorrect = parseMeters(q.answer) === parseMeters(correct.answerString);
     }
     // If correct answer is mixed meters + cm (e.g., 1 m 55 cm)
-    else if (/cm/.test(correct) && /m/.test(correct)) {
-      isCorrect = parseMeters(q.answer) === parseMeters(correct);
+    else if (/cm/.test(correct.answerString) && /m/.test(correct.answerString)) {
+      isCorrect = parseMeters(q.answer) === parseMeters(correct.answerString);
     }
     // If correct answer is liters/mL
-    else if (/l/i.test(correct) && /ml/i.test(correct)) {
-      isCorrect = parseLiters(q.answer) === parseLiters(correct);
+    else if (/l/i.test(correct.answerString) && /ml/i.test(correct.answerString)) {
+      isCorrect = parseLiters(q.answer) === parseLiters(correct.answerString);
     }
     // Default comparison
     else {
-      isCorrect = normalize(q.answer) === normalize(correct);
+      isCorrect = normalize(q.answer) === normalize(correct.answerString);
     }
 
     if (isCorrect) score++;
@@ -125,7 +125,7 @@ export const checkUnitAnswers = async(req, res) => {
     results.push({
       id: q.id,
       userAnswer: q.answer,
-      correctAnswer: correct,
+      correctAnswer: correct.answerString,
       isCorrect
     });
 

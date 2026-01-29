@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-
+import Quiz from "../models/Quiz.js";
 // In-memory store
 const sudokuStore = {};  
 
@@ -68,7 +68,7 @@ function removeCells(board, removeCount) {
 //   hard: 50
 // };
 // Generate Sudoku
-export function generateSudokup(req, res) {
+export async function generateSudokup(req, res) {
   const board = Array.from({ length: SIZE }, () =>
     Array(SIZE).fill(0)
   );
@@ -79,12 +79,16 @@ export function generateSudokup(req, res) {
   const puzzle = removeCells(solution, 30);
 
   const puzzleId = uuidv4();
-  sudokuStore[puzzleId] = { puzzle, solution };
-
+ // sudokuStore[puzzleId] = { puzzle, solution };
+ await Quiz.create({
+      id:puzzleId,
+     answerStringArr: { puzzle, solution },
+      createdAt: new Date(),
+    });
   res.json({ puzzleId, questions: puzzle ,solution});
 }
 
-export function generateSudokup2(req, res) {
+export async function generateSudokup2(req, res) {
   const board = Array.from({ length: SIZE }, () =>
     Array(SIZE).fill(0)
   );
@@ -95,11 +99,15 @@ export function generateSudokup2(req, res) {
   const puzzle = removeCells(solution, 40);
 
   const puzzleId = uuidv4();
-  sudokuStore[puzzleId] = { puzzle, solution };
-
+ // sudokuStore[puzzleId] = { puzzle, solution };
+ await Quiz.create({
+      id:puzzleId,
+     answerStringArr: { puzzle, solution },
+      createdAt: new Date(),
+    });
   res.json({ puzzleId, questions: puzzle ,solution});
 }
-export function generateSudokup3(req, res) {
+export async function generateSudokup3(req, res) {
  const board = Array.from({ length: SIZE }, () =>
     Array(SIZE).fill(0)
   );
@@ -111,9 +119,13 @@ export function generateSudokup3(req, res) {
   const puzzle = removeCells(solution, 50);
 
   const puzzleId = uuidv4();
-  sudokuStore[puzzleId] = { puzzle, solution };
-
-  res.json({ puzzleId, questions: puzzle ,solution});
+  //sudokuStore[puzzleId] = { puzzle, solution };
+ await Quiz.create({
+      id:puzzleId,
+     answerStringArr: { puzzle, solution },
+      createdAt: new Date(),
+    });
+  res.json({ puzzleId, questions: puzzle });
 }
 // Check Sudoku
 export async function checkSudokup(req, res) {
@@ -123,13 +135,15 @@ export async function checkSudokup(req, res) {
     if (!puzzleId || !Array.isArray(answers)) {
       return res.status(400).json({ error: "Invalid request format." });
     }
+     const puzzleData = await Quiz.findOne({ id: puzzleId});
 
-    const puzzleData = sudokuStore[puzzleId];
+    //const puzzleData = sudokuStore[puzzleId];
     if (!puzzleData) {
       return res.status(404).json({ error: "Puzzle not found." });
     }
 
-    const solution = puzzleData.solution;
+   const solution = puzzleData.answerStringArr.solution;
+
     let score = 0;
     const correctAnswers = {};
 
@@ -142,7 +156,7 @@ export async function checkSudokup(req, res) {
 
 score=score /2;
 
-
+await Quiz.deleteOne({ id: puzzleId }); 
     // Optional: save user progress
     if (userId) {
       try {

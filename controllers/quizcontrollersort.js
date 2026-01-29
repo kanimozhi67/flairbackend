@@ -1,10 +1,11 @@
 import UserProgress from "../models/UserProgress.js";
-
+import Quiz from "../models/Quiz.js";
+import { v4 as uuidv4 } from "uuid";
 // In-memory store for generated sorting questions
 const questionsStore = {}; // { [id]: { numbers, answer } }
 
 // Generate multiple random sorting questions with unique numbers
-const genQues=(req,res,n,t=0)=>{
+const genQues=async(req,res,n,t=0)=>{
    const questions = [];
 
   const randomNum = (exclude = []) => {
@@ -24,10 +25,15 @@ const genQues=(req,res,n,t=0)=>{
     }
 
     const answer = [...numbers].sort((a, b) => a - b); // correct ascending order
-    const id = Date.now() + i; // unique ID
+    const id = uuidv4(); // unique ID
 
     // Store question in memory
-    questionsStore[id] = { numbers, answer };
+     await Quiz.create({
+          id,
+         answerStringArr: { numbers, answer },
+          createdAt: new Date(),
+        });
+    //questionsStore[id] = { numbers, answer };
 
     // Send only numbers to frontend (no answer)
     questions.push({ id, numbers });
@@ -75,20 +81,22 @@ export async function checkSortingAnswers(req, res) {
   const correctAnswers = {};
 
   for (const q of answers) {
-    const original = questionsStore[q.id];
+     const original = await Quiz.findOne({ id: q.id});
+    //const original = questionsStore[q.id];
     if (!original) continue;
 
-    correctAnswers[q.id] = original.answer;
+    correctAnswers[q.id] = original.answerStringArr.answer;
 
     // Compare user's answer array with correct answer array
     const isCorrect =
       Array.isArray(q.answer) &&
-      q.answer.length === original.answer.length &&
-      q.answer.every((num, idx) => num === original.answer[idx]);
+      q.answer.length === original.answerStringArr.answer.length &&
+      q.answer.every((num, idx) => num === original.answerStringArr.answer[idx]);
 
     if (isCorrect) score++;
+     await Quiz.deleteOne({ id: q.id }); 
   }
-
+ 
   // Save progress
   if (userId) {
     try {

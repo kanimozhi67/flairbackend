@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-
+import Quiz from "../models/Quiz.js";
 // In-memory store
 const sudokuStore = {};  
 
@@ -54,37 +54,49 @@ function removeCells(board, difficulty = 5) {
 }
 
 // Generate Sudoku
-export function generateSudoku(req, res) {
+export async function generateSudoku(req, res) {
   const board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
   fillBoard(board);
   const solution = board.map((row) => [...row]);
   const puzzle = removeCells(board);
 
   const puzzleId = uuidv4();
-  sudokuStore[puzzleId] = { puzzle, solution };
-
+  // sudokuStore[puzzleId] = { puzzle, solution };
+ await Quiz.create({
+      id:puzzleId,
+     answerStringArr: { puzzle, solution },
+      createdAt: new Date(),
+    });
   res.json({ puzzleId, questions: puzzle });
 }
-export function generateSudoku2(req, res) {
+export async function generateSudoku2(req, res) {
   const board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
   fillBoard(board);
   const solution = board.map((row) => [...row]);
   const puzzle = removeCells(board,6);
 
   const puzzleId = uuidv4();
-  sudokuStore[puzzleId] = { puzzle, solution };
-
+ // sudokuStore[puzzleId] = { puzzle, solution };
+ await Quiz.create({
+      id:puzzleId,
+     answerStringArr: { puzzle, solution },
+      createdAt: new Date(),
+    });
   res.json({ puzzleId, questions: puzzle });
 }
-export function generateSudoku3(req, res) {
+export async function generateSudoku3(req, res) {
   const board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
   fillBoard(board);
   const solution = board.map((row) => [...row]);
   const puzzle = removeCells(board,7);
 
   const puzzleId = uuidv4();
-  sudokuStore[puzzleId] = { puzzle, solution };
-
+ // sudokuStore[puzzleId] = { puzzle, solution };
+ await Quiz.create({
+      id:puzzleId,
+     answerStringArr: { puzzle, solution },
+      createdAt: new Date(),
+    });
   res.json({ puzzleId, questions: puzzle });
 }
 // Check Sudoku
@@ -95,13 +107,13 @@ export async function checkSudoku(req, res) {
     if (!puzzleId || !Array.isArray(answers)) {
       return res.status(400).json({ error: "Invalid request format." });
     }
-
-    const puzzleData = sudokuStore[puzzleId];
+ const puzzleData = await Quiz.findOne({ id: puzzleId});
+    // const puzzleData = sudokuStore[puzzleId];
     if (!puzzleData) {
       return res.status(404).json({ error: "Puzzle not found." });
     }
 
-    const { puzzle, solution } = puzzleData;
+    const { puzzle, solution } = puzzleData.answerStringArr;
 
     let score = 0;
     let total = 0;
@@ -120,7 +132,7 @@ export async function checkSudoku(req, res) {
         score++;
       }
     });
-
+  await Quiz.deleteOne({ id: puzzleId });
     if (userId) {
       try {
         await UserProgress.create({

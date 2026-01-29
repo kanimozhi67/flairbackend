@@ -1,4 +1,7 @@
+import { v4 as uuidv4 } from "uuid";
 import UserProgress from "../models/UserProgress.js";
+import Quiz from "../models/Quiz.js";
+/**
 
 // In-memory store
 const puzzleStore = {}; 
@@ -7,19 +10,19 @@ const puzzleStore = {};
 /**
  * Generate a single path puzzle
  */
-const createPuzzle =(req,res,x=5,y=10,z=5,t=0)=> {
-  const puzzleId = Date.now().toString();
-
+const createPuzzle =async(req,res,x=5,y=10,z=5,t=0)=> {
+  // const puzzleId = Date.now().toString();
+const id=uuidv4();
   // Randomized but valid puzzle
   const a = Math.floor(Math.random() * x) + 1; // 1–5
   const b = Math.floor(Math.random() * y) + a;
   const c = Math.floor(Math.random() * z) + 1; // 5–9
 const A =b-a;
 const B=A+c;
-const C=B;
-
+const C=B+t;
+console.log(A,B,C);
   const puzzle = {
-    id: puzzleId,
+    id,
 
     // Send ONLY structure, not answers
     equations: [
@@ -32,10 +35,14 @@ const C=B;
   };
 
   // Store solution securely
-  puzzleStore[puzzleId] = {
-    solution: { A, B, C }
-  };
-
+  // puzzleStore[puzzleId] = {
+  //   solution: { A, B, C }
+  // };
+await Quiz.create({
+      id,
+     answerStringArr: { A, B, C },
+      createdAt: new Date(),
+    });
   res.json({ puzzle });
 }
 
@@ -54,8 +61,8 @@ export async function checkPuzzle(req, res) {
   if (!puzzleId || !answers) {
     return res.status(400).json({ error: "Invalid payload" });
   }
-
-  const puzzle = puzzleStore[puzzleId];
+ const puzzle = await Quiz.findOne({ id: puzzleId });
+  // const puzzle = puzzleStore[puzzleId];
   if (!puzzle) {
     return res.status(404).json({ error: "Puzzle not found" });
   }
@@ -71,23 +78,23 @@ export async function checkPuzzle(req, res) {
       }, {})
     : answers;
 
-  for (const key in puzzle.solution) {
-    correctAnswers[key] = puzzle.solution[key];
+  for (const key in puzzle.answerStringArr) {
+    correctAnswers[key] = puzzle.answerStringArr[key];
 
     const userAns = answersObj[key];
 
     // Compare numbers if possible, else strings
     if (
-      (!isNaN(Number(userAns)) && !isNaN(Number(puzzle.solution[key]))
-        ? Number(userAns) === Number(puzzle.solution[key])
-        : String(userAns).trim() === String(puzzle.solution[key]).trim())
+      (!isNaN(Number(userAns)) && !isNaN(Number(puzzle.answerStringArr[key]))
+        ? Number(userAns) === Number(puzzle.answerStringArr[key])
+        : String(userAns).trim() === String(puzzle.answerStringArr[key]).trim())
     ) {
       score++;
     }
   }
 
-  const total = Object.keys(puzzle.solution).length;
-
+  const total = Object.keys(puzzle.answerStringArr).length;
+ await Quiz.deleteOne({ id: puzzleId });
   // Save progress
   if (userId) {
     try {
