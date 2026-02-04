@@ -6,6 +6,7 @@ import School from "../models/Schools.js";
 import Teacher from "../models/Teacher.js";
 
 
+
 export const schoolAdminLogin = async (req, res) => {
   try {
     const { schoolId, email, password } = req.body;
@@ -224,11 +225,11 @@ isPremiuim:user.isPremium,
         model: "User",
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "30d" }
     );
 
     res.cookie("jwt", token, {
-      maxAge: 1 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       sameSite: "strict",
       secure: process.env.NODE_ENV !== "development",
