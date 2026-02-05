@@ -1,5 +1,8 @@
 import UserProgress from "../models/UserProgress.js";
 import Quiz from "../models/Quiz.js";
+import { v4 as uuidv4 } from "uuid";
+
+
 // In-memory store for generated questions (keyed by id)
 const questionsStore = {}; // { [id]: { a, b, operator, answer } }
 
@@ -19,7 +22,8 @@ const AddSub =async(n, t, req, res, l = 0) => {
     if (operator === "-" && b > a) [a, b] = [b, a];
 
     const answer = operator === "+" ? a + b : a - b;
-    const id = Date.now() + i; // unique ID
+   
+const id = uuidv4();
 
     // Store question in memory
    // questionsStore[id] = { a, b, operator, answer };
@@ -55,7 +59,8 @@ console.log(skip)
   const answer = q[missingIndex];
   q[missingIndex] = null;
 
-  const id = Date.now();
+const id = uuidv4();
+
 
   // questionsStore[id] = {
   //   answer, // ✅ correct value
@@ -163,7 +168,8 @@ const mult=async(b, req, res, t = 16)=> {
     const operator = "×"; // or "*"
 
     const answer = a * b;
-    const id = Date.now() + i; // unique ID
+   const id = uuidv4();
+
 
     // Store question & answer on backend
     // questionsStore[id] = { a, b, operator, answer };
@@ -230,13 +236,14 @@ const mult3=async(b, req, res, t)=> {
     q.push((start + i * t) * b);
   }
 const skip=q[1]-q[0];
-console.log(skip)
+console.log("skip:",skip)
   // choose missing index
   const missingIndex = Math.floor(Math.random() * 5);
   const answer = q[missingIndex];
   q[missingIndex] = null;
 
-  const id = Date.now();
+const id = uuidv4();
+
 
   // questionsStore[id] = {
   //   answer, // ✅ correct value
@@ -259,7 +266,7 @@ console.log(skip)
     id,
     q,
     mul: b,
-    skip: t,
+    skip,
     operator: "×",
   });
 
@@ -377,7 +384,8 @@ const div=async(t, req, res,s=13)=> {
     const operator = "➗"; // or "*"
 const a =d *b;
     const answer = a / b;
-    const id = Date.now() + i; // unique ID
+   const id = uuidv4();
+
 
     // Store question & answer on backend
     // questionsStore[id] = { a, b, operator, answer };
@@ -408,7 +416,8 @@ const a=e/100;
     const operator = "➗"; // or "*"
 
     const answer = a / b;
-    const id = Date.now() + i; // unique ID
+   const id = uuidv4();
+
 
     // Store question & answer on backend
     // questionsStore[id] = { a, b, operator, answer };
