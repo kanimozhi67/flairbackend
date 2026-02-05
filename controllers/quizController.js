@@ -265,6 +265,7 @@ const id = uuidv4();
   questions.push({
     id,
     q,
+    answer,
     mul: b,
     skip,
     operator: "×",

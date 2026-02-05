@@ -10,8 +10,8 @@ const QuizSchema = new mongoose.Schema({
   a: Number,
   b: Number,
   operator: String,
-mul:Number,
-skip:Number,
+mul: { type: Number },
+skip: { type: Number },
 
 
   answer:  Number,
