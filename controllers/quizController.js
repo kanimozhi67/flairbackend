@@ -10,8 +10,8 @@ const questionsStore = {}; // { [id]: { a, b, operator, answer } }
 const AddSub =async(n, t, req, res, l = 0) => {
   const questions = [];
 
-  // const randomNum = () => Math.floor(Math.random() * t);
-
+ 
+const docs = [];
   for (let i = 0; i < n; i++) {
     // generate 5 questions
     let a = Math.floor(Math.random() * t) + l; // 0 to t-1
@@ -24,23 +24,28 @@ const AddSub =async(n, t, req, res, l = 0) => {
     const answer = operator === "+" ? a + b : a - b;
    
 const id = uuidv4();
-
-    // Store question in memory
-   // questionsStore[id] = { a, b, operator, answer };
-  await Quiz.create({
-      id,
-      a,
-      b,
-      operator,
-      answer,
-      createdAt: new Date(),
-    });
+ docs.push({ id, a, b, operator, answer });
+  
+  // await Quiz.create({
+  //     id,
+  //     a,
+  //     b,
+  //     operator,
+  //     answer,
+  //     createdAt: new Date(),
+  //   });
 
     // Send only necessary info to frontend (no answer)
-    questions.push({ id, a, b, operator });
+    // questions.push({ id, a, b, operator });
   }
+await Quiz.insertMany(docs);
 
-  res.json({ questions });
+res.json({
+  questions: docs.map(({ id, a, b, operator }) => ({
+    id, a, b, operator
+  }))
+});
+  // res.json({ questions });
 };
 
 const  addsub3=async(b, req, res, t)=> {
@@ -49,11 +54,12 @@ const  addsub3=async(b, req, res, t)=> {
   const mul = b;
   // generate skip-count numbers
   let start = Math.floor(Math.random() * 4) + 2;
+  const docs = [];
   for (let i = 0; i < 5; i++) {
     q.push((start + i * t) * b);
   }
 const skip=q[1]-q[0];
-console.log(skip)
+
   // choose missing index
   const missingIndex = Math.floor(Math.random() * 3)+2;
   const answer = q[missingIndex];
@@ -62,14 +68,8 @@ console.log(skip)
 const id = uuidv4();
 
 
-  // questionsStore[id] = {
-  //   answer, // ✅ correct value
-   
-  // };
   await Quiz.create({
       id,
-     
-     
       answer,
       createdAt: new Date(),
     });
@@ -160,7 +160,7 @@ export function generateQuestionAddSubp3(req, res) {
 
 const mult=async(b, req, res, t = 16)=> {
   const questions = [];
-
+const docs=[];
   for (let i = 0; i < 5; i++) {
     // generate 5 questions
     const a = Math.floor(Math.random() * t); // 0–15
@@ -170,23 +170,29 @@ const mult=async(b, req, res, t = 16)=> {
     const answer = a * b;
    const id = uuidv4();
 
+ docs.push({ id, a, b, operator, answer });
+   
+  // await Quiz.create({
+  //     id,
+  //     a,
+  //     b,
+  //     operator,
+  //     answer,
+  //     createdAt: new Date(),
+  //   });
 
-    // Store question & answer on backend
-    // questionsStore[id] = { a, b, operator, answer };
-  await Quiz.create({
-      id,
-      a,
-      b,
-      operator,
-      answer,
-      createdAt: new Date(),
-    });
-
-    // Send only the question to frontend
-    questions.push({ id, a, b, operator });
+  //   // Send only the question to frontend
+  //   questions.push({ id, a, b, operator });
   }
 
-  res.json({ questions });
+  // res.json({ questions });
+  await Quiz.insertMany(docs);
+
+res.json({
+  questions: docs.map(({ id, a, b, operator }) => ({
+    id, a, b, operator
+  }))
+});
 }
 export function generateQuestionMul(req, res) {
   mult(2, req, res);
@@ -207,24 +213,30 @@ const mult2=async(req, res, t, u = 0)=> {
     const operator = "×"; // or "*"
 
     const answer = a * b;
-    const id = Date.now() + i; // unique ID
+ const id=uuidv4();
 
-    // Store question & answer on backend
-    // questionsStore[id] = { a, b, operator, answer };
-  await Quiz.create({
-      id,
-      a,
-      b,
-      operator,
-      answer,
-      createdAt: new Date(),
-    });
+  docs.push({ id, a, b, operator, answer });
+  // await Quiz.create({
+  //     id,
+  //     a,
+  //     b,
+  //     operator,
+  //     answer,
+  //     createdAt: new Date(),
+  //   });
 
-    // Send only the question to frontend
-    questions.push({ id, a, b, operator });
+  //   // Send only the question to frontend
+  //   questions.push({ id, a, b, operator });
   }
+  await Quiz.insertMany(docs);
 
-  res.json({ questions });
+res.json({
+  questions: docs.map(({ id, a, b, operator }) => ({
+    id, a, b, operator
+  }))
+});
+
+  // res.json({ questions });
 }
 const mult3=async(b, req, res, t)=> {
   const questions = [];
@@ -236,7 +248,7 @@ const mult3=async(b, req, res, t)=> {
     q.push((start + i * t) * b);
   }
 const skip=q[1]-q[0];
-console.log("skip:",skip)
+
   // choose missing index
   const missingIndex = Math.floor(Math.random() * 5);
   const answer = q[missingIndex];
@@ -245,11 +257,7 @@ console.log("skip:",skip)
 const id = uuidv4();
 
 
-  // questionsStore[id] = {
-  //   answer, // ✅ correct value
-  //   mul, // ✅ multiplicand
-  //   skip, // ✅ skip value
-  // };
+
   await Quiz.create({
       id,
       mul,
@@ -377,7 +385,7 @@ export async function checkAnswerCircle(req, res) {
 
 const div=async(t, req, res,s=13)=> {
   const questions = [];
-
+  const docs=[];
   for (let i = 0; i < 5; i++) {
     // generate 5 questions
     const d = Math.floor(Math.random() * s)+2; // 0–15
@@ -387,30 +395,35 @@ const a =d *b;
     const answer = a / b;
    const id = uuidv4();
 
-
-    // Store question & answer on backend
-    // questionsStore[id] = { a, b, operator, answer };
-  await Quiz.create({
-      id,
-      a,
-      b,
-      operator,
-      answer,
-      createdAt: new Date(),
-    });
-    // Send only the question to frontend
-    questions.push({ id, a, b, operator });
+  docs.push({ id, a, b, operator, answer });
+  // await Quiz.create({
+  //     id,
+  //     a,
+  //     b,
+  //     operator,
+  //     answer,
+  //     createdAt: new Date(),
+  //   });
+  //   // Send only the question to frontend
+  //   questions.push({ id, a, b, operator });
   }
 
-  res.json({ questions });
+  // res.json({ questions });
+  await Quiz.insertMany(docs);
+
+res.json({
+  questions: docs.map(({ id, a, b, operator }) => ({
+    id, a, b, operator
+  }))
+});
 }
 const div3=async( req, res)=> {
   const questions = [];
-
+   const docs=[];
   for (let i = 0; i < 5; i++) {
     // generate 5 questions
     const d =  ( Math.floor((Math.random() * 900)))+9;// 0–15
-    
+ 
      const b = Math.floor(Math.random() * 8)+2; // 2 to 9
 const e= d*b;
 const a=e/100;
@@ -418,23 +431,28 @@ const a=e/100;
 
     const answer = a / b;
    const id = uuidv4();
+ docs.push({ id, a, b, operator, answer });
 
-
-    // Store question & answer on backend
-    // questionsStore[id] = { a, b, operator, answer };
-  await Quiz.create({
-      id,
-      a,
-      b,
-      operator,
-      answer,
-      createdAt: new Date(),
-    });
-    // Send only the question to frontend
-    questions.push({ id, a, b, operator });
+  // await Quiz.create({
+  //     id,
+  //     a,
+  //     b,
+  //     operator,
+  //     answer,
+  //     createdAt: new Date(),
+  //   });
+  //   // Send only the question to frontend
+  //   questions.push({ id, a, b, operator });
   }
 
-  res.json({ questions });
+  // res.json({ questions });
+  await Quiz.insertMany(docs);
+
+res.json({
+  questions: docs.map(({ id, a, b, operator }) => ({
+    id, a, b, operator
+  }))
+});
 }
 export function generateQuestionDiv(req, res) {
   div(4, req, res);
