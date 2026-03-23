@@ -1174,7 +1174,39 @@ export const fractionQuestionBank = [
     answer: "1/4"
   }
 ];
+// fractionQuestions.js
 
+export const equiFractionQuestions = [
+  { text: "1/2 = 3 / ?", answer: "6", options: ["4","5","6","8"] },
+  { text: "2/3 = ? / 9", answer: "6", options: ["3","6","9","12"] },
+  { text: "3/4 = 9 / ?", answer: "12", options: ["8","10","12","16"] },
+  { text: "5/6 = ? / 12", answer: "10", options: ["8","9","10","11"] },
+  { text: "1/7 = ? / 21", answer: "3", options: ["2","3","4","5"] },
+
+  { text: "2/5 = 6 / ?", answer: "15", options: ["10","12","15","20"] },
+  { text: "3/8 = ? / 24", answer: "9", options: ["6","8","9","12"] },
+  { text: "4/9 = 8 / ?", answer: "18", options: ["12","16","18","20"] },
+  { text: "7/10 = ? / 20", answer: "14", options: ["10","12","14","16"] },
+  { text: "5/12 = ? / 36", answer: "15", options: ["10","12","15","18"] },
+
+  { text: "6/11 = 12 / ?", answer: "22", options: ["20","22","24","26"] },
+  { text: "3/5 = ? / 25", answer: "15", options: ["10","12","15","20"] },
+  { text: "4/7 = 20 / ?", answer: "35", options: ["28","30","35","40"] },
+  { text: "2/9 = ? / 45", answer: "10", options: ["5","8","10","12"] },
+  { text: "8/15 = ? / 30", answer: "16", options: ["12","14","16","18"] },
+
+  { text: "9/13 = 18 / ?", answer: "26", options: ["24","26","28","30"] },
+  { text: "10/17 = ? / 34", answer: "20", options: ["18","19","20","22"] },
+  { text: "6/8 = ? / 32", answer: "24", options: ["16","20","24","28"] },
+  { text: "7/9 = 21 / ?", answer: "27", options: ["24","25","27","30"] },
+  { text: "11/12 = ? / 24", answer: "22", options: ["18","20","22","24"] },
+
+  { text: "12/5 = 36 / ?", answer: "15", options: ["10","12","15","18"] },
+  { text: "14/7 = ? / 14", answer: "28", options: ["14","21","28","35"] },
+  { text: "15/4 = ? / 8", answer: "30", options: ["20","25","30","35"] },
+  { text: "16/3 = 32 / ?", answer: "6", options: ["3","4","5","6"] },
+  { text: "18/11 = ? / 22", answer: "36", options: ["30","32","34","36"] }
+];
 // fractionQuestions.js
 export const fractionQuestionBank2 = [
   {
@@ -1329,6 +1361,9 @@ genQ(req,res,fractionQuestionBank2)
 };
 export const generateFractionQuiz3 = (req, res) => {
 genQ(req,res,fractionQuestionBank3)
+};
+export const generateqFractionQuiz4 = (req, res) => {
+genQ(req,res,equiFractionQuestions)
 };
 export const generateFractionQuizPuzz3 = (req, res) => {
 genQ(req,res,analyticalEmojiQuizpuzz3)
