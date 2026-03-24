@@ -70,7 +70,9 @@ import { checkShapeAnswerStep, generateShapeQuizStep, generateShapeQuizStep2, ge
 import { checkAnswerFraction,  checkAnswerFraction2,  generateFractionQuiz, generateFractionQuiz2,
    generateFractionQuiz3, generateFractionQuizk, generateFractionQuizk2, 
    generateFractionQuizk3, generateFractionQuizPuzz2, generateFractionQuizPuzz3, 
-   generateqFractionQuiz4, logicQuizPuzz2, logicQuizPuzz3, puzzlep2, puzzlep3 } from "../controllers/fractionController.js";
+   generateqFractionQuiz4, hcfFractionQuiz4, lcmFractionQuiz4, logicQuizPuzz2, logicQuizPuzz3, mixedFractionQuiz4, puzzlep2, puzzlep3, 
+   wordFractionQuiz4,
+   wordMoneyQuiz4} from "../controllers/fractionController.js";
 import { explainWrongAnswer, explainWrongAnswer2, explainWrongAnswer3 } from "../controllers/openaiController.js";
 
 
@@ -116,6 +118,7 @@ router.get("/sudokuplevel3", generateSudokup3);
 router.get("/money", genMoney);
 router.get("/moneylevel2", genMoney2);
 router.get("/moneylevel3", genWordProblems);
+router.get("/moneylevel4", wordMoneyQuiz4);
 
 router.get("/puzzle", generatePuzzle);
 router.get("/puzzlep", generatePuzzle2);
@@ -148,6 +151,10 @@ router.get("/fraction", generateFractionQuiz);
 router.get("/fraction2", generateFractionQuiz2);
 router.get("/fraction3", generateFractionQuiz3);
 router.get("/fractioneq4", generateqFractionQuiz4);
+router.get("/fractionhcf4", hcfFractionQuiz4);
+router.get("/fractionlcm4",lcmFractionQuiz4);
+router.get("/fractionmixed4",mixedFractionQuiz4);
+router.get("/fractionword4",wordFractionQuiz4);
 
 router.post("/checkfraction", checkAnswerFraction);
 router.post("/checkfraction2", checkAnswerFraction2);

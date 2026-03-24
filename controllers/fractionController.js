@@ -1174,8 +1174,291 @@ export const fractionQuestionBank = [
     answer: "1/4"
   }
 ];
+
+//money level4
+export const moneyWordProblems = [
+  {
+    text: "Suman bought items for ₹86.45, ₹70.50 and ₹85.75. How much did she spend altogether?",
+    answer: "242.70",
+    options: ["240.70","242.70","245.70","250.70"]
+  },
+  {
+    text: "Sarita bought items for ₹48.50 and ₹15.75. She gave seven ₹10 notes. How much money did she get back?",
+    answer: "5.75",
+    options: ["4.75","5.75","6.75","7.75"]
+  },
+  {
+    text: "Dev wants to buy a toy costing ₹174.50. He has ₹160.50. How much more does he need?",
+    answer: "14.00",
+    options: ["12.00","13.00","14.00","15.00"]
+  },
+  {
+    text: "Vikram and Sagar had ₹500 and spent ₹430. How much money is left?",
+    answer: "70",
+    options: ["60","70","80","90"]
+  },
+  {
+    text: "Four cakes of soap cost ₹69.40. What is the cost of one cake?",
+    answer: "17.35",
+    options: ["16.35","17.35","18.35","19.35"]
+  },
+  {
+    text: "Tanvi bought five muffins for ₹280.50. What is the cost of one muffin?",
+    answer: "56.10",
+    options: ["55.10","56.10","57.10","58.10"]
+  },
+  {
+    text: "Samarth buys five balls (₹48.75 each) and two bats (₹992.80 each). Total cost?",
+    answer: "2229.35",
+    options: ["2100.35","2200.35","2229.35","2300.35"]
+  },
+   {
+    text: "5 kg of potatoes cost ₹90. How much will Priya pay for 15 kg of potatoes?",
+    answer: "270",
+    options: ["180","270","300","350"]
+  },
+  {
+    text: "15 metres of cloth cost ₹2700. What is the cost of 50 metres?",
+    answer: "9000",
+    options: ["8000","8500","9000","9500"]
+  },
+  {
+    text: "The rent of a shop for a year is ₹6,00,000. What is the rent for 8 months?",
+    answer: "400000",
+    options: ["300000","350000","400000","450000"]
+  },
+  {
+    text: "A man earns ₹82,400 in 2 months. How much does he earn in a year?",
+    answer: "494400",
+    options: ["482400","494400","500000","510000"]
+  },
+  {
+    text: "A tray of 12 eggs costs ₹276. What is the cost of 10 eggs?",
+    answer: "230",
+    options: ["200","220","230","240"]
+  }
+];
+
 // fractionQuestions.js
 
+export const wordProblemQuestions = [
+  {
+    text: "A watermelon is cut into 8 pieces. Saurabh ate 3 pieces in the afternoon and 2 pieces at night. What fraction did he eat altogether?",
+    answer: "5/8",
+    options: ["3/8","4/8","5/8","6/8"]
+  },
+  {
+    text: "Sam bought 1/4 kg of mangoes and 3/4 kg of bananas. What is the total weight?",
+    answer: "1",
+    options: ["1/2","3/4","1","5/4"]
+  },
+  {
+    text: "Raj bought 4/5 kg of tomatoes and used 2/5 kg. How much is left?",
+    answer: "2/5",
+    options: ["1/5","2/5","3/5","4/5"]
+  },
+  {
+    text: "Sonu used 7/10 m of paper and Monu used 2/10 m. Who used more and by how much?",
+    answer: "Sonu, 5/10",
+    options: ["Monu, 5/10","Sonu, 5/10","Sonu, 3/10","Monu, 3/10"]
+  },
+
+  {
+    text: "A pizza is cut into 6 slices. Riya ate 2 slices and Aman ate 3 slices. What fraction was eaten?",
+    answer: "5/6",
+    options: ["3/6","4/6","5/6","6/6"]
+  },
+  {
+    text: "A chocolate is divided into 10 parts. You eat 4 parts. What fraction is left?",
+    answer: "6/10",
+    options: ["4/10","5/10","6/10","7/10"]
+  },
+  {
+    text: "A cake is divided into 12 pieces. 5 pieces are eaten. What fraction remains?",
+    answer: "7/12",
+    options: ["5/12","6/12","7/12","8/12"]
+  },
+  {
+    text: "Rahul walked 2/5 km in the morning and 1/5 km in the evening. Total distance?",
+    answer: "3/5",
+    options: ["2/5","3/5","4/5","5/5"]
+  },
+  {
+    text: "A bottle has 1 liter juice. You drink 3/4 liter. How much is left?",
+    answer: "1/4",
+    options: ["1/4","1/2","3/4","4/4"]
+  },
+  {
+    text: "A rope is 1 meter long. 2/8 meter is cut. How much remains?",
+    answer: "6/8",
+    options: ["4/8","5/8","6/8","7/8"]
+  },
+  {
+    text: "Meena read 3/10 of a book on Monday and 4/10 on Tuesday. Total read?",
+    answer: "7/10",
+    options: ["5/10","6/10","7/10","8/10"]
+  },
+  {
+    text: "A tank is filled 6/9 full. How much more is needed to fill it?",
+    answer: "3/9",
+    options: ["2/9","3/9","4/9","5/9"]
+  },
+  {
+    text: "A boy ate 1/3 of a chocolate in the morning and 1/3 in the evening. Total eaten?",
+    answer: "2/3",
+    options: ["1/3","2/3","3/3","4/3"]
+  },
+  {
+    text: "A ribbon is 8/10 meter long. 3/10 meter is used. What is left?",
+    answer: "5/10",
+    options: ["3/10","4/10","5/10","6/10"]
+  },
+  {
+    text: "A class finished 2/6 of homework on Monday and 3/6 on Tuesday. Total done?",
+    answer: "5/6",
+    options: ["3/6","4/6","5/6","6/6"]
+  },
+  {
+    text: "A jar has 9/10 liter water. 2/10 liter is used. Remaining?",
+    answer: "7/10",
+    options: ["5/10","6/10","7/10","8/10"]
+  },
+  {
+    text: "A farmer used 3/8 of land for wheat and 2/8 for rice. Total used?",
+    answer: "5/8",
+    options: ["3/8","4/8","5/8","6/8"]
+  },
+  {
+    text: "A book has 20 pages. You read 15 pages. What fraction is read?",
+    answer: "15/20",
+    options: ["10/20","12/20","15/20","18/20"]
+  },
+  {
+    text: "A student completed 7/12 of work. How much is left?",
+    answer: "5/12",
+    options: ["4/12","5/12","6/12","7/12"]
+  },
+  {
+    text: "A glass is filled 3/5. How much more to fill it?",
+    answer: "2/5",
+    options: ["1/5","2/5","3/5","4/5"]
+  },
+  {
+    text: "A road is 10 km. You traveled 6 km. What fraction is covered?",
+    answer: "6/10",
+    options: ["4/10","5/10","6/10","7/10"]
+  },
+  {
+    text: "A cake is divided into 16 pieces. 8 pieces are eaten. Fraction eaten?",
+    answer: "8/16",
+    options: ["6/16","7/16","8/16","9/16"]
+  },
+  {
+    text: "A boy drank 5/8 liter milk. How much is left from 1 liter?",
+    answer: "3/8",
+    options: ["2/8","3/8","4/8","5/8"]
+  },
+  {
+    text: "A box has 12 chocolates. You ate 9. Fraction eaten?",
+    answer: "9/12",
+    options: ["6/12","7/12","8/12","9/12"]
+  },
+  {
+    text: "A train journey is 100 km. 25 km completed. Fraction done?",
+    answer: "25/100",
+    options: ["20/100","25/100","30/100","40/100"]
+  }
+];
+
+export const fractionMixedQuestions = [
+  // Improper → Mixed
+  { text: "7/2 = ?", answer: "3 1/2", options: ["2 1/2","3 1/2","3 2/2","4 1/2"] },
+  { text: "22/13 = ?", answer: "1 9/13", options: ["1 7/13","1 8/13","1 9/13","2 9/13"] },
+  { text: "8/3 = ?", answer: "2 2/3", options: ["1 2/3","2 1/3","2 2/3","3 2/3"] },
+  { text: "17/9 = ?", answer: "1 8/9", options: ["1 7/9","1 8/9","2 7/9","2 8/9"] },
+  { text: "11/5 = ?", answer: "2 1/5", options: ["1 1/5","2 1/5","2 2/5","3 1/5"] },
+  { text: "9/5 = ?", answer: "1 4/5", options: ["1 3/5","1 4/5","2 3/5","2 4/5"] },
+  { text: "14/4 = ?", answer: "3 2/4", options: ["2 2/4","3 2/4","3 1/4","4 2/4"] },
+  { text: "19/6 = ?", answer: "3 1/6", options: ["2 1/6","3 1/6","3 2/6","4 1/6"] },
+  { text: "25/8 = ?", answer: "3 1/8", options: ["2 1/8","3 1/8","3 2/8","4 1/8"] },
+  { text: "31/10 = ?", answer: "3 1/10", options: ["2 1/10","3 1/10","3 2/10","4 1/10"] },
+  { text: "18/7 = ?", answer: "2 4/7", options: ["2 3/7","2 4/7","2 5/7","3 4/7"] },
+  { text: "29/4 = ?", answer: "7 1/4", options: ["6 1/4","7 1/4","7 2/4","8 1/4"] },
+
+  // Mixed → Improper
+  { text: "3 1/4 = ?", answer: "13/4", options: ["12/4","13/4","14/4","15/4"] },
+  { text: "1 2/9 = ?", answer: "11/9", options: ["9/9","10/9","11/9","12/9"] },
+  { text: "1 7/8 = ?", answer: "15/8", options: ["14/8","15/8","16/8","17/8"] },
+  { text: "5 1/4 = ?", answer: "21/4", options: ["20/4","21/4","22/4","23/4"] },
+  { text: "5 4/11 = ?", answer: "59/11", options: ["55/11","57/11","59/11","61/11"] },
+  { text: "6 2/9 = ?", answer: "56/9", options: ["54/9","55/9","56/9","57/9"] },
+  { text: "4 3/5 = ?", answer: "23/5", options: ["20/5","22/5","23/5","24/5"] },
+  { text: "2 7/10 = ?", answer: "27/10", options: ["25/10","26/10","27/10","28/10"] },
+  { text: "7 1/3 = ?", answer: "22/3", options: ["20/3","21/3","22/3","23/3"] },
+  { text: "3 5/6 = ?", answer: "23/6", options: ["21/6","22/6","23/6","24/6"] },
+  { text: "9 2/7 = ?", answer: "65/7", options: ["60/7","63/7","65/7","67/7"] },
+  { text: "8 3/4 = ?", answer: "35/4", options: ["32/4","33/4","35/4","36/4"] }
+];
+export const likeFractionQuestions = [
+  { text: "4/2 , 9/8 = ?", answer: "16/8 , 9/8", options: ["8/8 , 9/8","16/8 , 9/8","12/8 , 9/8","20/8 , 9/8"] },
+  { text: "3/7 , 6/21 = ?", answer: "9/21 , 6/21", options: ["3/21 , 6/21","6/21 , 6/21","9/21 , 6/21","12/21 , 6/21"] },
+  { text: "2/10 , 5/15 = ?", answer: "3/15 , 5/15", options: ["2/15 , 5/15","3/15 , 5/15","4/15 , 5/15","5/15 , 5/15"] },
+  { text: "2/5 , 3/6 = ?", answer: "12/30 , 15/30", options: ["10/30 , 15/30","12/30 , 15/30","14/30 , 15/30","16/30 , 15/30"] },
+  { text: "3/15 , 4/25 = ?", answer: "5/25 , 4/25", options: ["3/25 , 4/25","4/25 , 4/25","5/25 , 4/25","6/25 , 4/25"] },
+  { text: "9/14 , 6/28 = ?", answer: "18/28 , 6/28", options: ["12/28 , 6/28","18/28 , 6/28","24/28 , 6/28","30/28 , 6/28"] },
+
+  { text: "1/3 , 2/5 = ?", answer: "5/15 , 6/15", options: ["3/15 , 6/15","5/15 , 6/15","6/15 , 6/15","9/15 , 6/15"] },
+  { text: "2/3 , 1/4 = ?", answer: "8/12 , 3/12", options: ["6/12 , 3/12","8/12 , 3/12","9/12 , 3/12","10/12 , 3/12"] },
+  { text: "3/4 , 5/6 = ?", answer: "9/12 , 10/12", options: ["6/12 , 10/12","9/12 , 10/12","12/12 , 10/12","15/12 , 10/12"] },
+  { text: "7/8 , 3/4 = ?", answer: "7/8 , 6/8", options: ["5/8 , 6/8","6/8 , 6/8","7/8 , 6/8","8/8 , 6/8"] },
+  { text: "5/6 , 2/3 = ?", answer: "5/6 , 4/6", options: ["3/6 , 4/6","4/6 , 4/6","5/6 , 4/6","6/6 , 4/6"] },
+  { text: "4/9 , 2/3 = ?", answer: "4/9 , 6/9", options: ["3/9 , 6/9","4/9 , 6/9","5/9 , 6/9","6/9 , 6/9"] },
+
+  { text: "3/8 , 1/2 = ?", answer: "3/8 , 4/8", options: ["2/8 , 4/8","3/8 , 4/8","4/8 , 4/8","5/8 , 4/8"] },
+  { text: "2/7 , 3/14 = ?", answer: "4/14 , 3/14", options: ["2/14 , 3/14","3/14 , 3/14","4/14 , 3/14","5/14 , 3/14"] },
+  { text: "5/12 , 1/3 = ?", answer: "5/12 , 4/12", options: ["3/12 , 4/12","4/12 , 4/12","5/12 , 4/12","6/12 , 4/12"] },
+  { text: "7/10 , 3/5 = ?", answer: "7/10 , 6/10", options: ["5/10 , 6/10","6/10 , 6/10","7/10 , 6/10","8/10 , 6/10"] },
+  { text: "9/16 , 1/2 = ?", answer: "9/16 , 8/16", options: ["6/16 , 8/16","7/16 , 8/16","8/16 , 8/16","9/16 , 8/16"] },
+ 
+  { text: "6/5 , 3/10 = ?", answer: "12/10 , 3/10", options: ["10/10 , 3/10","12/10 , 3/10","14/10 , 3/10","16/10 , 3/10"] },
+  { text: "8/3 , 4/9 = ?", answer: "24/9 , 4/9", options: ["18/9 , 4/9","21/9 , 4/9","24/9 , 4/9","27/9 , 4/9"] },
+  { text: "5/2 , 3/4 = ?", answer: "10/4 , 3/4", options: ["8/4 , 3/4","9/4 , 3/4","10/4 , 3/4","12/4 , 3/4"] },
+  { text: "7/6 , 5/12 = ?", answer: "14/12 , 5/12", options: ["10/12 , 5/12","12/12 , 5/12","14/12 , 5/12","16/12 , 5/12"] },
+  { text: "11/4 , 3/8 = ?", answer: "22/8 , 3/8", options: ["16/8 , 3/8","20/8 , 3/8","22/8 , 3/8","24/8 , 3/8"] }
+];
+
+export const reduceFractionQuestions = [
+  { text: "18/24 = ?", answer: "3/4", options: ["1/2","2/3","3/4","4/5"] },
+  { text: "15/25 = ?", answer: "3/5", options: ["1/5","2/5","3/5","4/5"] },
+  { text: "10/12 = ?", answer: "5/6", options: ["2/3","3/4","4/5","5/6"] },
+  { text: "30/45 = ?", answer: "2/3", options: ["1/3","2/3","3/4","4/5"] },
+  { text: "22/99 = ?", answer: "2/9", options: ["1/9","2/9","3/9","4/9"] },
+  { text: "21/27 = ?", answer: "7/9", options: ["5/9","6/9","7/9","8/9"] },
+  { text: "14/42 = ?", answer: "1/3", options: ["1/2","1/3","2/3","3/4"] },
+
+  { text: "8/12 = ?", answer: "2/3", options: ["1/2","2/3","3/4","4/5"] },
+  { text: "9/15 = ?", answer: "3/5", options: ["2/5","3/5","4/5","5/6"] },
+  { text: "16/20 = ?", answer: "4/5", options: ["2/5","3/5","4/5","5/6"] },
+  { text: "12/18 = ?", answer: "2/3", options: ["1/2","2/3","3/5","4/5"] },
+  { text: "25/35 = ?", answer: "5/7", options: ["3/7","4/7","5/7","6/7"] },
+  { text: "32/40 = ?", answer: "4/5", options: ["3/5","4/5","5/6","6/7"] },
+  { text: "6/9 = ?", answer: "2/3", options: ["1/3","2/3","3/4","4/5"] },
+  { text: "27/36 = ?", answer: "3/4", options: ["2/3","3/4","4/5","5/6"] },
+
+  { text: "45/60 = ?", answer: "3/4", options: ["2/3","3/4","4/5","5/6"] },
+  { text: "20/50 = ?", answer: "2/5", options: ["1/5","2/5","3/5","4/5"] },
+  { text: "14/21 = ?", answer: "2/3", options: ["1/3","2/3","3/4","4/5"] },
+  { text: "18/27 = ?", answer: "2/3", options: ["1/3","2/3","3/5","4/5"] },
+  { text: "35/49 = ?", answer: "5/7", options: ["3/7","4/7","5/7","6/7"] },
+  { text: "24/30 = ?", answer: "4/5", options: ["3/5","4/5","5/6","6/7"] },
+  { text: "28/56 = ?", answer: "1/2", options: ["1/2","2/3","3/4","4/5"] },
+  { text: "36/48 = ?", answer: "3/4", options: ["2/3","3/4","4/5","5/6"] },
+
+  { text: "40/100 = ?", answer: "2/5", options: ["1/5","2/5","3/5","4/5"] },
+  { text: "50/75 = ?", answer: "2/3", options: ["1/3","2/3","3/4","4/5"] },
+  { text: "63/81 = ?", answer: "7/9", options: ["5/9","6/9","7/9","8/9"] },
+  { text: "72/90 = ?", answer: "4/5", options: ["3/5","4/5","5/6","6/7"] }
+];
 export const equiFractionQuestions = [
   { text: "1/2 = 3 / ?", answer: "6", options: ["4","5","6","8"] },
   { text: "2/3 = ? / 9", answer: "6", options: ["3","6","9","12"] },
@@ -1364,6 +1647,21 @@ genQ(req,res,fractionQuestionBank3)
 };
 export const generateqFractionQuiz4 = (req, res) => {
 genQ(req,res,equiFractionQuestions)
+};
+export const hcfFractionQuiz4 = (req, res) => {
+genQ(req,res,reduceFractionQuestions)
+};
+export const lcmFractionQuiz4 = (req, res) => {
+genQ(req,res,likeFractionQuestions)
+};
+export const mixedFractionQuiz4 = (req, res) => {
+genQ(req,res,fractionMixedQuestions)
+};
+export const wordFractionQuiz4 = (req, res) => {
+genQ(req,res,wordProblemQuestions)
+}
+export const wordMoneyQuiz4 = (req, res) => {
+genQ(req,res,moneyWordProblems)
 };
 export const generateFractionQuizPuzz3 = (req, res) => {
 genQ(req,res,analyticalEmojiQuizpuzz3)

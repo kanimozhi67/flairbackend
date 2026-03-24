@@ -22,7 +22,7 @@ const generateOptions = (correct) => {
 };
 
 const generateQuestion = () => {
-  const type = Math.floor(Math.random() * 5);
+  const type = Math.floor(Math.random() * 9);
 
   switch (type) {
     case 0: {
@@ -71,10 +71,45 @@ const generateQuestion = () => {
         answer,
         options: generateOptions(answer)
       };
+      
     }
 
-  
-    
+    case 5: {
+      const rupee = Number((Math.random() * 10).toFixed(1));
+      const answer = Math.round(rupee * 100);
+      return {
+        question: `${rupee} rupee = ____ paise`,
+        answer,
+        options: generateOptions(answer)
+      };
+    }
+  case 6: {
+      const paise = Math.floor(Math.random() * 10) + 10;
+      const answer = Number((paise / 100).toFixed(2));
+      return {
+        question: `${paise} paise = ____ rupee`,
+        answer,
+        options: generateOptions(answer)
+      };
+    }
+  case 7: {
+      const paise = Math.floor(Math.random() * 100) + 10;
+      const answer = Number((paise / 100).toFixed(2));
+      return {
+        question: `${paise} paise = ____ rupee`,
+        answer,
+        options: generateOptions(answer)
+      };
+    }
+      case 8: {
+      const rupee = Number((Math.random() * 10).toFixed(1));
+      const answer = Math.round(rupee * 100);
+      return {
+        question: `${rupee} rupee = ____ paise`,
+        answer,
+        options: generateOptions(answer)
+      };
+    }
 
     default:
       return null;
