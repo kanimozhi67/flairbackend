@@ -179,6 +179,8 @@ export const todaytask = async (req, res) => {
         userTaskId: ut._id,
         taskId: ut.taskId._id,
         title: ut.taskId.title,
+        level: ut.taskId.level,
+
         description: ut.taskId.description,
         date: ut.taskId.date,
         totalPoints: ut.totalPoints,
