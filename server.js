@@ -42,13 +42,17 @@ console.log(`PORT= ${PORT}`);
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://flairfrontend.vercel.app",process.env.FRONTEND_URL,],
+    origin: [
+      "http://localhost:3000",
+      "https://flairfrontend.vercel.app",
+      "https://www.flairolympiad.com",   // 👈 ADD THIS
+      "https://flairolympiad.com"        // 👈 ALSO ADD ROOT (important)
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 
 
 
