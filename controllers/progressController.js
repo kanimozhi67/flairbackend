@@ -181,7 +181,8 @@ export const leaderboard = async (req, res) => {
   //  let filtered = level ? populated.filter((u) => u.level === level ) : populated;
 const filtered2 = populated.filter((u=>u.role!=="Teacher"));
 const filtered1= filtered2.filter((u=>u.role!=="SchoolAdmin"));
-const filtered = filtered1.filter((u=>u.role!=="Admin"));
+const filtered0 = filtered1.filter((u=>u.role!=="Admin"));
+const filtered = filtered0.filter((u=>u.username!=="Guest"));
  
     // 4️⃣ Sort descending by points
     filtered.sort((a, b) => b.points - a.points);
